@@ -1,0 +1,202 @@
+/*
+Author: Valerie German
+Date: 28 Aug 2019
+Course: CS 4540, University of Utah
+Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
+I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
+File Contents: This file contains the CSS for the PS1 webpages.
+*/
+p {
+	font-size: 16px;
+}
+/*Body*/
+body {
+	margin: 0px;
+}
+#ContentDiv {
+	margin: 20px;
+}
+:root {
+	--mainColor: rgb(214, 13, 13);
+	--mainText: white;
+	--mainTextFade: lightgrey;
+	--mainAccent: lightgrey;
+	--mainAccentText: black;
+	--secondColor: darkred;
+	--secondText: white;
+	--secondAccent: rgb(133, 15, 0);
+	--secondAccentText: white;
+	--progressEMColor: rgb(31, 191, 10);
+	--progressSColor: rgb(31, 128, 207);
+	--noProgressColor: rgb(188, 191, 194);
+}
+/*Menu Bar*/
+.menuDiv {
+	background-color: var(--mainColor);
+	overflow: hidden;
+}
+.menuDiv a {
+	float: left;
+	color: var(--mainTextFade);
+	text-align: center;
+	padding: 20px;
+	font-size: 17px;
+	text-decoration: none;
+	font-weight: normal;
+}
+.menuDiv a.active {
+	color: var(--mainText);
+	font-weight: bold;
+}
+.menuDiv a:hover {
+	background-color: var(--mainAccent);
+	color: var(--mainAccentText);
+}
+body {
+	height: 100%;
+}
+/*footer {
+	background-color: var(--mainColor);
+	height: 30px;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}*/
+/*Collapses*/
+.collapseButton {
+	background-color: var(--secondColor);
+	color: var(--secondText);
+	padding: 20px;
+	width: 100%;
+	border: none;
+	border-radius: 0px;
+	text-align: left;
+	outline: none;
+	font-size: 16px;
+}
+.collapseButton:after{
+	content: '\02795';
+	float: right;
+}
+.activeCollapseButton, .collapseButton:hover {
+	background-color: var(--secondAccent);
+}
+.activeCollapseButton:after {
+	content: '\2796';
+}
+.collapseContent {
+	max-height: 0px;
+	padding-left: 25px;
+	padding-right: 25px;
+	overflow: hidden;
+	transition: max-height 0.5s ease-out;
+}
+/*Styling*/
+table {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+button {
+	border-color: white;
+	border-width: 1px;
+	border-radius: 15px;
+	padding: 4px 15px;
+	color: white;
+	background-color: rgb(66, 9, 2);
+}
+.plusButton {
+	border-color: white;
+	border-width: 1px;
+	border-radius: 15px;
+	padding: 4px 8px;
+	color: white;
+	background-color: rgb(156, 92, 92);
+}
+.sampleButton {
+	border-color: white;
+	border-width: 1px;
+	border-radius: 5px;
+	padding: 4px 15px;
+	color: white;
+}
+.indented {
+	text-indent: 15px;
+}
+.EMBox {
+	padding-left: 15px;
+	padding-right: 15px;
+	border: solid 1px lightgrey;
+	border-radius: 15px;
+	box-shadow: 3px 3px 5px 1px grey;
+	margin: 10px;
+}
+/*Content styling*/
+.EMDiv {
+	margin: 10px;
+}
+.SectionDiv {
+	padding-left: 15px;
+	padding-right: 15px;
+	border: solid 1px lightgrey;
+	border-radius: 15px;
+	box-shadow: 3px 3px 2px 1px grey;
+}
+#floatRight {
+	float: right;
+}
+/*Progress Bar*/
+/*This code was created with help from https://stackoverflow.com/questions/45507970/how-can-i-change-the-color-of-a-progress-bar-value-in-html*/
+progress {
+	border: none;
+	width: 200px;
+	height: 15px;
+	background: grey;
+	color: green;
+	text-align: left;
+}
+.progressEM::-webkit-progress-value {
+	background: var(--progressEMColor);
+}
+.progressS::-webkit-progress-value {
+	background: var(--progressSColor);
+}
+progress::-webkit-progress-bar {
+	background: var(--noProgressColor);
+}
+.progressDiv {
+	font-size: 16px;
+}
+.percentFont {
+	font-size: 14px;
+}
+/*Department*/
+.classInfoContainer {
+	width: 100%;
+	display: inline-block;
+	margin-bottom: 10px;
+}
+.classInfo {
+	width: 35%;
+	float: left;
+	font-size: 14px;
+	display: inline-block;
+}
+.progressInfo {
+	width: 65%;
+	display: inline-block;
+	float: right;
+	font-size: 16px;
+}
+.lowProgress {
+	background-color: rgb(240, 161, 161);
+}
+.medProgress {
+	background-color: rgb(245, 242, 193);
+}
+.highProgress {
+	background-color: rgb(137, 240, 152);
+}
+.completeProgress {
+	background-color: rgb(115, 240, 134);
+}

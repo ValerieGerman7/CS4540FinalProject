@@ -1,0 +1,153 @@
+﻿@*
+    TODO: Modify to use bootstrap
+*@
+@{
+}
+<!--
+Author: Valerie German
+Date: 28 Aug 2019
+Course: CS 4540, University of Utah
+Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
+I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
+File Contents: This file contains the HTML for the Department view of the courses and their evaluation/sample progress.
+-->
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="INSERT">
+    <meta name="keywords" content="HMTL">
+    <meta name="author" content="Valerie German">
+    <link rel="stylesheet" type="text/css" href="site.css" />
+    <title>Department</title>
+</head>
+<body>
+    <div id="ContentDiv">
+        <h1>Computer Science Department</h1>
+        <hr />
+        <!--Options to search the classes by progress, class name, professor ... may be added here-->
+        <!--Information about each class's progress is separated by divs, each with the same structure.-->
+        <!-- This div contains the progress for a single class-->
+        <div class="SectionDiv medProgress">
+            <h2>CS 2100 - Discrete Structures</h2>
+            <div class="classInfoContainer">
+                <div align="left" class="classInfo">
+                    <!--Div for inserting information about the class, such as the professor (same structure for following class examples)-->
+                    <font class="indented">Professor X</font>
+                </div>
+                <div class="progressDiv progressInfo" align="right">
+                    <!--Progress display for class (same structure for following class examples).-->
+                    <i>Evaluation Metrics </i><font class="percentFont"> (60%)</font>
+                    <progress class="progressEM" value="60" max="100"></progress><br />
+                    <i>Samples </i><font class="percentFont"> (50%)</font>
+                    <progress class="progressS" value="50" max="100"></progress><br />
+                </div>
+            </div>
+            <br />
+        </div><br />
+
+        <!-- This div contains the progress for a single class-->
+        <div class="SectionDiv lowProgress">
+            <h2>CS 2100 - Discrete Structures</h2>
+            <div class="classInfoContainer">
+                <div align="left" class="classInfo">
+                    <font class="indented">Professor Y</font>
+                </div>
+                <div class="progressDiv progressInfo" align="right">
+                    <i>Evaluation Metrics </i><font class="percentFont"> (0%)</font>
+                    <progress class="progressEM" value="0" max="100"></progress><br />
+                    <i>Samples </i><font class="percentFont"> (0%)</font>
+                    <progress class="progressS" value="0" max="100"></progress><br />
+                </div>
+            </div>
+            <br />
+        </div><br />
+
+        <!-- This div contains the progress for a single class-->
+        <div class="SectionDiv completeProgress">
+            <h2>CS 3500 - Software Practice I</h2>
+            <div class="classInfoContainer">
+                <div align="left" class="classInfo">
+                    <font class="indented">Professor T</font>
+                </div>
+                <div class="progressDiv progressInfo" align="right">
+                    <i>Evaluation Metrics </i><font class="percentFont"> (100%)</font>
+                    <progress class="progressEM" value="100" max="100"></progress><br />
+                    <i>Samples </i><font class="percentFont"> (100%)</font>
+                    <progress class="progressS" value="100" max="100"></progress><br />
+                </div>
+            </div>
+            <br />
+        </div><br />
+
+        <!-- This div contains the progress for a single class-->
+        <div class="SectionDiv lowProgress">
+            <h2>CS 3500 - Software Practice I</h2>
+            <div class="classInfoContainer">
+                <div align="left" class="classInfo">
+                    <font class="indented">Professor Z</font>
+                </div>
+                <div class="progressDiv progressInfo" align="right">
+                    <i>Evaluation Metrics </i><font class="percentFont"> (10%)</font>
+                    <progress class="progressEM" value="10" max="100"></progress><br />
+                    <i>Samples </i><font class="percentFont"> (5%)</font>
+                    <progress class="progressS" value="5" max="100"></progress><br />
+                </div>
+            </div>
+            <br />
+        </div><br />
+
+        <!-- This div contains the progress for a single class-->
+        <div class="SectionDiv medProgress" onclick="location.href='course.html'">
+            <h2>CS 4540 - Web Software Architecture</h2>
+            <div class="classInfoContainer">
+                <div align="left" class="classInfo">
+                    <font class="indented">Professor R</font>
+                </div>
+                <div class="progressDiv progressInfo" align="right">
+                    <i>Evaluation Metrics </i><font class="percentFont"> (75%)</font>
+                    <progress class="progressEM" value="75" max="100"></progress><br />
+                    <i>Samples </i><font class="percentFont"> (50%)</font>
+                    <progress class="progressS" value="50" max="100"></progress><br />
+                </div>
+            </div>
+            <br />
+        </div><br />
+
+        <!-- This div contains the progress for a single class-->
+        <div class="SectionDiv highProgress">
+            <h2>CS 5530 - Database Systems</h2>
+            <div class="classInfoContainer">
+                <div align="left" class="classInfo">
+                    <font class="indented">Professor X</font>
+                </div>
+                <div class="progressDiv progressInfo" align="right">
+                    <i>Evaluation Metrics </i><font class="percentFont"> (95%)</font>
+                    <progress class="progressEM" value="95" max="100"></progress><br />
+                    <i>Samples </i><font class="percentFont"> (80%)</font>
+                    <progress class="progressS" value="80" max="100"></progress><br />
+                </div>
+            </div>
+            <br />
+        </div><br />
+
+        <!-- This div contains the progress for a single class-->
+        <div class="SectionDiv completeProgress">
+            <h2>CS 5460 - Operating Systems</h2>
+            <div class="classInfoContainer">
+                <div align="left" class="classInfo">
+                    <font class="indented">Professor W</font>
+                </div>
+                <div class="progressDiv progressInfo" align="right">
+                    <i>Evaluation Metrics </i><font class="percentFont"> (100%)</font>
+                    <progress class="progressEM" value="100" max="100"></progress><br />
+                    <i>Samples </i><font class="percentFont"> (100%)</font>
+                    <progress class="progressS" value="100" max="100"></progress><br />
+                </div>
+            </div>
+            <br />
+        </div><br />
+
+        <br />
+    </div>
+</body>
+</html>
