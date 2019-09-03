@@ -52,3 +52,7 @@ function SetColor(button, scale) {
     button.innerHTML = descript + " (" + scale + "%)";
     button.style.backgroundColor = color;
 }
+//Redirect to a webpage
+function RedirectToAction(action) {
+    window.location.href = "/Home/" + action;
+}

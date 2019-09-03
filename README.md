@@ -7,7 +7,9 @@ Course: CS 4540, University of Utah
 Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
 
 Comments to Evaluators: 
-  The navbar was changed to use a bootstrap navbar, including a dropdown and button.
+  The navbar was changed to use a bootstrap navbar, including a dropdown and button. In both of the course and overview pages, cards were used to 
+  organize the information. Buttons were designed with bootstrap css. Modals were used to demonstrate pop-ups for adding evaluation metrics or
+  sample files. Bootstrap styling was used in the forms on those modals.
 
 Design Notes:
   x

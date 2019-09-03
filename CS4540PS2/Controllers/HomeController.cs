@@ -15,6 +15,9 @@ namespace CS4540PS2.Controllers {
         public IActionResult Course() {
             return View();
         }
+        public IActionResult SampleCourse() {
+            return View();
+        }
 
         public IActionResult Overview() {
             return View();
