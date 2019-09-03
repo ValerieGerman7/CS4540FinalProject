@@ -2,7 +2,7 @@
 CS 4540 Web Software Architecture PS2 Assignment
 
 Author: Valerie German
-Date: 2 Sept 2019
+Date: 3 Sept 2019
 Course: CS 4540, University of Utah
 Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
 
@@ -12,7 +12,13 @@ Comments to Evaluators:
   sample files. Bootstrap styling was used in the forms on those modals.
 
 Design Notes:
-  x
+	Course.cshtml: I considered using the accordion structure for the course webpage, but it seemed more convienent for the user to be able to look at several learning outcomes
+	if desired. Each evaluation metric was separated into a card for easy visual separation, as well as with the whole learning outcome's description. The cards provided
+	an easy way to separate data and highlight titles (this is also true in the Department view) that was more effective than the previous structure. 
+	Adding Evaluation Metrics or Sample Files uses a modal, displaying a simple form - this functionality wasn't in PS1.
+	The layout of each evaluation metric was also improved, and the button style was updated.
+	Overview.cshtml: Cards were used to separate each of the classes, and progress bars were used to visualize their progress. The default bootstrap background colors
+	weren't used since they make the webpage too vibrant. Each card links to a course view, the CS 4540 card links to the sample Course.cshtml.
   
 References:
 (PS1)
