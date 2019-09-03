@@ -196,15 +196,18 @@ progress::-webkit-progress-bar {
 	font-size: 12px;
 }
 .lowProgress {
-	background-color: rgb(240, 161, 161);
+	background-color: rgb(240, 161, 161) !important;
 }
 .medProgress {
-	background-color: rgb(245, 242, 193);
+    background-color: rgb(245, 242, 193) !important;
 }
 .highProgress {
-	background-color: rgb(137, 240, 152);
+    background-color: rgb(137, 240, 152) !important;
 }
 .completeProgress {
-	background-color: rgb(115, 240, 134);
+    background-color: rgb(115, 240, 134) !important;
 }
-/**/
+/*Department Styling*/
+.courseHeader {
+    font-weight: bold;
+}
