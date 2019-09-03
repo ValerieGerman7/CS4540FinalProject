@@ -1,8 +1,7 @@
 ﻿@*
     TODO: modify to use bootstrap and _Layout
 *@
-@{
-}
+@{  }
 <!--
 Author: Valerie German
 Date: 28 Aug 2019
@@ -11,113 +10,111 @@ Copyright: CS 4540 and Valerie German - This work may not be copied for use in A
 I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
 File Contents: This file contains the HTML for the Professor view of a course and the evaluation metrics/sample files associated with the assigned learning outcomes.
 -->
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="description" content="INSERT">
-    <meta name="keywords" content="HMTL">
-    <meta name="author" content="Valerie German">
-    <link rel="stylesheet" type="text/css" href="site.css" />
-    <title>Course</title>
-</head>
-<body>
-    <!--This is the top menu bar-->
-    <!--<div class="menuDiv">-->
-    <!--Created with help from https://www.w3schools.com/howto/howto_js_topnav.asp-->
-    <!--<a href="PS1.html">Home</a>
-    <a class="active" href="course.html">Course</a>
-    <a href="overview.html">Department</a>
-    <a id="floatRight">(Professor View)</a>
-    </div>-->
-    <!--The content of the webpage - describes the course and its learning outcomes-->
-    <div id="ContentDiv">
-        <h1>CS 4540 Web Software Architecture</h1>
-        <h4>Professor Jim de St. Germain</h4>
+<div id="ContentDiv">
+    <h1>CS 4540 Web Software Architecture</h1>
+    <h4>Professor Jim de St. Germain</h4>
+    <hr />
+    <h2>Learning Outcomes</h2>
+
+    <!--Collapses separated in divs-->
+    <!--Collapse with information about a learning outcome-->
+    <!--This and following collapses created with help from https://www.w3schools.com/howto/howto_js_collapsible.asp-->
+    <button class="collapseButton">Ability to use HTML</button>
+    <div class="collapseContent">
+        <p><b>The student has the ability to use HTML to create static and dynamic web pages.</b></p>
         <hr />
-        <h2>Learning Outcomes</h2>
+        <!--Evaluation metrics - each assignment/exam is split into an 'EMBox'-->
+        <h3>Evaluation Metrics <button class="plusButton">+</button></h3>
+        <div class="EMBox">
+            <h4><b>PS1</b></h4>
+            <p class="indented">The student is able to make static web pages from scratch by creating webpages for learning outcomes.</p>
+            <div class="EMDiv">
+                <!-- Referenced https://stackoverflow.com/questions/11620698/how-to-trigger-a-file-download-when-clicking-an-html-button-or-javascript for opening files. -->
+                <form id="exampleHomework" class="form-inline" method="get" action="~/files/Example_Homework.pdf"></form>    
+            <button onclick="document.getElementById('exampleHomework').submit()">Download Assignment File</button>
+                <p>
+                    Sample Files: 
+                    <!-- Form containing sample work - will be changed for multiple examples to be dynamic later. -->
+                    <form id="exampleStudentWork" class="form-inline" method="get" action="~/files/Example_Student_Work.pdf"></form>
+                    <button value="60" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Poor</button>
+                    <button value="70" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">M</button>
+                    <button value="80" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Good</button>
+                    <button value="90" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Superior</button>
+                    <button class="plusButton">+</button>
+                </p>
 
-        <!--Collapses separated in divs-->
-        <!--Collapse with information about a learning outcome-->
-        <!--This and following collapses created with help from https://www.w3schools.com/howto/howto_js_collapsible.asp-->
-        <button class="collapseButton">Ability to use HTML</button>
-        <div class="collapseContent">
-            <p><b>The student has the ability to use HTML to create static and dynamic web pages.</b></p>
-            <hr />
-            <!--Evaluation metrics - each assignment/exam is split into an 'EMBox'-->
-            <h3>Evaluation Metrics <button class="plusButton">+</button></h3>
-            <div class="EMBox">
-                <h4><b>PS1</b></h4>
-                <p class="indented">The student is able to make static web pages from scratch by creating webpages for learning outcomes.</p>
-                <div class="EMDiv">
-                    <button onclick="location.href='assignment_definition.txt'">Download Assignment File</button>
-                    <p>Sample Files: <button value="60" class="sampleButton" onclick="location.href='student_work.txt'">Poor</button><button value="70" class="sampleButton" onclick="location.href='student_work.txt'">M</button><button value="80" class="sampleButton" onclick="location.href='student_work.txt'">Good</button><button value="90" class="sampleButton" onclick="location.href='student_work.txt'">Superior</button><button class="plusButton">+</button></p>
+            </div><!--End EM Div-->
+        </div>
+        <div class="EMBox">
+            <h4><b>Exam 1</b></h4>
+            <p class="indented">The exam covers HTML concepts such as __ and __.</p>
+            <div class="EMDiv">
+                <button onclick="document.getElementById('exampleHomework').submit()">Download Exam File</button>
+                <p>Sample Files: 
+                <button value="45" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Adequate</button>
+                <button value="70" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Good</button>
+                <button value="95" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Superior</button>
+                <button class="plusButton">+</button></p>
 
-                </div><!--End EM Div-->
-            </div>
-            <div class="EMBox">
-                <h4><b>Exam 1</b></h4>
-                <p class="indented">The exam covers HTML concepts such as __ and __.</p>
-                <div class="EMDiv">
-                    <button onclick="location.href='exam_definition.txt'">Download Exam File</button>
-                    <p>Sample Files: <button value="45" class="sampleButton" onclick="location.href='student_work.txt'">Adequate</button><button value="70" class="sampleButton" onclick="location.href='student_work.txt'">Good</button><button value="95" class="sampleButton" onclick="location.href='student_work.txt'">Superior</button><button class="plusButton">+</button></p>
+            </div><!--End EM Div-->
+        </div>
+        <br /><br />
+    </div><!--End Collapse Div-->
+    <br />
 
-                </div><!--End EM Div-->
-            </div>
-            <br /><br />
-        </div><!--End Collapse Div-->
-        <br />
-
-        <!--Collapse with information about a learning outcome-->
-        <button class="collapseButton">JavaScript -<small><i>Missing samples!</i></small></button>
-        <div class="collapseContent">
-            <p><b>Students must learn how to use JavaScript.</b></p>
-            <hr />
-            <h3>Evaluation Metrics <button class="plusButton">+</button></h3>
-            <div class="EMBox">
-                <h4><b>Assignment 1</b></h4>
-                <p class="indented">Assignment description ... this is where the professor describes how the assignment/exam fulfills the learning outcome. The file for this assignment can be downloaded/viewed from here, as well as the sample files.</p>
-                <div class="EMDiv">
-                    <button onclick="location.href='assignment_definition.txt'">Download Assignment File</button>
-                    <p>Sample Files: <i>There are no sample files. <b>Upload at least one sample.</b></i> <button class="plusButton">+</button></p>
-
-                </div><!--End EM Div-->
-            </div>
-            <br /><br />
-        </div><!--End Collapse Div-->
-        <br />
-
-        <!--Collapse with information about a learning outcome-->
-        <button class="collapseButton">Ability to Publish a Web Server -<small><i>Missing evaluation metrics!</i></small></button>
-        <div class="collapseContent">
-            <p><b>The students will be able to publish a C# .NET Core web server.</b></p>
-            <hr />
-            <h3>Evaluation Metrics <button class="plusButton">+</button></h3>
-            <p><i>This learning outcome has no evaluation metrics - <b>warning</b> metrics are required, please add at least one.</i></p>
-            <br /><br />
-        </div><!--End Collapse Div-->
-        <br />
-
-        <!--Collapse with information about a learning outcome-->
-        <button class="collapseButton">Example Learning Outcome Title</button>
-        <div class="collapseContent">
-            <p><b>Example learning outcome description. This is where the deparment's description of the desired learning outcome will be displayed.</b></p>
-            <hr />
-            <h3>Evaluation Metrics <button class="plusButton">+</button></h3>
-            <div class="EMBox">
-                <h4><b>Example Assignment/Exam</b></h4>
-                <p class="indented">Assignment description ... this is where the professor describes how the assignment/exam fulfills the learning outcome. The file for this assignment can be downloaded/viewed from here, as well as the sample files.</p>
-                <div class="EMDiv">
-                    <button onclick="location.href='assignment_definition.txt'">Download Assignment File</button>
-                    <p>Sample Files: <button value="0" class="sampleButton" onclick="location.href='student_work.txt'">Poor</button><button value="50" class="sampleButton" onclick="location.href='student_work.txt'">Good</button><button value="100" class="sampleButton" onclick="location.href='student_work.txt'">Superior</button><button class="plusButton">+</button></p>
-
-                </div><!--End EM Div-->
-            </div>
-            <br /><br />
-        </div><!--End Collapse Div-->
-
-        <br />
+    <!--Collapse with information about a learning outcome-->
+    <button class="collapseButton">JavaScript -<small><i>Missing samples!</i></small></button>
+    <div class="collapseContent">
+        <p><b>Students must learn how to use JavaScript.</b></p>
         <hr />
-        <br />
-    </div>
-</body>
-</html>
+        <h3>Evaluation Metrics <button class="plusButton">+</button></h3>
+        <div class="EMBox">
+            <h4><b>Assignment 1</b></h4>
+            <p class="indented">Assignment description ... this is where the professor describes how the assignment/exam fulfills the learning outcome. The file for this assignment can be downloaded/viewed from here, as well as the sample files.</p>
+            <div class="EMDiv">
+                <button onclick="document.getElementById('exampleHomework').submit()">Download Assignment File</button>
+                <p>Sample Files: <i>There are no sample files. <b>Upload at least one sample.</b></i> <button class="plusButton">+</button></p>
+
+            </div><!--End EM Div-->
+        </div>
+        <br /><br />
+    </div><!--End Collapse Div-->
+    <br />
+
+    <!--Collapse with information about a learning outcome-->
+    <button class="collapseButton">Ability to Publish a Web Server -<small><i>Missing evaluation metrics!</i></small></button>
+    <div class="collapseContent">
+        <p><b>The students will be able to publish a C# .NET Core web server.</b></p>
+        <hr />
+        <h3>Evaluation Metrics <button class="plusButton">+</button></h3>
+        <p><i>This learning outcome has no evaluation metrics - <b>warning</b> metrics are required, please add at least one.</i></p>
+        <br /><br />
+    </div><!--End Collapse Div-->
+    <br />
+
+    <!--Collapse with information about a learning outcome-->
+    <button class="collapseButton">Example Learning Outcome Title</button>
+    <div class="collapseContent">
+        <p><b>Example learning outcome description. This is where the deparment's description of the desired learning outcome will be displayed.</b></p>
+        <hr />
+        <h3>Evaluation Metrics <button class="plusButton">+</button></h3>
+        <div class="EMBox">
+            <h4><b>Example Assignment/Exam</b></h4>
+            <p class="indented">Assignment description ... this is where the professor describes how the assignment/exam fulfills the learning outcome. The file for this assignment can be downloaded/viewed from here, as well as the sample files.</p>
+            <div class="EMDiv">
+                <button onclick="document.getElementById('exampleHomework').submit()">Download Assignment File</button>
+                <p>Sample Files: 
+                <button value="0" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Poor</button>
+                <button value="50" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Good</button>
+                <button value="100" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Superior</button>
+                <button class="plusButton">+</button></p>
+
+            </div><!--End EM Div-->
+        </div>
+        <br /><br />
+    </div><!--End Collapse Div-->
+
+    <br />
+    <hr />
+    <br />
+</div>
