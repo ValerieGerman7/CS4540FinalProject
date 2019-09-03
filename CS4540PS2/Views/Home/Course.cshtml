@@ -1,7 +1,9 @@
 ﻿@*
     TODO: modify to use bootstrap and _Layout
 *@
-@{  }
+@{  
+    ViewData["Title"] = "Course";
+}
 <!--
 Author: Valerie German
 Date: 28 Aug 2019
@@ -26,16 +28,17 @@ File Contents: This file contains the HTML for the Professor view of a course an
         <!--Evaluation metrics - each assignment/exam is split into an 'EMBox'-->
         <h3>Evaluation Metrics <button class="plusButton">+</button></h3>
         <div class="EMBox">
+            <!-- Form containing sample work - will be changed for multiple examples to be dynamic later (and moved close to button). -->
+            <form id="exampleHomework" class="form-inline" method="get" action="~/files/Example_Homework.pdf"></form>
+            <form id="exampleStudentWork" class="form-inline" method="get" action="~/files/Example_Student_Work.pdf"></form>
+
             <h4><b>PS1</b></h4>
             <p class="indented">The student is able to make static web pages from scratch by creating webpages for learning outcomes.</p>
             <div class="EMDiv">
                 <!-- Referenced https://stackoverflow.com/questions/11620698/how-to-trigger-a-file-download-when-clicking-an-html-button-or-javascript for opening files. -->
-                <form id="exampleHomework" class="form-inline" method="get" action="~/files/Example_Homework.pdf"></form>    
-            <button onclick="document.getElementById('exampleHomework').submit()">Download Assignment File</button>
+                <button onclick="document.getElementById('exampleHomework').submit()">Download Assignment File</button>
                 <p>
-                    Sample Files: 
-                    <!-- Form containing sample work - will be changed for multiple examples to be dynamic later. -->
-                    <form id="exampleStudentWork" class="form-inline" method="get" action="~/files/Example_Student_Work.pdf"></form>
+                    Sample Files:
                     <button value="60" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Poor</button>
                     <button value="70" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">M</button>
                     <button value="80" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Good</button>
