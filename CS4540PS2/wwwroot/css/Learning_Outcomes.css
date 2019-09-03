@@ -92,7 +92,7 @@ body {
 	overflow: hidden;
 	transition: max-height 0.5s ease-out;
 }
-/*Styling*/
+/*Styling - Course Evaluation Metrics*/
 table {
 	border: 1px solid black;
 	border-collapse: collapse;
@@ -130,6 +130,13 @@ button {
 	border-radius: 15px;
 	box-shadow: 3px 3px 5px 1px grey;
 	margin: 10px;
+}
+.shadowBox {
+    box-shadow: 3px 3px 5px 1px grey;
+}
+.sampleLabelText {
+    font-size: 12px;
+    font-style: italic;
 }
 /*Content styling*/
 .EMDiv {
@@ -200,3 +207,4 @@ progress::-webkit-progress-bar {
 .completeProgress {
 	background-color: rgb(115, 240, 134);
 }
+/**/

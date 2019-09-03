@@ -23,3 +23,5 @@ References:
 -File Open: https://stackoverflow.com/questions/11620698/how-to-trigger-a-file-download-when-clicking-an-html-button-or-javascript
 -Progress bar: https://getbootstrap.com/docs/4.1/components/progress/
 -Forms: https://getbootstrap.com/docs/4.1/components/forms/
+-Modals: https://getbootstrap.com/docs/4.1/components/modal/
+-Cards: https://getbootstrap.com/docs/4.1/components/card/
