@@ -165,7 +165,7 @@ progress::-webkit-progress-bar {
 	background: var(--noProgressColor);
 }
 .progressDiv {
-	font-size: 16px;
+	font-size: 8px;
 }
 .percentFont {
 	font-size: 14px;
@@ -186,7 +186,7 @@ progress::-webkit-progress-bar {
 	width: 65%;
 	display: inline-block;
 	float: right;
-	font-size: 16px;
+	font-size: 12px;
 }
 .lowProgress {
 	background-color: rgb(240, 161, 161);
