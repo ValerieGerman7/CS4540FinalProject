@@ -1,151 +1,149 @@
 ﻿@*
-    TODO: Modify to use bootstrap
+    Author: Valerie German
+    Date: 4 Sept 2019
+    Course: CS 4540, University of Utah
+    Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
+    I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
+    File Contents: This file contains the HTML for the Department view of the courses and their evaluation/sample progress.
 *@
 @{
     ViewData["Title"] = "Department Overview";
 }
-<!--
-Author: Valerie German
-Date: 28 Aug 2019
-Course: CS 4540, University of Utah
-Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
-I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
-File Contents: This file contains the HTML for the Department view of the courses and their evaluation/sample progress.
--->
+<div id="ContentDiv">
+    <h1>Computer Science Department</h1>
+    <hr />
 
-    <div id="ContentDiv">
-        <h1>Computer Science Department</h1>
-        <hr />
-        
-        <!--Options to search the classes by progress, class name, professor ... may be added here-->
-        <!--Information about each class's progress is separated by divs, each with the same structure.-->
-        <!-- This div contains the progress for a single class-->
-        <div class="card mb-3 shadowBox medProgress" onclick="RedirectToAction('SampleCourse')">
-            <div class="card-header courseHeader">CS 2100 - Discrete Structures</div>
-            <div class="card-body">
-                <p class="card-text classInfo" align="left">Professor X</p>
-                <div class="progressDiv progressInfo" align="right">
-                    <!--Progress display for class (same structure for following class examples). Referenced https://getbootstrap.com/docs/4.1/components/progress/. -->
-                    <i>Evaluation Metrics </i>
-                    <div class="progress">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">60%</div>
-                    </div>
-                    <i>Samples </i>
-                    <div class="progress">
-                        <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
-                    </div>
+    <!--Options to search the classes by progress, class name, professor ... may be added here (future work) -->
+    <!--Information about each class's progress is separated by divs, each with the same structure.-->
+    <!-- This div contains the progress for a single class. Bootstrap cards are used to separate data. See https://getbootstrap.com/docs/4.1/components/card/. This
+        reference is used for all following cards. -->
+    <div class="card mb-3 shadowBox medProgress" onclick="RedirectToAction('SampleCourse')">
+        <div class="card-header courseHeader">CS 2100 - Discrete Structures</div>
+        <div class="card-body">
+            <p class="card-text classInfo" align="left">Professor X</p>
+            <div class="progressDiv progressInfo" align="right">
+                <!--Progress display for class (same structure for following class examples). Referenced https://getbootstrap.com/docs/4.1/components/progress/. This
+                    reference is used for all following progress bars (same structure).-->
+                <i>Evaluation Metrics </i>
+                <div class="progress">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">60%</div>
+                </div>
+                <i>Samples </i>
+                <div class="progress">
+                    <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
                 </div>
             </div>
         </div>
-
-        <div class="card mb-3 shadowBox lowProgress" onclick="RedirectToAction('SampleCourse')">
-            <div class="card-header courseHeader">CS 2100 - Discrete Structures</div>
-            <div class="card-body">
-                <p class="card-text classInfo" align="left">Professor Y</p>
-                <div class="progressDiv progressInfo" align="right">
-                    <!--Progress display for class (same structure for following class examples). Referenced https://getbootstrap.com/docs/4.1/components/progress/. -->
-                    <i>Evaluation Metrics </i>
-                    <div class="progress">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
-                    </div>
-                    <i>Samples </i>
-                    <div class="progress">
-                        <div class="progress-bar bg-info" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mb-3 shadowBox completeProgress" onclick="RedirectToAction('SampleCourse')">
-            <div class="card-header courseHeader">CS 3500 - Software Practice I</div>
-            <div class="card-body">
-                <p class="card-text classInfo" align="left">Professor T</p>
-                <div class="progressDiv progressInfo" align="right">
-                    <!--Progress display for class (same structure for following class examples). Referenced https://getbootstrap.com/docs/4.1/components/progress/. -->
-                    <i>Evaluation Metrics </i>
-                    <div class="progress">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
-                    </div>
-                    <i>Samples </i>
-                    <div class="progress">
-                        <div class="progress-bar bg-info" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mb-3 shadowBox lowProgress" onclick="RedirectToAction('SampleCourse')">
-            <div class="card-header courseHeader">CS 3500 - Software Practice I</div>
-            <div class="card-body">
-                <p class="card-text classInfo" align="left">Professor Z</p>
-                <div class="progressDiv progressInfo" align="right">
-                    <!--Progress display for class (same structure for following class examples). Referenced https://getbootstrap.com/docs/4.1/components/progress/. -->
-                    <i>Evaluation Metrics </i>
-                    <div class="progress">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="10">10%</div>
-                    </div>
-                    <i>Samples </i>
-                    <div class="progress">
-                        <div class="progress-bar bg-info" role="progressbar" style="width: 5%" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100">5%</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mb-3 shadowBox medProgress" onclick="RedirectToAction('Course')">
-            <div class="card-header courseHeader">CS 4540 - Web Software Architecture</div>
-            <div class="card-body">
-                <p class="card-text classInfo" align="left">Professor R</p>
-                <div class="progressDiv progressInfo" align="right">
-                    <!--Progress display for class (same structure for following class examples). Referenced https://getbootstrap.com/docs/4.1/components/progress/. -->
-                    <i>Evaluation Metrics </i>
-                    <div class="progress">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75%</div>
-                    </div>
-                    <i>Samples </i>
-                    <div class="progress">
-                        <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mb-3 shadowBox highProgress" onclick="RedirectToAction('SampleCourse')">
-            <div class="card-header courseHeader">CS 5530 - Database Systems</div>
-            <div class="card-body">
-                <p class="card-text classInfo" align="left">Professor R</p>
-                <div class="progressDiv progressInfo" align="right">
-                    <!--Progress display for class (same structure for following class examples). Referenced https://getbootstrap.com/docs/4.1/components/progress/. -->
-                    <i>Evaluation Metrics </i>
-                    <div class="progress">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100">95%</div>
-                    </div>
-                    <i>Samples </i>
-                    <div class="progress">
-                        <div class="progress-bar bg-info" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">80%</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mb-3 shadowBox completeProgress" onclick="RedirectToAction('SampleCourse')">
-            <div class="card-header courseHeader">CS 5460 - Operating Systems</div>
-            <div class="card-body">
-                <p class="card-text classInfo" align="left">Professor W</p>
-                <div class="progressDiv progressInfo" align="right">
-                    <!--Progress display for class (same structure for following class examples). Referenced https://getbootstrap.com/docs/4.1/components/progress/. -->
-                    <i>Evaluation Metrics </i>
-                    <div class="progress">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
-                    </div>
-                    <i>Samples </i>
-                    <div class="progress">
-                        <div class="progress-bar bg-info" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <br />
     </div>
+
+    <div class="card mb-3 shadowBox lowProgress" onclick="RedirectToAction('SampleCourse')">
+        <div class="card-header courseHeader">CS 2100 - Discrete Structures</div>
+        <div class="card-body">
+            <p class="card-text classInfo" align="left">Professor Y</p>
+            <div class="progressDiv progressInfo" align="right">
+                <!--Progress display for class (same structure for following class examples). Referenced https://getbootstrap.com/docs/4.1/components/progress/. -->
+                <i>Evaluation Metrics </i>
+                <div class="progress">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                </div>
+                <i>Samples </i>
+                <div class="progress">
+                    <div class="progress-bar bg-info" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3 shadowBox completeProgress" onclick="RedirectToAction('SampleCourse')">
+        <div class="card-header courseHeader">CS 3500 - Software Practice I</div>
+        <div class="card-body">
+            <p class="card-text classInfo" align="left">Professor T</p>
+            <div class="progressDiv progressInfo" align="right">
+                <!--Progress display for class (same structure for following class examples). Referenced https://getbootstrap.com/docs/4.1/components/progress/. -->
+                <i>Evaluation Metrics </i>
+                <div class="progress">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
+                </div>
+                <i>Samples </i>
+                <div class="progress">
+                    <div class="progress-bar bg-info" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3 shadowBox lowProgress" onclick="RedirectToAction('SampleCourse')">
+        <div class="card-header courseHeader">CS 3500 - Software Practice I</div>
+        <div class="card-body">
+            <p class="card-text classInfo" align="left">Professor Z</p>
+            <div class="progressDiv progressInfo" align="right">
+                <!--Progress display for class (same structure for following class examples). Referenced https://getbootstrap.com/docs/4.1/components/progress/. -->
+                <i>Evaluation Metrics </i>
+                <div class="progress">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="10">10%</div>
+                </div>
+                <i>Samples </i>
+                <div class="progress">
+                    <div class="progress-bar bg-info" role="progressbar" style="width: 5%" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100">5%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3 shadowBox medProgress" onclick="RedirectToAction('Course')">
+        <div class="card-header courseHeader">CS 4540 - Web Software Architecture</div>
+        <div class="card-body">
+            <p class="card-text classInfo" align="left">Professor R</p>
+            <div class="progressDiv progressInfo" align="right">
+                <!--Progress display for class (same structure for following class examples). Referenced https://getbootstrap.com/docs/4.1/components/progress/. -->
+                <i>Evaluation Metrics </i>
+                <div class="progress">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75%</div>
+                </div>
+                <i>Samples </i>
+                <div class="progress">
+                    <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3 shadowBox highProgress" onclick="RedirectToAction('SampleCourse')">
+        <div class="card-header courseHeader">CS 5530 - Database Systems</div>
+        <div class="card-body">
+            <p class="card-text classInfo" align="left">Professor R</p>
+            <div class="progressDiv progressInfo" align="right">
+                <!--Progress display for class (same structure for following class examples). Referenced https://getbootstrap.com/docs/4.1/components/progress/. -->
+                <i>Evaluation Metrics </i>
+                <div class="progress">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100">95%</div>
+                </div>
+                <i>Samples </i>
+                <div class="progress">
+                    <div class="progress-bar bg-info" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">80%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3 shadowBox completeProgress" onclick="RedirectToAction('SampleCourse')">
+        <div class="card-header courseHeader">CS 5460 - Operating Systems</div>
+        <div class="card-body">
+            <p class="card-text classInfo" align="left">Professor W</p>
+            <div class="progressDiv progressInfo" align="right">
+                <!--Progress display for class (same structure for following class examples). Referenced https://getbootstrap.com/docs/4.1/components/progress/. -->
+                <i>Evaluation Metrics </i>
+                <div class="progress">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
+                </div>
+                <i>Samples </i>
+                <div class="progress">
+                    <div class="progress-bar bg-info" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <br />
+</div>

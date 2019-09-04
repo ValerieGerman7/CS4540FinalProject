@@ -37,3 +37,4 @@ References:
 -Modals: https://getbootstrap.com/docs/4.1/components/modal/
 -Cards: https://getbootstrap.com/docs/4.1/components/card/
 -Collapses: https://getbootstrap.com/docs/4.0/components/collapse/
+-Navbar: https://getbootstrap.com/docs/4.0/components/navbar/

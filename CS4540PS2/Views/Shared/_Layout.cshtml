@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿<!--
+    Author: Valerie German
+    Date: 4 Sept 2019
+    Course: CS 4540, University of Utah
+    Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
+    I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
+    File Contents: This file contains the layout for all webpages for PS2.
+-->
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -25,9 +33,8 @@
 </head>
 <body>
     <header>
-        <!--TODO: Modify navbar (to be more representative of our application - in a static way)-->
+        <!-- References bootstrap https://getbootstrap.com/docs/4.0/components/navbar/ -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <!--<a class="navbar-brand" href="#">Home</a>-->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -36,9 +43,11 @@
                     <li class="nav-item active">
                         <a class="nav-link navbar-brand" asp-controller="Home" asp-action="Index">Home <span class="sr-only">(current)</span></a>
                     </li>
+                    <!-- Link -->
                     <li class="nav-item">
                         <a class="nav-link" asp-controller="Home" asp-action="Overview">Department</a>
                     </li>
+                    <!-- Dropdown -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Courses
@@ -51,6 +60,7 @@
                         </div>
                     </li>
                 </ul>
+                <!-- User Info / Dropdown -->
                 <div class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-light" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         UserName
@@ -60,7 +70,7 @@
                         <a class="dropdown-item" asp-controller="Home" asp-action="Profile">User Role Here</a>
                         <a class="dropdown-item" asp-controller="Home" asp-action="Profile">Profile</a>
                         <!--<div class="dropdown-divider"></div>
-                <button class="btn btn-outline-success my-2 my-sm-0 align-self-center p-2" type="submit">Logout</button>-->
+                    <button class="btn btn-outline-success my-2 my-sm-0 align-self-center p-2" type="submit">Logout</button>-->
                     </div>
                 </div>
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button>

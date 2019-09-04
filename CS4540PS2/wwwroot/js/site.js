@@ -3,9 +3,10 @@
 //Course: CS 4540, University of Utah
 //Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
 //I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
-//File Contents: This file contains the JavaScript for the PS1 webpages.
+//File Contents: This file contains the JavaScript for the PS1 webpages, modified for PS2 wepages.
 
 //--Initializing--
+//Set Sample file button colors and text.
 var sample = document.getElementsByClassName("sampleButton");
 for (index = 0; index < sample.length; index++) {
     SetColor(sample[index], sample[index].value);
