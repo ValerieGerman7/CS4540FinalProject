@@ -1,29 +1,27 @@
 ﻿@*
-    TODO: modify to use bootstrap and _Layout
+    Author: Valerie German
+    Date: 4 Sept 2019
+    Course: CS 4540, University of Utah
+    Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
+    I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
+    File Contents: This file contains the HTML for the Professor view of a course and the evaluation metrics/sample files associated with the assigned learning outcomes.
 *@
 @{
     ViewData["Title"] = "Course";
 }
-<!--
-Author: Valerie German
-Date: 28 Aug 2019
-Course: CS 4540, University of Utah
-Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
-I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
-File Contents: This file contains the HTML for the Professor view of a course and the evaluation metrics/sample files associated with the assigned learning outcomes.
--->
     <div id="ContentDiv">
         <h1>CS 4540 Web Software Architecture</h1>
         <h4>Professor Jim de St. Germain</h4>
         <hr />
         <h2>Learning Outcomes</h2>
 
+        <!--Modals are used for adding evaluation metrics or sample files in a simple popup.-->
         <!--Add modal for evaluation metrics (modals reference https://getbootstrap.com/docs/4.1/components/modal/)-->
-        <div class="modal fade" id="emModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="emModal" tabindex="-1" role="dialog" aria-labelledby="evaluationMetricModal" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Add Evaluation Metric</h5>
+                        <h5 class="modal-title" id="evaluationMetricModal">Add Evaluation Metric</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -32,11 +30,11 @@ File Contents: This file contains the HTML for the Professor view of a course an
                         <!--Referenced https://getbootstrap.com/docs/4.1/components/forms/ for form layout-->
                         <form>
                             <div class="form-group">
-                                <label for="exampleFormControlInput1">Title</label>
+                                <label>Title</label>
                                 <input type="email" class="form-control" placeholder="Enter assignment name here">
                             </div>
                             <div class="form-group">
-                                <label for="exampleFormControlTextarea1">Insert Metric Description</label>
+                                <label>Insert Metric Description</label>
                                 <textarea class="form-control" rows="3" placeholder="Enter description here"></textarea>
                             </div>
                             <div class="custom-file">
@@ -53,11 +51,11 @@ File Contents: This file contains the HTML for the Professor view of a course an
             </div>
         </div>
         <!--Add modal for sample files-->
-        <div class="modal fade" id="sModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="sModal" tabindex="-1" role="dialog" aria-labelledby="sampleFileModal" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Add Sample</h5>
+                        <h5 class="modal-title" id="sampleFileModal">Add Sample</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -82,182 +80,195 @@ File Contents: This file contains the HTML for the Professor view of a course an
                 </div>
             </div>
         </div>
-        <!-- Form containing sample work - will be changed for multiple examples to be dynamic later (and moved close to button). -->
+        <!-- Form containing sample work - will be changed for multiple examples to be dynamic later (and moved close to button). For now these are forms
+        to be link to files.-->
         <form id="exampleHomework" class="form-inline" method="get" action="~/files/Example_Homework.pdf"></form>
         <form id="exampleStudentWork" class="form-inline" method="get" action="~/files/Example_Student_Work.pdf"></form>
 
+
         <!--Collapses separated in divs-->
         <!--Collapse with information about a learning outcome-->
-        <!--This and following collapses created with help from https://www.w3schools.com/howto/howto_js_collapsible.asp-->
-        <button class="collapseButton">Ability to use HTML</button>
-        <div class="collapseContent">
+        <!--This and following collapses created with help from https://getbootstrap.com/docs/4.0/components/collapse/-->
+        <button class="btn btn-primary sectionButton text-left" type="button" data-toggle="collapse" data-target="#collapseContent" aria-expanded="false" aria-controls="collapseContent">
+            Ability to use HTML
+        </button>
+        <div class="collapse" id="collapseContent">
             <!--Cards reference https://getbootstrap.com/docs/4.1/components/card/-->
-            <div class="card">
-                <div class="card-body">
-                    The student has the ability to use HTML to create static and dynamic web pages.
+            <div class="card card-body">
+                <div class="card">
+                    <div class="card-body">
+                        The student has the ability to use HTML to create static and dynamic web pages.
+                    </div>
                 </div>
-            </div>
-            <br />
-            <!--Evaluation metrics - each assignment/exam is split into an 'EMBox'-->
-            <h5>
-                Evaluation Metrics
-                <button type="button" class="btn btn-rounded btn-dark btn-sm float-right" data-toggle="modal" data-target="#emModal">
-                    <i>+</i>
-                </button>
-            </h5>
-            <hr />
-            <!-- Referenced https://getbootstrap.com/docs/4.1/components/card/-->
-            <div class="card shadowBox">
-                <div class="card-header">
-                    <b>PS1</b>
-                    <button class="btn btn-rounded btn-dark btn-sm float-right" onclick="document.getElementById('exampleHomework').submit()">Download Assignment File</button>
-                </div>
-                <div class="card-body">
-                    <!--<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>-->
-                    <p class="card-text indented">The student is able to make static web pages from scratch by creating webpages for learning outcomes.</p>
-                    <!-- Referenced https://stackoverflow.com/questions/11620698/how-to-trigger-a-file-download-when-clicking-an-html-button-or-javascript for opening files. -->
-                    <p>
-                        <label class="sampleLabelText">Sample Files:</label>
-                        <button value="60" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Poor</button>
-                        <button value="70" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">M</button>
-                        <button value="80" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Good</button>
-                        <button value="90" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Superior</button>
-                        <button type="button" class="btn btn-rounded btn-dark btn-sm" data-toggle="modal" data-target="#sModal">
-                            <i>+</i>
-                        </button>
-                    </p>
-                </div>
-            </div>
-            <br />
-            <div class="card shadowBox">
-                <div class="card-header">
-                    <b>Exam 1</b>
-                    <button class="btn btn-rounded btn-dark btn-sm float-right" onclick="document.getElementById('exampleHomework').submit()">
-                        Download Exam File
+                <br />
+                <!--Evaluation metrics - each assignment/exam is split into an 'EMBox'-->
+                <h5>
+                    Evaluation Metrics
+                    <button type="button" class="btn btn-rounded btn-dark btn-sm float-right" data-toggle="modal" data-target="#emModal">
+                        <i>+</i>
                     </button>
+                </h5>
+                <hr />
+                <!-- Referenced https://getbootstrap.com/docs/4.1/components/card/-->
+                <div class="card shadowBox">
+                    <div class="card-header">
+                        <b>PS1</b>
+                        <button class="btn btn-rounded btn-dark btn-sm float-right" onclick="document.getElementById('exampleHomework').submit()">Download Assignment File</button>
+                    </div>
+                    <div class="card-body">
+                        <!--<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>-->
+                        <p class="card-text indented">The student is able to make static web pages from scratch by creating webpages for learning outcomes.</p>
+                        <!-- Referenced https://stackoverflow.com/questions/11620698/how-to-trigger-a-file-download-when-clicking-an-html-button-or-javascript for opening files. -->
+                        <p>
+                            <label class="sampleLabelText">Sample Files:</label>
+                            <button value="60" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Poor</button>
+                            <button value="70" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">M</button>
+                            <button value="80" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Good</button>
+                            <button value="90" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Superior</button>
+                            <button type="button" class="btn btn-rounded btn-dark btn-sm" data-toggle="modal" data-target="#sModal">
+                                <i>+</i>
+                            </button>
+                        </p>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <!--<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>-->
-                    <p class="card-text indented">The exam covers HTML concepts such as __ and __.</p>
-                    <!-- Referenced https://stackoverflow.com/questions/11620698/how-to-trigger-a-file-download-when-clicking-an-html-button-or-javascript for opening files. -->
-                    <p>
-                        <label class="sampleLabelText">Sample Files:</label>
-                        <button value="45" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Adequate</button>
-                        <button value="70" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Good</button>
-                        <button value="95" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Superior</button>
-                        <button type="button" class="btn btn-rounded btn-dark btn-sm" data-toggle="modal" data-target="#sModal">
-                            <i>+</i>
+                <br />
+                <div class="card shadowBox">
+                    <div class="card-header">
+                        <b>Exam 1</b>
+                        <button class="btn btn-rounded btn-dark btn-sm float-right" onclick="document.getElementById('exampleHomework').submit()">
+                            Download Exam File
                         </button>
-                    </p>
+                    </div>
+                    <div class="card-body">
+                        <!--<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>-->
+                        <p class="card-text indented">The exam covers HTML concepts such as __ and __.</p>
+                        <!-- Referenced https://stackoverflow.com/questions/11620698/how-to-trigger-a-file-download-when-clicking-an-html-button-or-javascript for opening files. -->
+                        <p>
+                            <label class="sampleLabelText">Sample Files:</label>
+                            <button value="45" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Adequate</button>
+                            <button value="70" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Good</button>
+                            <button value="95" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Superior</button>
+                            <button type="button" class="btn btn-rounded btn-dark btn-sm" data-toggle="modal" data-target="#sModal">
+                                <i>+</i>
+                            </button>
+                        </p>
+                    </div>
                 </div>
             </div>
-
-            <br />
         </div><!--End Collapse Div-->
-        <br />
-
-        <!--Collapse with information about a learning outcome-->
-        <button class="collapseButton">JavaScript -<small><i>Missing samples!</i></small></button>
-        <div class="collapseContent">
-            <div class="card">
-                <div class="card-body">
+        <br /><br />
+        <button class="btn btn-primary sectionButton text-left" type="button" data-toggle="collapse"
+                data-target="#collapseContent1" aria-expanded="false" aria-controls="collapseContent1">
+            Javascript  -<small><i>Missing samples!</i></small>
+        </button>
+        <div class="collapse" id="collapseContent1">
+            <div class="card card-body">
+                <div class="card card-body">
                     Students must learn how to use JavaScript.
                 </div>
-            </div>
-            <br />
-            <!--Evaluation metrics - each assignment/exam is split into an 'EMBox'-->
-            <h5>
-                Evaluation Metrics
-                <button type="button" class="btn btn-rounded btn-dark btn-sm float-right" data-toggle="modal" data-target="#emModal">
-                    <i>+</i>
-                </button>
-            </h5>
-            <hr />
-
-            <div class="card shadowBox">
-                <div class="card-header">
-                    <b>Assignment 1</b>
-                    <button class="btn btn-rounded btn-dark btn-sm float-right" onclick="document.getElementById('exampleHomework').submit()">Download Assignment File</button>
-                </div>
-                <div class="card-body">
-                    <!--<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>-->
-                    <p class="card-text indented">Assignment description ... this is where the professor describes how the assignment/exam fulfills the learning outcome. The file for this assignment can be downloaded/viewed from here, as well as the sample files.</p>
-                    <!-- Referenced https://stackoverflow.com/questions/11620698/how-to-trigger-a-file-download-when-clicking-an-html-button-or-javascript for opening files. -->
-                    <p>
-                        <label class="sampleLabelText">Sample Files: <i>There are no sample files. <b>Upload at least one sample.</b></i></label>
-                        <button type="button" class="btn btn-rounded btn-dark btn-sm" data-toggle="modal" data-target="#sModal">
-                            <i>+</i>
-                        </button>
-                    </p>
-                </div>
-            </div>
-            <br />
-        </div><!--End Collapse Div-->
-        <br />
-
-        <!--Collapse with information about a learning outcome-->
-        <button class="collapseButton">Ability to Publish a Web Server -<small><i>Missing evaluation metrics!</i></small></button>
-        <div class="collapseContent">
-            <div class="card">
-                <div class="card-body">
-                    The students will be able to publish a C# .NET Core web server.
-                </div>
-            </div>
-            <br />
-            <!--Evaluation metrics - each assignment/exam is split into an 'EMBox'-->
-            <h5>
-                Evaluation Metrics
-                <button type="button" class="btn btn-rounded btn-dark btn-sm float-right" data-toggle="modal" data-target="#emModal">
-                    <i>+</i>
-                </button>
-            </h5>
-            <hr />
-            <p><i>This learning outcome has no evaluation metrics - <b>warning</b> metrics are required, please add at least one.</i></p>
-            <br /><br />
-        </div><!--End Collapse Div-->
-        <br />
-
-        <!--Collapse with information about a learning outcome-->
-        <button class="collapseButton">Example Learning Outcome Title</button>
-        <div class="collapseContent">
-            <div class="card">
-                <div class="card-body">
-                    Example learning outcome description. This is where the deparment's description of the desired learning outcome will be displayed.
-                </div>
-            </div>
-            <br />
-            <!--Evaluation metrics - each assignment/exam is split into an 'EMBox'-->
-            <h5>
-                Evaluation Metrics
-                <button type="button" class="btn btn-rounded btn-dark btn-sm float-right" data-toggle="modal" data-target="#emModal">
-                    <i>+</i>
-                </button>
-            </h5>
-            <hr />
-
-            <div class="card shadowBox">
-                <div class="card-header">
-                    <b>Example Assignment/Exam</b>
-                    <button class="btn btn-rounded btn-dark btn-sm float-right" onclick="document.getElementById('exampleHomework').submit()">
-                        Download Assignment File
+                <br />
+                <!--Evaluation metrics - each assignment/exam is split into an 'EMBox'-->
+                <h5>
+                    Evaluation Metrics
+                    <button type="button" class="btn btn-rounded btn-dark btn-sm float-right" data-toggle="modal" data-target="#emModal">
+                        <i>+</i>
                     </button>
-                </div>
-                <div class="card-body">
-                    <!--<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>-->
-                    <p class="card-text indented">The exam covers HTML concepts such as __ and __.</p>
-                    <!-- Referenced https://stackoverflow.com/questions/11620698/how-to-trigger-a-file-download-when-clicking-an-html-button-or-javascript for opening files. -->
-                    <p>
-                        <label class="sampleLabelText">Sample Files:</label>
-                        <button value="0" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Poor</button>
-                        <button value="50" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Good</button>
-                        <button value="100" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Superior</button>
-                        <button type="button" class="btn btn-rounded btn-dark btn-sm" data-toggle="modal" data-target="#sModal">
-                            <i>+</i>
-                        </button>
-                    </p>
+                </h5>
+                <hr />
+
+                <div class="card shadowBox">
+                    <div class="card-header">
+                        <b>Assignment 1</b>
+                        <button class="btn btn-rounded btn-dark btn-sm float-right" onclick="document.getElementById('exampleHomework').submit()">Download Assignment File</button>
+                    </div>
+                    <div class="card-body">
+                        <!--<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>-->
+                        <p class="card-text indented">Assignment description ... this is where the professor describes how the assignment/exam fulfills the learning outcome. The file for this assignment can be downloaded/viewed from here, as well as the sample files.</p>
+                        <!-- Referenced https://stackoverflow.com/questions/11620698/how-to-trigger-a-file-download-when-clicking-an-html-button-or-javascript for opening files. -->
+                        <p>
+                            <label class="sampleLabelText">Sample Files: <i>There are no sample files. <b>Upload at least one sample.</b></i></label>
+                            <button type="button" class="btn btn-rounded btn-dark btn-sm" data-toggle="modal" data-target="#sModal">
+                                <i>+</i>
+                            </button>
+                        </p>
+                    </div>
                 </div>
             </div>
-            <br />
+        </div><!--End Collapse Div-->
+        <br /><br />
+
+        <!--Collapse with information about a learning outcome-->
+        <button class="btn btn-primary sectionButton text-left" type="button" data-toggle="collapse"
+                data-target="#collapseContent2" aria-expanded="false" aria-controls="collapseContent2">
+            Ability to Publish a Web Server  -<small><i>Missing evaluation metrics!</i></small>
+        </button>
+        <div class="collapse" id="collapseContent2">
+            <div class="card card-body">
+                <div class="card">
+                    <div class="card-body">
+                        The students will be able to publish a C# .NET Core web server.
+                    </div>
+                </div>
+                <br />
+                <!--Evaluation metrics - each assignment/exam is split into an 'EMBox'-->
+                <h5>
+                    Evaluation Metrics
+                    <button type="button" class="btn btn-rounded btn-dark btn-sm float-right" data-toggle="modal" data-target="#emModal">
+                        <i>+</i>
+                    </button>
+                </h5>
+                <hr />
+                <p><i>This learning outcome has no evaluation metrics - <b>warning</b> metrics are required, please add at least one.</i></p>
+                <br /><br />
+            </div>
+        </div><!--End Collapse Div-->
+        <br /><br />
+
+        <!--Collapse with information about a learning outcome-->
+        <button class="btn btn-primary sectionButton text-left" type="button" data-toggle="collapse"
+                data-target="#collapseContent3" aria-expanded="false" aria-controls="collapseContent3">
+            Example Learning Outcome
+        </button>
+        <div class="collapse" id="collapseContent3">
+            <div class="card card-body">
+                <div class="card">
+                    <div class="card-body">
+                        Example learning outcome description. This is where the deparment's description of the desired learning outcome will be displayed.
+                    </div>
+                </div>
+                <br />
+                <!--Evaluation metrics - each assignment/exam is split into an 'EMBox'-->
+                <h5>
+                    Evaluation Metrics
+                    <button type="button" class="btn btn-rounded btn-dark btn-sm float-right" data-toggle="modal" data-target="#emModal">
+                        <i>+</i>
+                    </button>
+                </h5>
+                <hr />
+
+                <div class="card shadowBox">
+                    <div class="card-header">
+                        <b>Example Assignment/Exam</b>
+                        <button class="btn btn-rounded btn-dark btn-sm float-right" onclick="document.getElementById('exampleHomework').submit()">
+                            Download Assignment File
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <!--<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>-->
+                        <p class="card-text indented">The exam covers HTML concepts such as __ and __.</p>
+                        <!-- Referenced https://stackoverflow.com/questions/11620698/how-to-trigger-a-file-download-when-clicking-an-html-button-or-javascript for opening files. -->
+                        <p>
+                            <label class="sampleLabelText">Sample Files:</label>
+                            <button value="0" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Poor</button>
+                            <button value="50" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Good</button>
+                            <button value="100" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()">Superior</button>
+                            <button type="button" class="btn btn-rounded btn-dark btn-sm" data-toggle="modal" data-target="#sModal">
+                                <i>+</i>
+                            </button>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div><!--End Collapse Div-->
 
         <br />

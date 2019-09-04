@@ -12,6 +12,10 @@ namespace CS4540PS2.Controllers {
             return View();
         }
 
+        public IActionResult Profile() {
+            return View();
+        }
+
         public IActionResult Course() {
             return View();
         }
