@@ -16,6 +16,12 @@ using CS4540PS2.Models;
 /// </summary>
 namespace CS4540PS2.Controllers {
     public class HomeController : Controller {
+        private readonly LearningOutcomeDBContext _context;
+
+        public HomeController(LearningOutcomeDBContext context) {
+            _context = context;
+        }
+
         public IActionResult Index() {
             return View();
         }
