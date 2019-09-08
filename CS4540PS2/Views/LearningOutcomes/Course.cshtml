@@ -13,3 +13,9 @@
 @foreach(var y in Model.CourseInstance) {
     <p>@y.Name</p>
 }
+@foreach (var x in Model.EvaluationMetrics) {
+    <p>@x.Name</p>
+}
+@foreach(var x in Model.SampleFiles) {
+    <p>@x.FileName</p>
+}

@@ -16,7 +16,9 @@ namespace CS4540PS2.Models
         }
 
         public virtual DbSet<CourseInstance> CourseInstance { get; set; }
+        public virtual DbSet<EvaluationMetrics> EvaluationMetrics { get; set; }
         public virtual DbSet<LearningOutcomes> LearningOutcomes { get; set; }
+        public virtual DbSet<SampleFiles> SampleFiles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -34,7 +36,7 @@ namespace CS4540PS2.Models
             modelBuilder.Entity<CourseInstance>(entity =>
             {
                 entity.HasIndex(e => new { e.Department, e.Number, e.Semester, e.Year })
-                    .HasName("UQ__CourseIn__EA334D09BC08C7E2")
+                    .HasName("UQ__CourseIn__EA334D099E6B4C3E")
                     .IsUnique();
 
                 entity.Property(e => e.CourseInstanceId).HasColumnName("CourseInstanceID");
@@ -43,7 +45,7 @@ namespace CS4540PS2.Models
                     .IsRequired()
                     .HasMaxLength(5);
 
-                entity.Property(e => e.Descripton).IsRequired();
+                entity.Property(e => e.Description).IsRequired();
 
                 entity.Property(e => e.Name).IsRequired();
 
@@ -52,10 +54,29 @@ namespace CS4540PS2.Models
                     .HasMaxLength(6);
             });
 
+            modelBuilder.Entity<EvaluationMetrics>(entity =>
+            {
+                entity.HasKey(e => e.Emid)
+                    .HasName("PK__Evaluati__258EC8E008589A09");
+
+                entity.Property(e => e.Emid).HasColumnName("EMID");
+
+                entity.Property(e => e.Description).IsRequired();
+
+                entity.Property(e => e.Loid).HasColumnName("LOID");
+
+                entity.Property(e => e.Name).IsRequired();
+
+                entity.HasOne(d => d.Lo)
+                    .WithMany(p => p.EvaluationMetrics)
+                    .HasForeignKey(d => d.Loid)
+                    .HasConstraintName("FK__Evaluation__LOID__2F10007B");
+            });
+
             modelBuilder.Entity<LearningOutcomes>(entity =>
             {
                 entity.HasKey(e => e.Loid)
-                    .HasName("PK__Learning__76F319DD86543E19");
+                    .HasName("PK__Learning__76F319DDB98F0B5B");
 
                 entity.Property(e => e.Loid).HasColumnName("LOID");
 
@@ -66,7 +87,22 @@ namespace CS4540PS2.Models
                 entity.HasOne(d => d.CourseInstance)
                     .WithMany(p => p.LearningOutcomes)
                     .HasForeignKey(d => d.CourseInstanceId)
-                    .HasConstraintName("FK__LearningO__Cours__267ABA7A");
+                    .HasConstraintName("FK__LearningO__Cours__2C3393D0");
+            });
+
+            modelBuilder.Entity<SampleFiles>(entity =>
+            {
+                entity.HasKey(e => e.Sid)
+                    .HasName("PK__SampleFi__CA195970E10633C4");
+
+                entity.Property(e => e.Sid).HasColumnName("SID");
+
+                entity.Property(e => e.Emid).HasColumnName("EMID");
+
+                entity.HasOne(d => d.Em)
+                    .WithMany(p => p.SampleFiles)
+                    .HasForeignKey(d => d.Emid)
+                    .HasConstraintName("FK__SampleFile__EMID__31EC6D26");
             });
         }
     }

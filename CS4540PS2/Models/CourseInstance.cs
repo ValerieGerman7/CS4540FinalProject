@@ -12,7 +12,7 @@ namespace CS4540PS2.Models
 
         public int CourseInstanceId { get; set; }
         public string Name { get; set; }
-        public string Descripton { get; set; }
+        public string Description { get; set; }
         public string Department { get; set; }
         public int Number { get; set; }
         public string Semester { get; set; }
