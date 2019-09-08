@@ -1,0 +1,15 @@
+﻿@model LearningOutcomeDBContext
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<h1>Course</h1>
+@foreach(var x in Model.LearningOutcomes) {
+    <p>@x.Name</p>
+}
+<br />
+@foreach(var y in Model.CourseInstance) {
+    <p>@y.Name</p>
+}
