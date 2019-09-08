@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using CS4540PS2.Models;
 
 namespace CS4540PS2
 {
@@ -33,6 +35,9 @@ namespace CS4540PS2
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            var connection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=LearningOutcomeDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"; //@"Server=(localdb)\mssqllocaldb;Database=CS4540PS2;Trusted_Connection=True;ConnectRetryCount=0";
+            services.AddDbContext<LearningOutcomeDBContext>(options => options.UseSqlServer(connection));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
