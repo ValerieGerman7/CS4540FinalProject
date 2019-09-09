@@ -7,8 +7,39 @@
     @using CS4540PS2.Controllers;
     ViewData["Title"] = Model.DeptName;
 }
+<div id="ContentDiv">
+    <h1>@Model.DeptName Department</h1>
+    <hr />
+    <!--Options to search the classes by progress, class name, professor ... may be added here (future work) -->
+    <!--Information about each class's progress is separated by divs, each with the same structure.-->
+    @{ foreach (CourseStatData course in Model.Courses) {
+            var LOProgress = 100 * course.NumLOWithEvaluationMetrics / (course.NumLearningOutcomes == 0 ? 1 : course.NumLearningOutcomes);
+            var EMProgress = 100 * course.NumEMWithSamples / (course.NumEvaluationMetrics == 0 ? 1 : course.NumEvaluationMetrics);
+            var totalProgress = LOProgress + EMProgress;
+            var progressColor = (totalProgress == 200 ? "completeProgress" : (totalProgress >= 160 ? "highProgress" :
+                (totalProgress >= 90 ? "medProgress" : "lowProgress")));
+            <!-- This div contains the progress for a single class. Bootstrap cards are used to separate data. See https://getbootstrap.com/docs/4.1/components/card/. This
+            reference is used for all following cards. -->
+            <div class="card mb-3 shadowBox @progressColor" onclick="RedirectToAction('SampleCourse')">
+                <div class="card-header courseHeader">@Model.DeptCode @course.CourseNum - @course.CourseName</div>
+                <div class="card-body">
+                    <p class="card-text classInfo" align="left">@course.CourseDescript</p>
+                    <div class="progressDiv progressInfo" align="right">
+                        <!--Progress display for class (same structure for following class examples). Referenced https://getbootstrap.com/docs/4.1/components/progress/. This
+                            reference is used for all following progress bars (same structure).-->
+                        <i>Evaluation Metrics </i>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: @LOProgress%" aria-valuenow="@LOProgress" aria-valuemin="0" aria-valuemax="100">@LOProgress%</div>
+                        </div>
+                        <i>Samples </i>
+                        <div class="progress">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: @EMProgress%" aria-valuenow="@EMProgress" aria-valuemin="0" aria-valuemax="100">@EMProgress%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
 
-<p>@Model.DeptCode</p>
-@foreach(CourseStatData stat in Model.Courses) {
-    <p>@stat.CourseName : LO EM: @stat.NumLearningOutcomes / @stat.NumLOWithEvaluationMetrics : EM Sample: @stat.NumEvaluationMetrics / @stat.NumEMWithSamples</p>
-}
+    <br />
+</div>

@@ -69,6 +69,7 @@ namespace CS4540PS2.Controllers {
                               select new CourseStatData {
                                   CourseName = courses.Name,
                                   CourseNum = courses.Number,
+                                  CourseDescript = courses.Description,
                                   NumLearningOutcomes = (from lo in _context.LearningOutcomes
                                                          where lo.CourseInstanceId == courses.CourseInstanceId
                                                          select lo.Name).Count(),
@@ -135,6 +136,7 @@ namespace CS4540PS2.Controllers {
     public struct CourseStatData {
         public string CourseName { get; set; }
         public int CourseNum { get; set; }
+        public string CourseDescript { get; set; }
         public int NumLearningOutcomes { get; set; }
         public int NumLOWithEvaluationMetrics { get; set; }
         public int NumEvaluationMetrics { get; set; }
