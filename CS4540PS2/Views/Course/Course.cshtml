@@ -1,8 +1,19 @@
-﻿@model string
+﻿@model CS4540PS2.Controllers.CourseInfo
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    @using Newtonsoft.Json.Linq;
+    @using CS4540PS2.Controllers;
 }
 
 <p>@Model</p>
+<p></p>
+
+@try {
+    <p>Course: @Model.CourseName</p>
+    @foreach (LearningOutcomeData lo in Model.LearningOutcomes) {
+        <p>@lo.LOName</p>
+    }} catch (Exception e) {
+    <p>Failed: @e.Message</p>
+}
