@@ -40,3 +40,22 @@ function SetColor(button, scale) {
 function RedirectToAction(action) {
     window.location.href = "/Home/" + action;
 }
+
+function RedirectToCourse(Dept, Num, Sem, Year) {
+    var form = document.createElement("form");
+    var dept = document.createElement("input");
+    dept.name = "Dept"; dept.value = Dept;
+    form.appendChild(dept);
+    var num = document.createElement("input");
+    num.name = "Num"; num.value = Num;
+    form.appendChild(num);
+    var sem = document.createElement("input");
+    sem.name = "Sem"; sem.value = Sem;
+    form.appendChild(sem);
+    var year = document.createElement("input");
+    year.name = "Year"; year.value = Year;
+    form.appendChild(year);
+    form.action = "/Course/Course";
+    document.body.appendChild(form);
+    form.submit();
+}
