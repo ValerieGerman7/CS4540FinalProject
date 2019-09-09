@@ -10,7 +10,7 @@
 
 <div id="ContentDiv">
     <h1>@Model.Department @Model.Number @Model.CourseName</h1>
-    <h4><!--Professor name--></h4>
+    <h4>@Model.CourseDescription<!--Professor name--></h4>
     <hr />
     <h2>Learning Outcomes</h2>
 
@@ -85,7 +85,9 @@
                     See buttons as well.-->
     <form id="exampleHomework" class="form-inline" method="get" action="~/files/Example_Homework.pdf" target="_blank"></form>
     <form id="exampleStudentWork" class="form-inline" method="get" action="~/files/Example_Student_Work.pdf" target="_blank"></form>
-
+    @if(Model.LearningOutcomes.Count == 0) {
+        <p><b>This course has no assigned learning outcomes.</b></p>
+    }
     @foreach (LearningOutcomeData lo in Model.LearningOutcomes) {
         <!--Collapses separated in divs-->
         <!--Collapse with information about a learning outcome-->

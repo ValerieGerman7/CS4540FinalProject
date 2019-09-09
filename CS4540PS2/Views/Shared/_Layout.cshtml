@@ -47,14 +47,17 @@
                     <li class="nav-item">
                         <a class="nav-link" asp-controller="Home" asp-action="Overview">Department</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Course" asp-action="Department">Department2</a>
+                    </li>
                     <!-- Dropdown -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Courses
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" asp-controller="Home" asp-action="SampleCourse">CS 2100</a>
-                            <a class="dropdown-item" asp-controller="Home" asp-action="SampleCourse">CS 3500</a>
+                            <a class="dropdown-item" asp-controller="Course" asp-action="Course" asp-route-Dept="CS" asp-route-Num="2100" asp-route-Sem="Fall" asp-route-Year="2019">CS 2100</a>
+                            <a class="dropdown-item" asp-controller="Course" asp-action="Course" asp-route-Dept="CS" asp-route-Num="3500" asp-route-Sem="Fall" asp-route-Year="2019">CS 3500</a>
                             <a class="dropdown-item" asp-controller="Course" asp-action="Course" asp-route-Dept="CS" asp-route-Num="4540" asp-route-Sem="Fall" asp-route-Year="2019">CS 4540</a>
                             <!--<div class="dropdown-divider"></div>-->
                         </div>

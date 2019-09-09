@@ -1,0 +1,14 @@
+﻿@model CS4540PS2.Controllers.DepartmentData
+@*
+    x
+*@
+@{
+    @using Newtonsoft.Json.Linq;
+    @using CS4540PS2.Controllers;
+    ViewData["Title"] = Model.DeptName;
+}
+
+<p>@Model.DeptCode</p>
+@foreach(CourseStatData stat in Model.Courses) {
+    <p>@stat.CourseName : LO EM: @stat.NumLearningOutcomes / @stat.NumLOWithEvaluationMetrics : EM Sample: @stat.NumEvaluationMetrics / @stat.NumEMWithSamples</p>
+}
