@@ -59,3 +59,12 @@ function RedirectToCourse(Dept, Num, Sem, Year) {
     document.body.appendChild(form);
     form.submit();
 }
+function RedirectToDept(Dept) {
+    var form = document.createElement("form");
+    var dept = document.createElement("input");
+    dept.name = "Dept"; dept.value = Dept;
+    form.appendChild(dept);
+    form.action = "/Department/Department";
+    document.body.appendChild(form);
+    form.submit();
+}
