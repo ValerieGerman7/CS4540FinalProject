@@ -21,8 +21,9 @@ namespace CS4540PS2.Controllers {
             return View(await learningOutcomeDBContext.ToListAsync());
         }
 
-        public async Task<IActionResult> Course() {
-            return View(_context);
+        public async Task<IActionResult> Course(string Dept, int Num, string Sem, int Year) {
+            //JObject courseInfo = GetCourseInfo(Dept, Num, Sem, Year);
+            return View("Course", CourseController.GetCourseInfo(Dept, Num, Sem, Year, _context));
         }
 
         // GET: LearningOutcomes/Details/5

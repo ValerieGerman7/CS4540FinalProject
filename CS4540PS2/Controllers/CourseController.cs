@@ -20,12 +20,12 @@ namespace CS4540PS2.Controllers {
         
         public async Task<IActionResult> Course(string Dept, int Num, string Sem, int Year) {
             //JObject courseInfo = GetCourseInfo(Dept, Num, Sem, Year);
-            return View("Course", GetCourseInfo(Dept, Num, Sem, Year));
+            return View("Course", GetCourseInfo(Dept, Num, Sem, Year, _context));
         }
 
-        public CourseInfo GetCourseInfo(string Dept, int Num, string Sem, int Year) {
-            using (_context) {
-                var getCourse = from courses in _context.CourseInstance
+        public static CourseInfo GetCourseInfo(string Dept, int Num, string Sem, int Year, LearningOutcomeDBContext context) {
+            using (context) {
+                var getCourse = from courses in context.CourseInstance
                                 where courses.Department == Dept
                                 && courses.Number == Num
                                 && courses.Semester == Sem
@@ -37,18 +37,23 @@ namespace CS4540PS2.Controllers {
                                     Number = courses.Number,
                                     Semester = courses.Semester,
                                     Year = courses.Year,
+                                    ID = courses.CourseInstanceId,
                                     LearningOutcomes = courses.LearningOutcomes.Select(lo =>
                                         new LearningOutcomeData {
                                             LOName = lo.Name,
                                             LODescription = lo.Description,
+                                            LOID = lo.Loid,
                                             EvaluationMetrics = lo.EvaluationMetrics.Where(em => em.Loid == lo.Loid)
                                             .Select(x => new EvaluationMetricData {
                                                 Name = x.Name,
                                                 Description = x.Description,
+                                                EMID = x.Emid,
                                                 Samples = x.SampleFiles.Where(sample => sample.Emid == x.Emid)
                                                         .Select(sampleSelect => new SamplesData {
                                                             Score = sampleSelect.Score,
-                                                            FileName = sampleSelect.FileName }).ToList<SamplesData>()
+                                                            FileName = sampleSelect.FileName,
+                                                            SID = sampleSelect.Sid
+                                                        }).ToList<SamplesData>()
                                             }).ToList<EvaluationMetricData>()
                                         }
                                     ).ToList<LearningOutcomeData>()
@@ -166,21 +171,25 @@ namespace CS4540PS2.Controllers {
         public int Number { get; set; }
         public string Semester { get; set; }
         public int Year { get; set; }
+        public int ID { get; set; }
         public List<LearningOutcomeData> LearningOutcomes { get; set; }
     }
     public struct LearningOutcomeData {
         public string LOName { get; set; }
         public string LODescription { get; set; }
+        public int LOID { get; set; }
         public List<EvaluationMetricData> EvaluationMetrics { get; set; }
     }
     public struct EvaluationMetricData {
         public string Name { get; set; }
         public string Description { get; set; }
+        public int EMID { get; set; }
         public List<SamplesData> Samples { get; set; }
     }
     public struct SamplesData {
         public string FileName { get; set; }
         public int Score { get; set; }
+        public int SID { get; set; }
     }
 
 }

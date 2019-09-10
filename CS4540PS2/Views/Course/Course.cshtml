@@ -11,6 +11,9 @@
 <div id="ContentDiv">
     <h1>@Model.Department @Model.Number @Model.CourseName</h1>
     <h4>@Model.CourseDescription<!--Professor name--></h4>
+    <div align="right">
+        <label><b>Professor View   </b>  -</label><button onclick="RedirectToCourseDept('@Model.Department', @Model.Number, '@Model.Semester', @Model.Year);">Go To Department View</button>
+    </div>
     <hr />
     <h2>Learning Outcomes</h2>
 
@@ -85,7 +88,7 @@
                     See buttons as well.-->
     <form id="exampleHomework" class="form-inline" method="get" action="~/files/Example_Homework.pdf" target="_blank"></form>
     <form id="exampleStudentWork" class="form-inline" method="get" action="~/files/Example_Student_Work.pdf" target="_blank"></form>
-    @if(Model.LearningOutcomes.Count == 0) {
+    @if (Model.LearningOutcomes.Count == 0) {
         <p><b>This course has no assigned learning outcomes.</b></p>
     }
     @foreach (LearningOutcomeData lo in Model.LearningOutcomes) {

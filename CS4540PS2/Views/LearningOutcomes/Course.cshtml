@@ -1,21 +1,97 @@
-﻿@model LearningOutcomeDBContext
+﻿@model CS4540PS2.Controllers.CourseInfo
 @*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+    Department View of a course
 *@
 @{
+    @using Newtonsoft.Json.Linq;
+    @using CS4540PS2.Controllers;
+    ViewData["Title"] = Model.CourseName;
 }
 
-<h1>Course</h1>
-@foreach(var x in Model.LearningOutcomes) {
-    <p>@x.Name</p>
-}
-<br />
-@foreach(var y in Model.CourseInstance) {
-    <p>@y.Name</p>
-}
-@foreach (var x in Model.EvaluationMetrics) {
-    <p>@x.Name</p>
-}
-@foreach(var x in Model.SampleFiles) {
-    <p>@x.FileName</p>
-}
+    <div id="ContentDiv">
+        <h1>@Model.Department @Model.Number @Model.CourseName</h1>
+        <h4>@Model.CourseDescription<!--Professor name--></h4>
+        <div align="right">
+            <label><b>Department View   </b>  -</label><button onclick="RedirectToCourse('@Model.Department', @Model.Number, '@Model.Semester', @Model.Year)">Go To Professor View</button>
+        </div>
+        <hr />
+        <h2>Learning Outcomes</h2>
+
+        @if (Model.LearningOutcomes.Count == 0) {
+            <p><b>This course has no assigned learning outcomes.</b></p>
+        }
+        @foreach (LearningOutcomeData lo in Model.LearningOutcomes) {
+            <!--Collapses separated in divs-->
+            <!--Collapse with information about a learning outcome-->
+            <!--This and following collapses created with help from https://getbootstrap.com/docs/4.0/components/collapse/-->
+            <button class="btn btn-primary sectionButton text-left" type="button" data-toggle="collapse"
+                    data-target="#collapseContent@{<text>@Model.LearningOutcomes.IndexOf(lo)</text>}" aria-expanded="false"
+                    aria-controls="collapseContent@{<text>@Model.LearningOutcomes.IndexOf(lo)</text>}">
+                @lo.LOName
+            </button>
+            <div class="collapse show" id="collapseContent@{<text>@Model.LearningOutcomes.IndexOf(lo)</text>}">
+                <!--Cards reference https://getbootstrap.com/docs/4.1/components/card/ (this is true of all following cards).-->
+                <div class="card card-body">
+                    <div class="card">
+                        <div class="card-body">
+                            @lo.LODescription
+                        </div>
+                    </div>
+                    <br />
+                    <div class="btn-group">
+                        <a asp-controller="LearningOutcomes" asp-action="Edit" asp-route-id="@lo.LOID">
+                            <button class="btn btn-primary btn-sm">Modify</button>
+                        </a>
+                        <a asp-controller="LearningOutcomes" asp-action="Delete" asp-route-id="@lo.LOID">
+                            <button class="btn btn-danger btn-sm">Delete</button>
+                        </a>
+                    </div>
+                </div>
+            </div><!--End Collapse Div-->
+        }
+        <br />
+
+        <h5>
+            Add Learning Outcome
+            <button type="button" class="btn btn-rounded btn-dark btn-sm" data-toggle="modal" data-target="#loModal">
+                <i>+</i>
+            </button>
+        </h5>
+        <div class="modal fade" id="loModal" tabindex="-1" role="dialog" aria-labelledby="learningOutcomeModal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="learningOutcomeModal">Add Learning Outcome</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!--Referenced https://getbootstrap.com/docs/4.1/components/forms/ for form layout-->
+                        <form asp-action="Create">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label class="control-label">Name</label>
+                                <input name="Name" class="form-control" placeholder="Insert Name" />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Description</label>
+                                <input name="Description" class="form-control" placeholder="Insert Description" />
+                            </div>
+                            <div class="form-group">
+                                <input hidden="hidden" name="CourseInstanceId" class="form-control" value="@Model.ID" />
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Create" class="btn btn-primary" />
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <br />
+    </div>

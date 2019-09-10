@@ -24,6 +24,7 @@ namespace CS4540PS2.Controllers {
         //TODO: Move to own controller
 
         public async Task<IActionResult> Department(string DeptCode) {
+            if(DeptCode == null) { DeptCode = "CS"; } //Temp for viewing
             return View("Department", GetDeptData(DeptCode));
         }
 
