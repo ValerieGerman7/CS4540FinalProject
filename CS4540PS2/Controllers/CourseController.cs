@@ -14,7 +14,8 @@ namespace CS4540PS2.Controllers {
         }
 
         public async Task<IActionResult> Index() {
-            return View();
+            var instances = _context.CourseInstance;
+            return View(await instances.ToListAsync());
         }
         
         public async Task<IActionResult> Course(string Dept, int Num, string Sem, int Year) {
