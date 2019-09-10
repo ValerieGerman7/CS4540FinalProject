@@ -4,9 +4,7 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
-
-<h4>LearningOutcomes</h4>
+<h2>Create Course Instance</h2>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -24,7 +22,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Department" class="control-label"></label>
-                <input asp-for="Department" class="form-control" />
+                <input asp-for="Department" maxlength="5" class="form-control" />
                 <span asp-validation-for="Department" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -34,7 +32,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Semester" class="control-label"></label>
-                <input asp-for="Semester" class="form-control" />
+                <input asp-for="Semester" maxlength="6" class="form-control" />
                 <span asp-validation-for="Semester" class="text-danger"></span>
             </div>
             <div class="form-group">

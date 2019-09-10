@@ -5,7 +5,24 @@
 @{
 }
 
+<h2>Existing Courses</h2>
+<hr />
 
-@foreach(CourseInstance course in Model) {
-    <p>Course: @course.Name</p>
+@foreach (CourseInstance course in Model) {
+<div class="card shadowBox">
+    <div class="card-body" onclick="RedirectToCourse('@course.Department', @course.Number, '@course.Semester', @course.Year);">
+        <p>@course.Department @course.Number - <b>@course.Name</b> </p>
+        <p>@course.Description</p>
+    </div>
+    
+    <div align="right">
+        <a asp-controller="Course" asp-action="Delete" asp-route-id="@course.CourseInstanceId">
+            <button class="btn btn-danger">Delete</button>
+        </a>
+        <a asp-controller="Course" asp-action="Edit" asp-route-id="@course.CourseInstanceId">
+            <button class="btn btn-primary">Modify</button>
+        </a>
+    </div>
+</div>
+    <br />
 }
