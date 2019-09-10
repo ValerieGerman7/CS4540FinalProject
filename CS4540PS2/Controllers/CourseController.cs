@@ -1,11 +1,10 @@
-﻿using System;
+﻿using CS4540PS2.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CS4540PS2.Models;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace CS4540PS2.Controllers {
     public class CourseController : Controller {
@@ -58,6 +57,101 @@ namespace CS4540PS2.Controllers {
                 return getCourse.FirstOrDefault();
             }
         }
+
+        // GET: LearningOutcomes/Create
+        public IActionResult Create() {
+            ViewData["CourseInstanceId"] = new SelectList(_context.CourseInstance, "CourseInstanceId", "Department");
+            return View();
+        }
+
+        // POST: LearningOutcomes/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Name,Description,Department,Number,Semester,Year")] CourseInstance courseInstance) {
+            if (ModelState.IsValid) {
+                _context.Add(courseInstance);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["CourseInstanceId"] = new SelectList(_context.CourseInstance, "CourseInstanceId", "Department", courseInstance.CourseInstanceId);
+            return View(courseInstance);
+        }
+
+        // GET: LearningOutcomes/Edit/5
+        public async Task<IActionResult> Edit(int? id) {
+            if (id == null) {
+                return NotFound();
+            }
+
+            var courseInstance = await _context.CourseInstance.FindAsync(id);
+            if (courseInstance == null) {
+                return NotFound();
+            }
+            ViewData["CourseInstanceId"] = new SelectList(_context.CourseInstance, "CourseInstanceId", "Department", courseInstance.CourseInstanceId);
+            return View(courseInstance);
+        }
+
+        // POST: LearningOutcomes/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("CourseInstanceId,Name,Description,Department,Number,Semester,Year")] CourseInstance courseInstance) {
+            if (id != courseInstance.CourseInstanceId) {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid) {
+                try {
+                    _context.Update(courseInstance);
+                    await _context.SaveChangesAsync();
+                } catch (DbUpdateConcurrencyException) {
+                    if (!CourseInstanceExists(courseInstance.CourseInstanceId)) {
+                        return NotFound();
+                    } else {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["CourseInstanceId"] = new SelectList(_context.CourseInstance, "CourseInstanceId", "Department", courseInstance.CourseInstanceId);
+            return View(courseInstance);
+        }
+
+        // GET: LearningOutcomes/Delete/5
+        public async Task<IActionResult> Delete(int? id) {
+            if (id == null) {
+                return NotFound();
+            }
+
+            var courseInstance = await _context.CourseInstance
+                .FirstOrDefaultAsync(m => m.CourseInstanceId == id);
+            if (courseInstance == null) {
+                return NotFound();
+            }
+
+            return View(courseInstance);
+        }
+
+        // POST: LearningOutcomes/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id) {
+            var courseInstance = await _context.CourseInstance.FindAsync(id);
+            _context.CourseInstance.Remove(courseInstance);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool CourseInstanceExists(int id) {
+            return _context.CourseInstance.Any(e => e.CourseInstanceId == id);
+        }
+
+
+
+        //TODO: Move to own controller
 
         public async Task<IActionResult> Department(string DeptCode) {
             return View("Department", GetDeptData(DeptCode));
