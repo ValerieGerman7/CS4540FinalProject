@@ -20,7 +20,7 @@
                 (totalProgress >= 90 ? "medProgress" : "lowProgress")));
             <!-- This div contains the progress for a single class. Bootstrap cards are used to separate data. See https://getbootstrap.com/docs/4.1/components/card/. This
             reference is used for all following cards. -->
-            <div class="card mb-3 shadowBox @progressColor" onclick="RedirectToCourse('@Model.DeptCode', @course.CourseNum, 'Fall', 2019);">
+            <div class="card mb-3 shadowBox @progressColor" onclick="RedirectToCourseDept('@Model.DeptCode', @course.CourseNum, '@course.Semester', @course.Year);">
                 <div class="card-header courseHeader">@Model.DeptCode @course.CourseNum - @course.CourseName</div>
                 <div class="card-body">
                     <p class="card-text classInfo" align="left">@course.CourseDescript</p>

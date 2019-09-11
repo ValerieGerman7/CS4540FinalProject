@@ -4,9 +4,8 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>LearningOutcomes</h4>
+<h2>Edit Learning Outcome</h2>
+<p>@if (Model.CourseInstance != null) {<text>@Model.CourseInstance.Department @Model.CourseInstance.Number - @Model.CourseInstance.Name</text>}</p>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -23,11 +22,7 @@
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="CourseInstanceId" class="control-label"></label>
-                <select asp-for="CourseInstanceId" class="form-control" asp-items="ViewBag.CourseInstanceId"></select>
-                <span asp-validation-for="CourseInstanceId" class="text-danger"></span>
-            </div>
+            <input type="hidden" asp-for="CourseInstanceId" value="@Model.CourseInstanceId" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -36,7 +31,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="RedirectToCourse" asp-route-id="@Model.CourseInstanceId">Back to Course</a>
 </div>
 
 @section Scripts {

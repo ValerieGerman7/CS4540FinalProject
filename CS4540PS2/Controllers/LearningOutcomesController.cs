@@ -21,6 +21,15 @@ namespace CS4540PS2.Controllers {
             return View(await learningOutcomeDBContext.ToListAsync());
         }
 
+        public async Task<IActionResult> RedirectToCourse(int id) {
+            using (_context) {
+                CourseInstance getid = (from courses in _context.CourseInstance
+                            where courses.CourseInstanceId == id
+                            select courses).FirstOrDefault<CourseInstance>();
+                if (getid == null) return RedirectToAction("Error");
+                return await Course(getid.Department, getid.Number, getid.Semester, getid.Year);
+            }
+        }
         public async Task<IActionResult> Course(string Dept, int Num, string Sem, int Year) {
             //JObject courseInfo = GetCourseInfo(Dept, Num, Sem, Year);
             return View("Course", CourseController.GetCourseInfo(Dept, Num, Sem, Year, _context));
@@ -133,5 +142,6 @@ namespace CS4540PS2.Controllers {
         private bool LearningOutcomesExists(int id) {
             return _context.LearningOutcomes.Any(e => e.Loid == id);
         }
+
     }
 }
