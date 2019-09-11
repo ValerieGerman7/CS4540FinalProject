@@ -5,6 +5,14 @@ using System.Threading.Tasks;
 using CS4540PS2.Models;
 using Microsoft.AspNetCore.Mvc;
 
+/// <summary>
+/// Author: Valerie German
+/// Date: 10 Sept 2019
+/// Course: CS 4540, University of Utah
+/// Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
+/// I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
+/// File Contents: This file contains controller for department webpages.
+/// </summary>
 namespace CS4540PS2.Controllers {
     public class DepartmentController : Controller {
         private readonly LearningOutcomeDBContext _context;
@@ -12,6 +20,10 @@ namespace CS4540PS2.Controllers {
             _context = context;
         }
 
+        /// <summary>
+        /// Returns a list of departments.
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Index() {
             using (_context) {
                 var getDepts = from courses in _context.CourseInstance
@@ -21,13 +33,23 @@ namespace CS4540PS2.Controllers {
                 return View("Index", getDepts.ToList<string>());
             }
         }
-        //TODO: Move to own controller
 
+        /// <summary>
+        /// Returns a department page, listing classes with the given department
+        /// code.
+        /// </summary>
+        /// <param name="DeptCode"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Department(string DeptCode) {
             if(DeptCode == null) { DeptCode = "CS"; } //Temp for viewing
             return View("Department", GetDeptData(DeptCode));
         }
 
+        /// <summary>
+        /// Returns information about a department's courses.
+        /// </summary>
+        /// <param name="DeptCode"></param>
+        /// <returns></returns>
         public DepartmentData GetDeptData(string DeptCode) {
             using (_context) {
                 var getDept = from courses in _context.CourseInstance
@@ -67,13 +89,17 @@ namespace CS4540PS2.Controllers {
 
     }
 
-
+    /// <summary>
+    /// Struct containing information about a department.
+    /// </summary>
     public struct DepartmentData {
         public string DeptName { get; set; }
         public string DeptCode { get; set; }
         public List<CourseStatData> Courses { get; set; }
     }
-
+    /// <summary>
+    /// Struct containing information about a course.
+    /// </summary>
     public struct CourseStatData {
         public string CourseName { get; set; }
         public int CourseNum { get; set; }
