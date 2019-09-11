@@ -1,5 +1,12 @@
 ﻿@model CS4540PS2.Models.LearningOutcomes
-
+@*
+    Author: Valerie German
+    Date: 10 Sept 2019
+    Course: CS 4540, University of Utah
+    Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
+    I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
+    File Contents: Webpage for viewing a learning outcome.
+*@
 @{
     ViewData["Title"] = "Details";
 }
@@ -10,22 +17,22 @@
     <h4>LearningOutcomes</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Description)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CourseInstance)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CourseInstance.Department)
         </dd>
     </dl>

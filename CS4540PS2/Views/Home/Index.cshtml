@@ -1,17 +1,19 @@
 ﻿@*
     Author: Valerie German
-    Date: 4 Sept 2019
+    Date: 10 Sept 2019
     Course: CS 4540, University of Utah
     Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
     I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
-    File Contents: This file contains sample homepage for PS2.
+    File Contents: This file contains sample homepage for PS3.
 *@
 @{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h3 class="display-4">Home - PS2</h3>
-    <p>PS2 Sample Home Page</p>
-    <p>Please see the <a asp-controller="Home" asp-action="Course">Course</a> and <a asp-controller="Home" asp-action="Overview">Overview</a> pages.</p>
+    <h3 class="display-4">Home - PS3</h3>
+    <p>PS3 Sample Home Page</p>
+    <p>Please see the <a asp-controller="Course" asp-action="Course" asp-route-Dept="CS" asp-route-Num="4540" 
+                         asp-route-Sem="Fall" asp-route-Year="2019">Course</a> and 
+                        <a asp-controller="Department" asp-action="Department">Overview</a> pages.</p>
 </div>

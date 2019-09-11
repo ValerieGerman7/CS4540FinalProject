@@ -2,17 +2,21 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace CS4540PS2.Models
-{
-    public partial class LearningOutcomeDBContext : DbContext
-    {
-        public LearningOutcomeDBContext()
-        {
+/// <summary>
+/// Author: Valerie German
+/// Date: 10 Sept 2019
+/// Course: CS 4540, University of Utah
+/// Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
+/// I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
+/// File Contents: Database context for the learning outcomes database.
+/// </summary>
+namespace CS4540PS2.Models {
+    public partial class LearningOutcomeDBContext : DbContext {
+        public LearningOutcomeDBContext() {
         }
 
         public LearningOutcomeDBContext(DbContextOptions<LearningOutcomeDBContext> options)
-            : base(options)
-        {
+            : base(options) {
         }
 
         public virtual DbSet<CourseInstance> CourseInstance { get; set; }
@@ -20,21 +24,17 @@ namespace CS4540PS2.Models
         public virtual DbSet<LearningOutcomes> LearningOutcomes { get; set; }
         public virtual DbSet<SampleFiles> SampleFiles { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
+            if (!optionsBuilder.IsConfigured) {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=LearningOutcomeDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;");
             }
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+        protected override void OnModelCreating(ModelBuilder modelBuilder) {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
 
-            modelBuilder.Entity<CourseInstance>(entity =>
-            {
+            modelBuilder.Entity<CourseInstance>(entity => {
                 entity.HasIndex(e => new { e.Department, e.Number, e.Semester, e.Year })
                     .HasName("UQ__CourseIn__EA334D099E6B4C3E")
                     .IsUnique();
@@ -54,8 +54,7 @@ namespace CS4540PS2.Models
                     .HasMaxLength(6);
             });
 
-            modelBuilder.Entity<EvaluationMetrics>(entity =>
-            {
+            modelBuilder.Entity<EvaluationMetrics>(entity => {
                 entity.HasKey(e => e.Emid)
                     .HasName("PK__Evaluati__258EC8E008589A09");
 
@@ -73,8 +72,7 @@ namespace CS4540PS2.Models
                     .HasConstraintName("FK__Evaluation__LOID__2F10007B");
             });
 
-            modelBuilder.Entity<LearningOutcomes>(entity =>
-            {
+            modelBuilder.Entity<LearningOutcomes>(entity => {
                 entity.HasKey(e => e.Loid)
                     .HasName("PK__Learning__76F319DDB98F0B5B");
 
@@ -90,8 +88,7 @@ namespace CS4540PS2.Models
                     .HasConstraintName("FK__LearningO__Cours__2C3393D0");
             });
 
-            modelBuilder.Entity<SampleFiles>(entity =>
-            {
+            modelBuilder.Entity<SampleFiles>(entity => {
                 entity.HasKey(e => e.Sid)
                     .HasName("PK__SampleFi__CA195970E10633C4");
 
