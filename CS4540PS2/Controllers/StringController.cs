@@ -35,7 +35,7 @@ namespace CS4540PS2.Controllers {
                 });
             string webpage = "<div id=\"ContentDiv\">" +
                 "<h1>" + info.Department + " " + info.Number + " " + info.CourseName + " </h1>" +
-                "<h4> " + info.CourseDescription + " < !--Professor name-- ></h4>" +
+                "<h4> " + info.CourseDescription + "</h4>" +
                 "<div align = \"right\" >" +
                     "<label><b> Professor View </b> -</label><button onclick=" +
                         "\"RedirectToCourseDept('" + info.Department + "', " + info.Number + ", '" + info.Semester + "', " + info.Year + ");\">Go To Department View</button>" +
@@ -110,11 +110,11 @@ namespace CS4540PS2.Controllers {
                 foreach(LearningOutcomeData lo in info.LearningOutcomes) {
                     webpage +=
                         "<button class=\"btn btn-primary sectionButton text-left\" type=\"button\" data-toggle=\"collapse\"" +
-                            "data-target=\"#collapseContent@{<text>@Model.LearningOutcomes.IndexOf(lo)</text>}\" aria-expanded=\"false\"" +
-                            "aria-controls=\"collapseContent@{<text>@Model.LearningOutcomes.IndexOf(lo)</text>}\">" +
+                            "data-target=\"#collapseContent"+info.LearningOutcomes.IndexOf(lo)+"\" aria-expanded=\"false\"" +
+                            "aria-controls=\"collapseContent" + info.LearningOutcomes.IndexOf(lo) + "\">" +
                             lo.LOName +
                         "</button>" +
-                        "<div class=\"collapse\" id=\"collapseContent@{<text>@Model.LearningOutcomes.IndexOf(lo)</text>}\">" +
+                        "<div class=\"collapse\" id=\"collapseContent" + info.LearningOutcomes.IndexOf(lo) + "\">" +
                             "<div class=\"card card-body\">" +
                                 "<div class=\"card\">" +
                                     "<div class=\"card-body\">" +
