@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 
 /// <summary>
 /// Author: Valerie German
@@ -16,7 +17,10 @@ using Microsoft.Extensions.DependencyInjection;
 namespace CS4540PS2.Data {
     public class DbInitializer {
         public static void Initialize(LearningOutcomeDBContext context) {
-            context.Database.EnsureCreated();
+            if (context.Database.EnsureCreated()) {
+                //context.Database.Migrate();
+            }
+            //
             if (context.CourseInstance.Any()) {
                 return;
             }
