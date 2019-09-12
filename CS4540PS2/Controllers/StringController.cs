@@ -23,6 +23,15 @@ namespace CS4540PS2.Controllers {
         public StringController(LearningOutcomeDBContext context) {
             _context = context;
         }
+
+        /// <summary>
+        /// Generates the course webpage with C# strings.
+        /// </summary>
+        /// <param name="Dept"></param>
+        /// <param name="Num"></param>
+        /// <param name="Sem"></param>
+        /// <param name="Year"></param>
+        /// <returns></returns>
         public IActionResult Index(string Dept, int? Num, string Sem, int? Year) {
             if (Dept.Equals(null) || Num == null || Sem.Equals(null) || Year == null)
                 return View("Error", new ErrorViewModel() {
