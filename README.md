@@ -7,7 +7,16 @@ Course: CS 4540, University of Utah
 Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
 
 Comments to Evaluators: 
-	The connection string for the database is located in appsettings.json. If the database is empty, it is populated with test data.
+	The connection string for the database is located in appsettings.json. If the database is empty, it is populated with test data. DbInitialize
+initializes the database schema and data (if empty). 
+	Department: The homepage redirects to the Computer Science Department view. This lists all CS courses, and each course links to a department view of the
+course.
+	Course: The department course view allows learning outcomes to be added, deleted and modified. The evaluation metrics and sample files aren't currently
+displayed - this webpage is currently intended to show functionality for editing learning outcomes. For assignment purposes, on the top right, it will
+indicate that it is the department view, and the professor view can be seen by clicking 'Go To Professor View'. The professor view displays learning
+outcomes, evaluation metrics and samples files. Evalutation metric and sample file editing aren't currently enabled, but the forms for creating are
+displayed in modals.
+	
 
 Design Notes:
 	
