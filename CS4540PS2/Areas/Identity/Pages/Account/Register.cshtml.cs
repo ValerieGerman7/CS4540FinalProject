@@ -10,11 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
-namespace CS4540PS2.Areas.Identity.Pages.Account
-{
+namespace CS4540PS2.Areas.Identity.Pages.Account {
     [AllowAnonymous]
-    public class RegisterModel : PageModel
-    {
+    public class RegisterModel : PageModel {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
@@ -24,8 +22,7 @@ namespace CS4540PS2.Areas.Identity.Pages.Account
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
-        {
+            IEmailSender emailSender) {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
@@ -37,8 +34,7 @@ namespace CS4540PS2.Areas.Identity.Pages.Account
 
         public string ReturnUrl { get; set; }
 
-        public class InputModel
-        {
+        public class InputModel {
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
@@ -56,20 +52,16 @@ namespace CS4540PS2.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
         }
 
-        public void OnGet(string returnUrl = null)
-        {
+        public void OnGet(string returnUrl = null) {
             ReturnUrl = returnUrl;
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
-        {
+        public async Task<IActionResult> OnPostAsync(string returnUrl = null) {
             returnUrl = returnUrl ?? Url.Content("~/");
-            if (ModelState.IsValid)
-            {
+            if (ModelState.IsValid) {
                 var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
-                if (result.Succeeded)
-                {
+                if (result.Succeeded) {
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -85,8 +77,7 @@ namespace CS4540PS2.Areas.Identity.Pages.Account
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);
                 }
-                foreach (var error in result.Errors)
-                {
+                foreach (var error in result.Errors) {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }

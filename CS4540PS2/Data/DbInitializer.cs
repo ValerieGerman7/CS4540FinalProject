@@ -36,30 +36,36 @@ namespace CS4540PS2.Data {
                 }
             }
             if (!context.Users.Any()) { //Only add if database is empty
+                UserManager<IdentityUser> manageRoles = provider.GetService<UserManager<IdentityUser>>();
                 IdentityUser user0 = new IdentityUser() {
                     Email = "testInstructor@gmail.com",
                     UserName = "TestInstructor",
-                    PasswordHash = new PasswordHasher<UserContext>().HashPassword(context, "Password0?")
+                    LockoutEnabled = false,
+                    EmailConfirmed = true
                 };
+                await manageRoles.CreateAsync(user0, "Password0?");
                 IdentityUser user1 = new IdentityUser() {
                     Email = "testAdmin@gmail.com",
                     UserName = "TestAdmin",
-                    PasswordHash = new PasswordHasher<UserContext>().HashPassword(context, "Password0?")
+                    LockoutEnabled = false,
+                    EmailConfirmed = true
                 };
+                await manageRoles.CreateAsync(user1, "Password0?");
                 IdentityUser user2 = new IdentityUser() {
                     Email = "testChair@gmail.com",
                     UserName = "TestChair",
-                    PasswordHash = new PasswordHasher<UserContext>().HashPassword(context, "Password0?")
+                    LockoutEnabled = false,
+                    EmailConfirmed = true
                 };
+                await manageRoles.CreateAsync(user2, "Password0?");
                 IdentityUser[] users = { user0, user1, user2 };
                 foreach (IdentityUser user in users) {
                     if (!context.Users.Any(u => u.UserName == user.UserName)) {
-                        context.Users.Add(user);
+                        //context.Users.Add(user);
                     }
                 }
                 context.SaveChanges();
                 //Give users roles
-                UserManager<IdentityUser> manageRoles = provider.GetService<UserManager<IdentityUser>>();
                 await manageRoles.AddToRoleAsync(user0, "Instructor");
                 await manageRoles.AddToRoleAsync(user1, "Admin");
                 await manageRoles.AddToRoleAsync(user2, "Chair");
