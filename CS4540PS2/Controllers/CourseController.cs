@@ -13,10 +13,10 @@ using System.Threading.Tasks;
 /// Course: CS 4540, University of Utah
 /// Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
 /// I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
-/// File Contents: This file contains controller for course webpages.
+/// File Contents: This file contains controller for admin course webpages - creating/editing/deleting courses and course overview.
 /// </summary>
 namespace CS4540PS2.Controllers {
-    [Authorize(Roles="Instructor")]
+    [Authorize(Roles="Admin")]
     public class CourseController : Controller {
         private readonly LearningOutcomeDBContext _context;
         /// <summary>
@@ -38,6 +38,7 @@ namespace CS4540PS2.Controllers {
         
         /// <summary>
         /// Return a webpage containing information about the selected course.
+        /// TODO: modify for admin view.
         /// </summary>
         /// <param name="Dept"></param>
         /// <param name="Num"></param>
