@@ -22,7 +22,9 @@ namespace CS4540PS2.Data {
         public static async Task InitializeUser(UserContext context, IServiceProvider provider) {
             //context.Database.EnsureCreated();
             context.Database.Migrate();
-            
+
+            //Referencesd https://romansimuta.com/blogs/blog/authorization-with-roles-in-asp.net-core-mvc-web-application in
+            //initializing users database.
             //Create Roles
             var manager = provider.GetRequiredService<RoleManager<IdentityRole>>();
             string[] availableRoles = { "Admin", "Instructor", "Chair" };
@@ -33,17 +35,36 @@ namespace CS4540PS2.Data {
                     identRes = await manager.CreateAsync(new IdentityRole(role));
                 }
             }
-            /*
-            var config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json").Build();
-            var userManager = provider.GetRequiredService<UserManager<UserContext>>();
-            var user = await userManager.FindByEmailAsync(config.GetSection("AppSettings")["UserEmail"]);
-            if(user == null) {
-                var altUser = new UserContext {
-
+            if (!context.Users.Any()) { //Only add if database is empty
+                IdentityUser user0 = new IdentityUser() {
+                    Email = "testInstructor@gmail.com",
+                    UserName = "TestInstructor",
+                    PasswordHash = new PasswordHasher<UserContext>().HashPassword(context, "Password0?")
+                };
+                IdentityUser user1 = new IdentityUser() {
+                    Email = "testAdmin@gmail.com",
+                    UserName = "TestAdmin",
+                    PasswordHash = new PasswordHasher<UserContext>().HashPassword(context, "Password0?")
+                };
+                IdentityUser user2 = new IdentityUser() {
+                    Email = "testChair@gmail.com",
+                    UserName = "TestChair",
+                    PasswordHash = new PasswordHasher<UserContext>().HashPassword(context, "Password0?")
+                };
+                IdentityUser[] users = { user0, user1, user2 };
+                foreach (IdentityUser user in users) {
+                    if (!context.Users.Any(u => u.UserName == user.UserName)) {
+                        context.Users.Add(user);
+                    }
                 }
-            }*/
-
+                context.SaveChanges();
+                //Give users roles
+                UserManager<IdentityUser> manageRoles = provider.GetService<UserManager<IdentityUser>>();
+                await manageRoles.AddToRoleAsync(user0, "Instructor");
+                await manageRoles.AddToRoleAsync(user1, "Admin");
+                await manageRoles.AddToRoleAsync(user2, "Chair");
+                await context.SaveChangesAsync();
+            }
         }
         public static void Initialize(LearningOutcomeDBContext context) {
             if (context.Database.EnsureCreated()) {
