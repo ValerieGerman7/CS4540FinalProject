@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CS4540PS2.Models;
+using Microsoft.AspNetCore.Authorization;
 
 /// <summary>
 /// Author: Valerie German
@@ -16,6 +17,7 @@ using CS4540PS2.Models;
 /// File Contents: This file contains controller for learning outcome webpages.
 /// </summary>
 namespace CS4540PS2.Controllers {
+    [Authorize(Roles="Admin")]
     public class LearningOutcomesController : Controller {
         private readonly LearningOutcomeDBContext _context;
         public LearningOutcomesController(LearningOutcomeDBContext context) {

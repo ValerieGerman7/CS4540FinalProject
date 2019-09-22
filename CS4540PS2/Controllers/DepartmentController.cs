@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CS4540PS2.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 /// <summary>
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 /// File Contents: This file contains controller for department webpages.
 /// </summary>
 namespace CS4540PS2.Controllers {
+    [Authorize(Roles="Chair")]
     public class DepartmentController : Controller {
         private readonly LearningOutcomeDBContext _context;
         public DepartmentController(LearningOutcomeDBContext context) {

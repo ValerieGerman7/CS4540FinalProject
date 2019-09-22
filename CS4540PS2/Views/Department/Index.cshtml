@@ -11,7 +11,6 @@
 }
 <h2>Departments</h2>
 @foreach (string dept in Model) {
-    <p>@dept</p>
     <div class="card shadowBox">
         <div class="card-body" onclick="RedirectToDept('@dept');">
             <p><b>@dept</b></p>

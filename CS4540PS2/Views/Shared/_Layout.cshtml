@@ -6,6 +6,9 @@
     I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
     File Contents: This file contains the layout for all webpages for PS3.
 -->
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 <!DOCTYPE html>
 <html>
 <head>
@@ -43,42 +46,50 @@
                     <li class="nav-item active">
                         <a class="nav-link navbar-brand" asp-controller="Home" asp-action="Index">Home <span class="sr-only">(current)</span></a>
                     </li>
-                    <!-- Link -->
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Department" asp-action="Department">Department</a>
-                    </li>
-                    <!-- Dropdown -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Courses
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" asp-controller="Course" asp-action="Index">All Courses</a>
-                            <a class="dropdown-item" asp-controller="Course" asp-action="Course" asp-route-Dept="CS" asp-route-Num="2100" asp-route-Sem="Fall" asp-route-Year="2019">CS 2100</a>
-                            <a class="dropdown-item" asp-controller="Course" asp-action="Course" asp-route-Dept="CS" asp-route-Num="3500" asp-route-Sem="Fall" asp-route-Year="2019">CS 3500</a>
-                            <a class="dropdown-item" asp-controller="Course" asp-action="Course" asp-route-Dept="CS" asp-route-Num="4540" asp-route-Sem="Fall" asp-route-Year="2019">CS 4540</a>
-                            <a class="dropdown-item" asp-controller="Course" asp-action="Create">Create New Course</a>
-                            <!--<div class="dropdown-divider"></div>-->
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="LearningOutcomes" asp-action="Index">Learning Outcomes</a>
-                    </li>
+                    @if (User.IsInRole("Admin")) {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="LearningOutcomes" asp-action="Index">Learning Outcomes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="LearningOutcomes" asp-action="Index">Users</a>
+                        </li>
+                    }
+                    @if (User.IsInRole("Chair")) {
+                        <!-- Link -->
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Department" asp-action="Department">Department</a>
+                        </li>
+                        <!-- Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Courses
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" asp-controller="Course" asp-action="Index">All Courses</a>
+                                <a class="dropdown-item" asp-controller="Course" asp-action="Create">Create New Course</a>
+                                <!--<div class="dropdown-divider"></div>-->
+                            </div>
+                        </li>
+                    }
+                    @if (User.IsInRole("Instructor")) {
+                        <!-- Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Courses
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" asp-controller="Course" asp-action="Index">All Courses</a>
+                                <a class="dropdown-item" asp-controller="Course" asp-action="Course" asp-route-Dept="CS" asp-route-Num="2100" asp-route-Sem="Fall" asp-route-Year="2019">CS 2100</a>
+                                <a class="dropdown-item" asp-controller="Course" asp-action="Course" asp-route-Dept="CS" asp-route-Num="3500" asp-route-Sem="Fall" asp-route-Year="2019">CS 3500</a>
+                                <a class="dropdown-item" asp-controller="Course" asp-action="Course" asp-route-Dept="CS" asp-route-Num="4540" asp-route-Sem="Fall" asp-route-Year="2019">CS 4540</a>
+                                <a class="dropdown-item" asp-controller="Course" asp-action="Create">Create New Course</a>
+                                <!--<div class="dropdown-divider"></div>-->
+                            </div>
+                        </li>
+                    }
+
                 </ul>
-                <!-- User Info / Dropdown -->
-                <div class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-light" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        UserName
-                    </a>
-                    <!-- Referenced https://stackoverflow.com/questions/42388989/bootstrap-4-center-vertical-and-horizontal-alignment for alignment classes. -->
-                    <div class="dropdown-menu justify-content-center" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" asp-controller="Home" asp-action="Profile">User Role Here</a>
-                        <a class="dropdown-item" asp-controller="Home" asp-action="Profile">Profile</a>
-                        <!--<div class="dropdown-divider"></div>
-                    <button class="btn btn-outline-success my-2 my-sm-0 align-self-center p-2" type="submit">Logout</button>-->
-                    </div>
-                </div>
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button>
+                <!-- User Info -->
                 <partial name="_LoginPartial" />
             </div>
         </nav>
