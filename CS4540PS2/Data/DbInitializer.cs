@@ -17,7 +17,8 @@ using Microsoft.EntityFrameworkCore;
 namespace CS4540PS2.Data {
     public class DbInitializer {
         public static void InitializeUser(UserContext context) {
-            context.Database.EnsureCreated();
+            //context.Database.EnsureCreated();
+            context.Database.Migrate();
         }
         public static void Initialize(LearningOutcomeDBContext context) {
             if (context.Database.EnsureCreated()) {
