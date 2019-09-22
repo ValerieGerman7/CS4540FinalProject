@@ -5,6 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 /// <summary>
 /// Author: Valerie German
@@ -16,9 +19,31 @@ using Microsoft.EntityFrameworkCore;
 /// </summary>
 namespace CS4540PS2.Data {
     public class DbInitializer {
-        public static void InitializeUser(UserContext context) {
+        public static async Task InitializeUser(UserContext context, IServiceProvider provider) {
             //context.Database.EnsureCreated();
             context.Database.Migrate();
+            
+            //Create Roles
+            var manager = provider.GetRequiredService<RoleManager<IdentityRole>>();
+            string[] availableRoles = { "Admin", "Instructor", "Chair" };
+            IdentityResult identRes;
+            foreach(string role in availableRoles) {
+                var existing = await manager.RoleExistsAsync(role);
+                if (!existing) {
+                    identRes = await manager.CreateAsync(new IdentityRole(role));
+                }
+            }
+            /*
+            var config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json").Build();
+            var userManager = provider.GetRequiredService<UserManager<UserContext>>();
+            var user = await userManager.FindByEmailAsync(config.GetSection("AppSettings")["UserEmail"]);
+            if(user == null) {
+                var altUser = new UserContext {
+
+                }
+            }*/
+
         }
         public static void Initialize(LearningOutcomeDBContext context) {
             if (context.Database.EnsureCreated()) {

@@ -21,7 +21,7 @@ namespace CS4540PS2 {
                     var context = services.GetRequiredService<LearningOutcomeDBContext>();
                     DbInitializer.Initialize(context);
                     var userContext = services.GetRequiredService<UserContext>();
-                    DbInitializer.InitializeUser(userContext);
+                    DbInitializer.InitializeUser(userContext, services).Wait();
                 } catch (Exception e) {
                     var logger = services.GetRequiredService<ILogger<Program>>();
                     logger.LogError(e, "Error occurred while seeding the database.");

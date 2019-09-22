@@ -41,11 +41,6 @@ namespace CS4540PS2 {
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            /*services.AddDefaultIdentity<IdentityUser>()
-                .AddRoles<IdentityRole>()
-                .AddDefaultUI(UIFramework.Bootstrap4)
-                .AddEntityFrameworkStores<UserContext>();*/
-
             var connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<LearningOutcomeDBContext>(options => options.UseSqlServer(connection));
         }
