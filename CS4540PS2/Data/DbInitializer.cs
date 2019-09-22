@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 /// <summary>
 /// Author: Valerie German
@@ -36,40 +37,58 @@ namespace CS4540PS2.Data {
                 }
             }
             if (!context.Users.Any()) { //Only add if database is empty
-                UserManager<IdentityUser> manageRoles = provider.GetService<UserManager<IdentityUser>>();
+                //UserManager<IdentityUser> manageRoles = provider.GetService<UserManager<IdentityUser>>();
                 IdentityUser user0 = new IdentityUser() {
                     Email = "testInstructor@gmail.com",
-                    UserName = "TestInstructor",
+                    NormalizedEmail = "TESTINSTRUCTOR@GMAIL.COM",
+                    UserName = "testInstructor@gmail.com",
+                    NormalizedUserName = "TESTINSTRUCTOR@GMAIL.COM",
                     LockoutEnabled = false,
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    SecurityStamp = "Stamp"
                 };
-                await manageRoles.CreateAsync(user0, "Password0?");
+                //await manageRoles.CreateAsync(user0, "Password0?");
                 IdentityUser user1 = new IdentityUser() {
                     Email = "testAdmin@gmail.com",
-                    UserName = "TestAdmin",
+                    NormalizedEmail = "TESTADMIN@GMAIL.COM",
+                    UserName = "testAdmin@gmail.com",
+                    NormalizedUserName = "TESTADMIN@GMAIL.COM",
                     LockoutEnabled = false,
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    SecurityStamp = "Stamp"
                 };
-                await manageRoles.CreateAsync(user1, "Password0?");
+                //await manageRoles.CreateAsync(user1, "Password0?");
                 IdentityUser user2 = new IdentityUser() {
                     Email = "testChair@gmail.com",
-                    UserName = "TestChair",
+                    NormalizedEmail = "TESTCHAIR@GMAIL.COM",
+                    UserName = "testChair@gmail.com",
+                    NormalizedUserName = "TESTCHAIR@GMAIL.COM",
                     LockoutEnabled = false,
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    SecurityStamp = "Stamp"
                 };
-                await manageRoles.CreateAsync(user2, "Password0?");
-                IdentityUser[] users = { user0, user1, user2 };
-                foreach (IdentityUser user in users) {
-                    if (!context.Users.Any(u => u.UserName == user.UserName)) {
+                //await manageRoles.CreateAsync(user2, "Password0?");
+                (IdentityUser, string)[] users = {
+                    (user0, "Instructor"),
+                    (user1, "Admin"),
+                    (user2, "Chair") };
+                string[] roles = { "Instructor", "Admin", "Chair" };
+                foreach ((IdentityUser, string) user in users) {
+                    if (!context.Users.Any(u => u.UserName == user.Item1.UserName)) {
+                        var pass = new PasswordHasher<IdentityUser>().HashPassword(user.Item1, "Password0?");
+                        user.Item1.PasswordHash = pass;
+                        var userStor = new UserStore<IdentityUser>(context);
+                        await userStor.CreateAsync(user.Item1);
+                        await userStor.AddToRoleAsync(user.Item1, user.Item2);
                         //context.Users.Add(user);
                     }
                 }
-                context.SaveChanges();
-                //Give users roles
-                await manageRoles.AddToRoleAsync(user0, "Instructor");
-                await manageRoles.AddToRoleAsync(user1, "Admin");
-                await manageRoles.AddToRoleAsync(user2, "Chair");
                 await context.SaveChangesAsync();
+                //Give users roles
+                //await manageRoles.AddToRoleAsync(user0, "Instructor");
+                //await manageRoles.AddToRoleAsync(user1, "Admin");
+                //await manageRoles.AddToRoleAsync(user2, "Chair");
+                //await context.SaveChangesAsync();
             }
         }
         public static void Initialize(LearningOutcomeDBContext context) {
