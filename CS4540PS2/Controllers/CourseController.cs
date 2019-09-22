@@ -1,4 +1,5 @@
 ﻿using CS4540PS2.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ using System.Threading.Tasks;
 /// File Contents: This file contains controller for course webpages.
 /// </summary>
 namespace CS4540PS2.Controllers {
+    [Authorize(Roles="Instructor")]
     public class CourseController : Controller {
         private readonly LearningOutcomeDBContext _context;
         /// <summary>

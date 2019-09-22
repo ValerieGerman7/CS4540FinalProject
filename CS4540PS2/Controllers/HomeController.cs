@@ -29,8 +29,8 @@ namespace CS4540PS2.Controllers {
         /// </summary>
         /// <returns></returns>
         public IActionResult Index() {
-            return RedirectToAction("Department", "Department");
-            //return View();
+            //return RedirectToAction("Department", "Department");
+            return View();
         }
         /// <summary>
         /// Sample profile page.
