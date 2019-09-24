@@ -77,20 +77,23 @@
                         </li>
                     }
                     @if (User.IsInRole("Instructor")) {
-                        <!-- Dropdown -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Courses
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" asp-controller="Instructor" asp-action="Index">All Courses</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" asp-controller="Instructor" asp-action="Course" asp-route-Dept="CS" asp-route-Num="2100" asp-route-Sem="Fall" asp-route-Year="2019">CS 2100</a>
-                                <a class="dropdown-item" asp-controller="Instructor" asp-action="Course" asp-route-Dept="CS" asp-route-Num="3500" asp-route-Sem="Fall" asp-route-Year="2019">CS 3500</a>
-                                <a class="dropdown-item" asp-controller="Instructor" asp-action="Course" asp-route-Dept="CS" asp-route-Num="4540" asp-route-Sem="Fall" asp-route-Year="2019">CS 4540</a>
-
-                            </div>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Instructor" asp-action="Index">Courses</a>
                         </li>
+                        <!-- Dropdown -->
+                        <!--<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Courses
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" asp-controller="Instructor" asp-action="Index">Your Courses</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" asp-controller="Instructor" asp-action="Course" asp-route-Dept="CS" asp-route-Num="2100" asp-route-Sem="Fall" asp-route-Year="2019">CS 2100</a>
+            <a class="dropdown-item" asp-controller="Instructor" asp-action="Course" asp-route-Dept="CS" asp-route-Num="3500" asp-route-Sem="Fall" asp-route-Year="2019">CS 3500</a>
+            <a class="dropdown-item" asp-controller="Instructor" asp-action="Course" asp-route-Dept="CS" asp-route-Num="4540" asp-route-Sem="Fall" asp-route-Year="2019">CS 4540</a>
+
+        </div>
+                        </li>-->
                     }
 
                 </ul>
