@@ -16,4 +16,18 @@
     <p>Please see the <a asp-controller="Course" asp-action="Course" asp-route-Dept="CS" asp-route-Num="4540" 
                          asp-route-Sem="Fall" asp-route-Year="2019">Course</a> and 
                         <a asp-controller="Department" asp-action="Department">Overview</a> pages.</p>
+    <p>
+        <b>Admin:</b>
+    </p>
+    <p>
+        <b>Instructor:</b>
+        <a asp-controller="Instructor" asp-action="Index">Courses Overview</a>,
+        <a asp-controller="Instructor" asp-action="Course" asp-route-Dept="CS" asp-route-Num="4540"
+           asp-route-Sem="Fall" asp-route-Year="2019">CS 4540 (Professor Z)</a>,
+        <a asp-controller="Instructor" asp-action="Course" asp-route-Dept="CS" asp-route-Num="3500"
+           asp-route-Sem="Fall" asp-route-Year="2019">CS 3500 (Professor X)</a>
+    </p>
+    <p>
+        <b>Chair:</b>
+    </p>
 </div>
