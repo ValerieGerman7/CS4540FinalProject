@@ -9,6 +9,7 @@
 *@
 @{
     ViewData["Title"] = "Create";
+    List<CourseInstance> instances = (List<CourseInstance>) ViewData["CourseInstances"];
 }
 
 <h1>Create</h1>
@@ -30,8 +31,13 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CourseInstanceId" class="control-label"></label>
-                <select asp-for="CourseInstanceId" class="form-control" asp-items="ViewBag.CourseInstanceId"></select>
+                <label asp-for="CourseInstanceId" class="control-label">Course</label>
+                <select asp-for="CourseInstanceId" class="form-control">
+                    <option disabled selected>Select a course</option>
+                @foreach(CourseInstance inst in instances) {
+                    <option name="CourseInstanceId" value="@inst.CourseInstanceId">@inst.Department @inst.Number @inst.Name (@inst.Semester @inst.Year)</option>
+                }
+                </select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

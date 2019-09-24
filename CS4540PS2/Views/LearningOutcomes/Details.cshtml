@@ -9,6 +9,8 @@
 *@
 @{
     ViewData["Title"] = "Details";
+    string course = Model.CourseInstance.Department + Model.CourseInstance.Number + " " + Model.CourseInstance.Name + 
+        " (" + Model.CourseInstance.Semester + " " + Model.CourseInstance.Year + ")";
 }
 
 <h1>Details</h1>
@@ -30,10 +32,10 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CourseInstance)
+            Course
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CourseInstance.Department)
+            @Html.DisplayFor(model => course)
         </dd>
     </dl>
 </div>

@@ -95,7 +95,7 @@ namespace CS4540PS2.Controllers {
         /// </summary>
         /// <returns></returns>
         public IActionResult Create() {
-            ViewData["CourseInstanceId"] = new SelectList(_context.CourseInstance, "CourseInstanceId", "Department");
+            ViewData["CourseInstances"] = _context.CourseInstance.ToList<CourseInstance>();
             return View();
         }
 

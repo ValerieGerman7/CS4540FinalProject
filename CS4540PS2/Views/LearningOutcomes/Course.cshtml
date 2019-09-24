@@ -17,7 +17,7 @@
     <h1>@Model.Department @Model.Number @Model.CourseName</h1>
     <h4>@Model.CourseDescription<!--Professor name--></h4>
     <div align="right">
-        <label><b>Department View   </b>  -</label><button onclick="RedirectToCourse('@Model.Department', @Model.Number, '@Model.Semester', @Model.Year)">Go To Professor View</button>
+        <a asp-controller="LearningOutcomes" asp-action="Index">All Learning Outcomes</a>
     </div>
     <hr />
     <h2>Learning Outcomes</h2>

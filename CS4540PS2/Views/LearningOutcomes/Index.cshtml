@@ -46,7 +46,9 @@
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Loid">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Loid">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Loid">Delete</a>
+                    <a asp-action="Delete" asp-route-id="@item.Loid">Delete</a> | 
+                    <a asp-action="Course" asp-route-Dept="@item.CourseInstance.Department" asp-route-Num="@item.CourseInstance.Number"
+                       asp-route-Sem="@item.CourseInstance.Semester" asp-route-Year="@item.CourseInstance.Year">Course</a>
                 </td>
             </tr>
         }
