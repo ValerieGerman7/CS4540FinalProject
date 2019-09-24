@@ -1,5 +1,6 @@
 ﻿using CS4540PS2.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -19,12 +20,14 @@ namespace CS4540PS2.Controllers {
     [Authorize(Roles = "Instructor")]
     public class InstructorController : Controller {
         private readonly LearningOutcomeDBContext _context;
+        private readonly RoleManager<IdentityRole> _roleManager;
         /// <summary>
         /// Construct a course controller with a database context.
         /// </summary>
         /// <param name="context"></param>
-        public InstructorController(LearningOutcomeDBContext context) {
+        public InstructorController(LearningOutcomeDBContext context, RoleManager<IdentityRole> role) {
             _context = context;
+            _roleManager = role;
         }
 
         /// <summary>
@@ -33,7 +36,8 @@ namespace CS4540PS2.Controllers {
         /// <returns></returns>
         public async Task<IActionResult> Index() {
             //TODO: professor check and restrict
-            var instances = _context.CourseInstance;
+            var instances = _context.CourseInstance.Where(i => 
+                i.Instructors.Where(ins => ins.InstructorLoginEmail == User.Identity.Name).Any());
             return View(await instances.ToListAsync());
         }
 
@@ -51,7 +55,7 @@ namespace CS4540PS2.Controllers {
                 return View("Error", new ErrorViewModel() {
                     ErrorMessage = "Insufficient information to locate course."
                 });
-            CourseInfo info = GetCourseInfo(Dept, (int)Num, Sem, (int)Year, _context);
+            CourseInfo info = GetCourseInfo(Dept, (int)Num, Sem, (int)Year, _context, User.Identity.Name);
             if (info.CourseName == null)
                 return View("Error", new ErrorViewModel() {
                     ErrorMessage = "Insufficient information to locate course."
@@ -68,13 +72,14 @@ namespace CS4540PS2.Controllers {
         /// <param name="Year"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public static CourseInfo GetCourseInfo(string Dept, int Num, string Sem, int Year, LearningOutcomeDBContext context) {
+        public static CourseInfo GetCourseInfo(string Dept, int Num, string Sem, int Year, LearningOutcomeDBContext context, string userEmail) {
             using (context) {
                 var getCourse = from courses in context.CourseInstance
                                 where courses.Department == Dept
                                 && courses.Number == Num
                                 && courses.Semester == Sem
                                 && courses.Year == Year
+                                && courses.Instructors.Where(i => i.InstructorLoginEmail == userEmail).Any()
                                 select new CourseInfo {
                                     CourseName = courses.Name,
                                     CourseDescription = courses.Description,

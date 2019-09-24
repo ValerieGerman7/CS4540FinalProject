@@ -67,12 +67,22 @@ namespace CS4540PS2.Data {
                     EmailConfirmed = true,
                     SecurityStamp = "Stamp"
                 };
+                IdentityUser user3 = new IdentityUser() {
+                    Email = "testInstructor2@gmail.com",
+                    NormalizedEmail = "TESTINSTRUCTOR2@GMAIL.COM",
+                    UserName = "testInstructor2@gmail.com",
+                    NormalizedUserName = "TESTINSTRUCTOR2@GMAIL.COM",
+                    LockoutEnabled = false,
+                    EmailConfirmed = true,
+                    SecurityStamp = "Stamp"
+                };
                 //await manageRoles.CreateAsync(user2, "Password0?");
                 (IdentityUser, string)[] users = {
                     (user0, "Instructor"),
                     (user1, "Admin"),
-                    (user2, "Chair") };
-                string[] roles = { "Instructor", "Admin", "Chair" };
+                    (user2, "Chair"),
+                    (user3, "Instructor")
+                };
                 foreach ((IdentityUser, string) user in users) {
                     if (!context.Users.Any(u => u.UserName == user.Item1.UserName)) {
                         var pass = new PasswordHasher<IdentityUser>().HashPassword(user.Item1, "Password0?");
@@ -150,7 +160,16 @@ namespace CS4540PS2.Data {
                 context.SampleFiles.Add(s);
             }
             context.SaveChanges();
-
+            var instructorAssignments = new Instructors[] {
+                new Instructors { CourseInstance=ci0, InstructorLoginEmail="testInstructor@gmail.com", InstructorTitle="Professor X" },
+                new Instructors { CourseInstance=ci1, InstructorLoginEmail="testInstructor2@gmail.com", InstructorTitle="Professor Z" },
+                new Instructors { CourseInstance=ci2, InstructorLoginEmail="testInstructor2@gmail.com", InstructorTitle="Professor Z" },
+                new Instructors { CourseInstance=ci3, InstructorLoginEmail="testInstructor@gmail.com", InstructorTitle="Professor X" }
+            };
+            foreach(Instructors inst in instructorAssignments) {
+                context.Instructors.Add(inst);
+            }
+            context.SaveChanges();
         }
     }
 }
