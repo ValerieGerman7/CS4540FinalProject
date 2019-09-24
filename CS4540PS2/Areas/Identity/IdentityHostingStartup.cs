@@ -1,8 +1,10 @@
 ﻿using System;
 using CS4540PS2.Models;
+using CS4540PS2.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,9 +26,14 @@ namespace CS4540PS2.Areas.Identity {
                     options.UseSqlServer(
                         context.Configuration.GetConnectionString("UserContextConnection")));
 
-                services.AddDefaultIdentity<IdentityUser>()
+                services.AddDefaultIdentity<IdentityUser>(config=> {
+                    config.SignIn.RequireConfirmedEmail = true;
+                })
                     .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<UserContext>();
+
+                services.AddTransient<IEmailSender, EmailSender>();
+
             });
         }
     }
