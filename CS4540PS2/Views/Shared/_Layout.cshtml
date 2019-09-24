@@ -65,19 +65,14 @@
                         </li>
                     }
                     @if (User.IsInRole("Chair")) {
-                        <!-- Link -->
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Department" asp-action="Department">Department</a>
-                        </li>
-                        <!-- Dropdown -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Courses
+                                Departments
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" asp-controller="Course" asp-action="Index">All Courses</a>
-                                <a class="dropdown-item" asp-controller="Course" asp-action="Create">Create New Course</a>
-                                <!--<div class="dropdown-divider"></div>-->
+                                <a class="dropdown-item" asp-controller="Department" asp-action="Index">All Departments</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-controller="Department" asp-action="Department" asp-route-DeptCode="CS">Computer Science</a>
                             </div>
                         </li>
                     }
