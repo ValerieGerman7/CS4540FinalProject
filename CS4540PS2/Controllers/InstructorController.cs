@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 /// <summary>
 /// Author: Valerie German
-/// Date: 22 Sept 2019
+/// Date: 25 Sept 2019
 /// Course: CS 4540, University of Utah
 /// Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
 /// I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
@@ -35,7 +35,6 @@ namespace CS4540PS2.Controllers {
         /// </summary>
         /// <returns></returns>
         public async Task<IActionResult> Index() {
-            //TODO: professor check and restrict
             var instances = _context.CourseInstance.Where(i => 
                 i.Instructors.Where(ins => ins.InstructorLoginEmail == User.Identity.Name).Any());
             return View(await instances.ToListAsync());
@@ -50,7 +49,6 @@ namespace CS4540PS2.Controllers {
         /// <param name="Year"></param>
         /// <returns></returns>
         public async Task<IActionResult> Course(string Dept, int? Num, string Sem, int? Year) {
-            //TODO: Verify Instructor
             if (Dept.Equals(null) || Num == null || Sem.Equals(null) || Year == null)
                 return View("Error", new ErrorViewModel() {
                     ErrorMessage = "Insufficient information to locate course."

@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 /// Course: CS 4540, University of Utah
 /// Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
 /// I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
-/// File Contents: This file contains controller for learning outcome webpages. Admins may create/edit/delete learning outcomes.
+/// File Contents: This file contains controller for learning outcome webpages. Admins may create/edit/delete learning outcomes. These actions are only available to admins.
 /// </summary>
 namespace CS4540PS2.Controllers {
     [Authorize(Roles="Admin")]

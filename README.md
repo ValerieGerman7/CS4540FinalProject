@@ -2,12 +2,21 @@
 CS 4540 Web Software Architecture PS4 Assignment
 
 Author: Valerie German
-Date: 22 Sept 2019
+Date: 25 Sept 2019
 Course: CS 4540, University of Utah
 Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
 
-Comments to Evaluators/Design Notes: 
-	...
+Authentication and Authorization:
+		To authorize pages, I split the different access levels to use controllers, so only one authorize statement would
+	cover all the web pages associated. The InstructorController was the only one to check the actual user, since it has
+	specific courses for specific instructors. This verified the IdentityUser with a table in the database which associates
+	course instances with users. Ideally, the database will have a forien key directly linked to users, however linking
+	with the default user tables was a little more difficult than I thought with scaffolding so it currently uses an inserted
+	user email in the seed file.
+		Overall, the support for users/identity is very convienient in .NET and after a little setup was very simple to use.
+
+Extra:
+	xx
 	
   
 References:
