@@ -57,9 +57,7 @@ namespace CS4540PS2.Controllers {
                 });
             CourseInfo info = GetCourseInfo(Dept, (int)Num, Sem, (int)Year, _context, User.Identity.Name);
             if (info.CourseName == null)
-                return View("Error", new ErrorViewModel() {
-                    ErrorMessage = "Insufficient information to locate course."
-                });
+                return Forbid();
             return View("Course", info);
         }
 

@@ -12,22 +12,23 @@
 
 <div class="text-center">
     <h3 class="display-4">Home - PS4</h3>
-    <p>PS3 Sample Home Page</p>
-    <p>Please see the <a asp-controller="Course" asp-action="Course" asp-route-Dept="CS" asp-route-Num="4540" 
-                         asp-route-Sem="Fall" asp-route-Year="2019">Course</a> and 
-                        <a asp-controller="Department" asp-action="Department">Overview</a> pages.</p>
+    <hr />
     <p>
         <b>Admin:</b>
+        <a asp-controller="LearningOutcomes" asp-action="Index">Learning Outcomes</a>,
+        <a asp-controller="Course" asp-action="Index">All Courses</a>,
+        <a asp-controller="User" asp-action="Index">User roles page</a>
     </p>
     <p>
         <b>Instructor:</b>
         <a asp-controller="Instructor" asp-action="Index">Courses Overview</a>,
         <a asp-controller="Instructor" asp-action="Course" asp-route-Dept="CS" asp-route-Num="4540"
-           asp-route-Sem="Fall" asp-route-Year="2019">CS 4540 (Professor Z)</a>,
-        <a asp-controller="Instructor" asp-action="Course" asp-route-Dept="CS" asp-route-Num="3500"
-           asp-route-Sem="Fall" asp-route-Year="2019">CS 3500 (Professor X)</a>
+           asp-route-Sem="Fall" asp-route-Year="2019">CS 4540 (Professor Jim)</a>,
+        <a asp-controller="Instructor" asp-action="Course" asp-route-Dept="CS" asp-route-Num="2100"
+           asp-route-Sem="Fall" asp-route-Year="2019">CS 2100 (Professor Mary)</a>
     </p>
     <p>
         <b>Chair:</b>
+        <a asp-controller="Department" asp-action="Department">Computer Science Department Overview</a>
     </p>
 </div>
