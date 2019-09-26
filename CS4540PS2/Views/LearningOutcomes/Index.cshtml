@@ -32,7 +32,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model) {
+        @foreach (var item in Model.OrderBy(i => i.CourseInstance.Number).ThenBy(i => i.Name)) {
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)

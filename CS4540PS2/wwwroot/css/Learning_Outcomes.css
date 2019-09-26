@@ -212,14 +212,14 @@ progress::-webkit-progress-bar {
 }
 
 .classInfo {
-    width: 35%;
+    width: 65%;
     float: left;
     font-size: 14px;
     display: inline-block;
 }
 
 .progressInfo {
-    width: 65%;
+    width: 35%;
     display: inline-block;
     float: right;
     font-size: 12px;
