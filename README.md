@@ -32,3 +32,4 @@ References:
 -Roles: https://docs.microsoft.com/en-us/aspnet/core/security/authorization/roles?view=aspnetcore-2.2
 -Seeding: https://romansimuta.com/blogs/blog/authorization-with-roles-in-asp.net-core-mvc-web-application,
 https://stackoverflow.com/questions/34343599/how-to-seed-users-and-roles-with-code-first-migration-using-identity-asp-net-cor
+-Tabs: https://www.w3schools.com/bootstrap4/tryit.asp?filename=trybs_ref_js_tab-content&stacked=h

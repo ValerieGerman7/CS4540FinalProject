@@ -19,7 +19,7 @@ namespace CS4540PS2.Services {
                 mail.Body = message;
                 mail.IsBodyHtml = true;
 
-                //client.Send(mail);
+                client.Send(mail);
             });
             sendTask.Start();
             return sendTask;

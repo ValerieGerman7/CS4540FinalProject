@@ -1,0 +1,83 @@
+﻿@*
+
+*@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@{
+}
+<h1>Users</h1>
+<hr />
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">User Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Email Confirmed</th>
+            <th scope="col">Roles</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (IdentityUser user in UserManager.Users.OrderBy(u => u.UserName)) {
+            <tr>
+                <th scope="row">@user.UserName</th>
+                <td>@user.Email</td>
+                <td>@user.EmailConfirmed</td>
+                @{ 
+                    string roles = "";
+                    foreach(string role in UserManager.GetRolesAsync(user).Result) {
+                        roles += role + " ";
+                    }
+                    if (roles.Equals("")) { roles = "None"; }
+                }
+                <td>@roles</td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+<!--Future: move into tabs?-->
+<!-- Tabs (Referenced https://www.w3schools.com/bootstrap4/tryit.asp?filename=trybs_ref_js_tab-content&stacked=h)-->
+<!--
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#admin">Administrators</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#chair">Department Chairs</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#instructor">Instructors</a>
+    </li>
+</ul>
+<div class="tab-content">
+    <div id="admin" class="container tab-pane active">
+        <br />
+        <h3>Administrators</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">User Name</th>
+                    <th scope="col">Email</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <th scope="row">X</th>
+                    <td>Ex</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="chair" class="container tab-pane fade">
+        <br />
+        <h3>Chair</h3>
+    </div>
+    <div id="instructor" class="container tab-pane fade">
+        <br />
+        <h3>Instructor</h3>
+    </div>
+</div>-->
