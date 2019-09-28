@@ -8,18 +8,33 @@
     File Contents: Webpage for viewing all existing learning outcomes.
 *@
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Learning Outcomes";
+    int Page = (int)ViewData["page"];
+    int TableSize = (int)ViewData["tableSize"];
+    //Fix page
+    while (Page * TableSize >= Model.Count()) {
+        Page--; //Go to start page.
+        if (Page == 0) {
+            TableSize = 0;
+            break;
+        }
+    }
+    //Fix table size
+    if (Page * TableSize + TableSize >= Model.Count()) {
+        TableSize = Model.Count() - (Page * TableSize);
+    }
 }
 
-<h1>Learning Outcomes</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<div align="left" class="halfWidth">
+    <h1>Learning Outcomes</h1>
+</div><div align="right" class="halfWidth">
+    <a asp-action="Create"><button class="btn btn-sm btn-primary">Create New</button></a>
+</div>
+<hr />
+<table class="table table-striped">
     <thead>
         <tr>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
@@ -32,25 +47,53 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.OrderBy(i => i.CourseInstance.Number).ThenBy(i => i.Name)) {
+        @foreach (var item in Model.OrderBy(i => i.CourseInstance.Number).ThenBy(i => i.Name).ToList().GetRange(Page * TableSize, TableSize)) {
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                <td scope="row">
+                    <b>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </b>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    <p>@item.CourseInstance.Department  @item.CourseInstance.Number - @item.CourseInstance.Name</p>
+                    <p><b>@item.CourseInstance.Department  @item.CourseInstance.Number</b> - <i>@item.CourseInstance.Name</i></p>
+                    <a asp-action="Course" asp-route-Dept="@item.CourseInstance.Department" asp-route-Num="@item.CourseInstance.Number"
+                       asp-route-Sem="@item.CourseInstance.Semester" asp-route-Year="@item.CourseInstance.Year"><button class="btn btn-sm btn-dark">Go To Course</button></a>
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Loid">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Loid">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Loid">Delete</a> | 
-                    <a asp-action="Course" asp-route-Dept="@item.CourseInstance.Department" asp-route-Num="@item.CourseInstance.Number"
-                       asp-route-Sem="@item.CourseInstance.Semester" asp-route-Year="@item.CourseInstance.Year">Course</a>
+                    <a asp-action="Edit" asp-route-id="@item.Loid"><button class="btn btn-sm btn-primary">Edit</button></a>
+                    <a asp-action="Details" asp-route-id="@item.Loid"><button class="btn btn-sm btn-light">Details</button></a>
+                    <a asp-action="Delete" asp-route-id="@item.Loid"><button class="btn btn-sm btn-danger">Delete</button></a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item @if (Page == 0) { <text>disabled</text> }">
+            <a class="page-link" asp-controller="LearningOutcomes" asp-action="Index" asp-route-id="@(Page - 1)">Previous</a>
+        </li>
+        <li class="page-item @if (Page == 0) {<text>active</text>}">
+            <a class="page-link" asp-controller="LearningOutcomes" asp-action="Index" asp-route-id="@if (Page == 0) {<text>1</text>} else { <text>@(Page)</text> }">
+                @if (Page == 0) {<text>1</text>} else { <text>@(Page - 1)</text>}
+            </a>
+        </li>
+        <li class="page-item @if (Page != 0) {<text>active</text>}">
+            <a class="page-link" asp-controller="LearningOutcomes" asp-action="Index" asp-route-id="@if (Page == 0) {<text>2</text>} else { <text>@(Page + 1)</text> }">
+                @if (Page == 0) {<text>2</text>} else { <text>@(Page)</text>}
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" asp-controller="LearningOutcomes" asp-action="Index" asp-route-id="@if (Page == 0) {<text>3</text>} else { <text>@(Page + 2)</text> }">
+                @if (Page == 0) {<text>3</text>} else { <text>@(Page + 1)</text>}
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" asp-controller="LearningOutcomes" asp-action="Index" asp-route-id="@(Page + 1)">Next</a>
+        </li>
+    </ul>
+</nav>

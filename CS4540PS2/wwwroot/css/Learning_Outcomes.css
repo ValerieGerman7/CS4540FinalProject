@@ -244,3 +244,6 @@ progress::-webkit-progress-bar {
 .courseHeader {
     font-weight: bold;
 }
+.halfWidth {
+    width: 49%;
+}

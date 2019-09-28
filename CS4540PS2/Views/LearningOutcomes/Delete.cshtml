@@ -38,8 +38,9 @@
 
     <form asp-action="Delete">
         <input type="hidden" asp-for="Loid" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <input type="submit" value="Delete" class="btn btn-danger" /><br /><br />
         <a asp-action="Course" asp-route-Dept="@Model.CourseInstance.Department" asp-route-Num="@Model.CourseInstance.Number"
-           asp-route-Sem="@Model.CourseInstance.Semester" asp-route-Year="@Model.CourseInstance.Year">Back to Course</a>
-    </form>
+           asp-route-Sem="@Model.CourseInstance.Semester" asp-route-Year="@Model.CourseInstance.Year"><button class="btn btn-sm btn-dark">Back to Course</button></a> | 
+        <a asp-action="Index"><button class="btn btn-sm btn-light">Back To All Learning Outcomes</button></a>
+</form>
 </div>

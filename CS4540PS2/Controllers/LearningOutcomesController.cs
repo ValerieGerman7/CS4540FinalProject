@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Authorization;
 /// File Contents: This file contains controller for learning outcome webpages. Admins may create/edit/delete learning outcomes. These actions are only available to admins.
 /// </summary>
 namespace CS4540PS2.Controllers {
-    [Authorize(Roles="Admin")]
+    [Authorize(Roles = "Admin")]
     public class LearningOutcomesController : Controller {
         private readonly LearningOutcomeDBContext _context;
         public LearningOutcomesController(LearningOutcomeDBContext context) {
@@ -28,7 +28,10 @@ namespace CS4540PS2.Controllers {
         /// Returns index page listing all learning outcomes.
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> Index() {
+        public async Task<IActionResult> Index(int id = 0) {
+            if (id < 0) id = 0;
+            ViewData["page"] = id;
+            ViewData["tableSize"] = 5; //TODO: dynamic
             var learningOutcomeDBContext = _context.LearningOutcomes.Include(l => l.CourseInstance);
             return View(await learningOutcomeDBContext.ToListAsync());
         }
@@ -39,18 +42,18 @@ namespace CS4540PS2.Controllers {
         /// <param name="id"></param>
         /// <returns></returns>
         public async Task<IActionResult> RedirectToCourse(int? id) {
-            if(id == null)
+            if (id == null)
                 return View("Error", new ErrorViewModel() {
                     ErrorMessage = "Insufficient information to locate course."
                 });
             using (_context) {
                 CourseInstance getid = (from courses in _context.CourseInstance
-                            where courses.CourseInstanceId == id
-                            select courses).FirstOrDefault<CourseInstance>();
-                if (getid == null) 
-                        return View("Error", new ErrorViewModel() {
-                            ErrorMessage = "Insufficient information to locate course."
-                        });
+                                        where courses.CourseInstanceId == id
+                                        select courses).FirstOrDefault<CourseInstance>();
+                if (getid == null)
+                    return View("Error", new ErrorViewModel() {
+                        ErrorMessage = "Insufficient information to locate course."
+                    });
                 return await Course(getid.Department, getid.Number, getid.Semester, getid.Year);
             }
         }
@@ -67,7 +70,55 @@ namespace CS4540PS2.Controllers {
                 return View("Error", new ErrorViewModel() {
                     ErrorMessage = "Insufficient information to locate course."
                 });
-            return View("Course", CourseController.GetCourseInfo(Dept, (int) Num, Sem, (int) Year, _context));
+            return View("Course", GetCourseInfo(Dept, (int)Num, Sem, (int)Year, _context));
+        }
+
+        /// <summary>
+        /// Returns an object containing relevant information about the given course.
+        /// </summary>
+        /// <param name="Dept"></param>
+        /// <param name="Num"></param>
+        /// <param name="Sem"></param>
+        /// <param name="Year"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public static CourseInfo GetCourseInfo(string Dept, int Num, string Sem, int Year, LearningOutcomeDBContext context) {
+            using (context) {
+                var getCourse = from courses in context.CourseInstance
+                                where courses.Department == Dept
+                                && courses.Number == Num
+                                && courses.Semester == Sem
+                                && courses.Year == Year
+                                select new CourseInfo {
+                                    CourseName = courses.Name,
+                                    CourseDescription = courses.Description,
+                                    Department = courses.Department,
+                                    Number = courses.Number,
+                                    Semester = courses.Semester,
+                                    Year = courses.Year,
+                                    ID = courses.CourseInstanceId,
+                                    LearningOutcomes = courses.LearningOutcomes.Select(lo =>
+                                        new LearningOutcomeData {
+                                            LOName = lo.Name,
+                                            LODescription = lo.Description,
+                                            LOID = lo.Loid,
+                                            EvaluationMetrics = lo.EvaluationMetrics.Where(em => em.Loid == lo.Loid)
+                                            .Select(x => new EvaluationMetricData {
+                                                Name = x.Name,
+                                                Description = x.Description,
+                                                EMID = x.Emid,
+                                                Samples = x.SampleFiles.Where(sample => sample.Emid == x.Emid)
+                                                        .Select(sampleSelect => new SamplesData {
+                                                            Score = sampleSelect.Score,
+                                                            FileName = sampleSelect.FileName,
+                                                            SID = sampleSelect.Sid
+                                                        }).ToList<SamplesData>()
+                                            }).ToList<EvaluationMetricData>()
+                                        }
+                                    ).ToList<LearningOutcomeData>()
+                                };
+                return getCourse.FirstOrDefault();
+            }
         }
 
         /// <summary>

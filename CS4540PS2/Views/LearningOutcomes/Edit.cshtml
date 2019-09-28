@@ -36,9 +36,10 @@
         </form>
     </div>
 </div>
-
+<br />
 <div>
-    <a asp-action="RedirectToCourse" asp-route-id="@Model.CourseInstanceId">Back to Course</a>
+    <a asp-action="Index"><button class="btn btn-sm btn-light">Back To All Learning Outcomes</button></a><br />
+    <a asp-action="RedirectToCourse" asp-route-id="@Model.CourseInstanceId"><button class="btn btn-sm btn-dark">Back to Course</button></a>
 </div>
 
 @section Scripts {

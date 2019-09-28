@@ -2,9 +2,22 @@
 CS 4540 Web Software Architecture PS4 Assignment
 
 Author: Valerie German
-Date: 25 Sept 2019
+Date: 27 Sept 2019
 Course: CS 4540, University of Utah
 Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
+
+Note:
+		The home page contains links to pages, listed with the associated user type authorized to access them. The instructor
+	list contains links to two different classes. The home page may be accessed by anyone, any other page requires the user
+	to be logged in.
+		Admins can view a list of all learning outcomes, as well as create, modify and delete learning outcomes. They can view
+	a list of all available courses (note the link on each course is invalid - no current course overview page for admins.)
+	Courses may be added, modified and deleted. Admins may also view a list of all users and their roles.
+		Professors can view a list of their courses, and a course overview page containing the course's learning outcomes,
+	evaluation metrics and sample files.
+		Chairs may view a department overview - listing all classes in the department and the evaluation metric and sample file
+	progress. They also have access to a page that links to all the departments (note this only shows the department code 
+	currently).
 
 Authentication and Authorization:
 		To authorize pages, I split the different access levels to use controllers, so only one authorize statement would
@@ -16,7 +29,11 @@ Authentication and Authorization:
 		Overall, the support for users/identity is very convienient in .NET and after a little setup was very simple to use.
 
 Extra:
-	xx
+		Creating LearningOutcomes uses a drop down containing the course's department, number, name and semester/year.
+		The list of learning outcomes is displayed in pages (currently 5 at a time), with some table design changes to make it 
+	more visually appealing. An Admin may go to the course to see all learning outcomes in a course, and add learning outcomes
+	to that course directly by the + button on the right (labeled). General additional styling was applied to the learning 
+	outcome pages (links to buttons, cleaner table).
 	
   
 References:
@@ -42,3 +59,4 @@ References:
 -Seeding: https://romansimuta.com/blogs/blog/authorization-with-roles-in-asp.net-core-mvc-web-application,
 https://stackoverflow.com/questions/34343599/how-to-seed-users-and-roles-with-code-first-migration-using-identity-asp-net-cor
 -Tabs: https://www.w3schools.com/bootstrap4/tryit.asp?filename=trybs_ref_js_tab-content&stacked=h
+-Pagination: https://getbootstrap.com/docs/4.0/components/pagination/

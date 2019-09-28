@@ -40,6 +40,8 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Loid">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.Loid"><button class="btn btn-sm btn-primary">Edit</button></a><br /><br />
+    <a asp-action="Course" asp-route-Dept="@Model.CourseInstance.Department" asp-route-Num="@Model.CourseInstance.Number"
+       asp-route-Sem="@Model.CourseInstance.Semester" asp-route-Year="@Model.CourseInstance.Year"><button class="btn btn-sm btn-dark">Back to Course</button></a> |
+    <a asp-action="Index"><button class="btn btn-sm btn-light">Back To All Learning Outcomes</button></a>
 </div>
