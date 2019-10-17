@@ -131,3 +131,31 @@ function AddUserToRole(e, username) {
         window.alert(data.success);
     });
 }
+function test() {
+    window.alert("here");
+}
+function ChangeUserRole(e, username, role) {
+    //window.alert("here");
+    e.preventDefault();
+    $.ajax({
+        url: "/User/ChangeRole",
+        method: "POST",
+        data: {
+            username: username,
+            role: role
+        }
+    }).fail(function () {
+        window.alert('Fail');
+    }).done(function (data) {
+        window.alert("Done" + data.success);
+        var box = e.target;
+        if (data.success) {
+            box.checked = !box.checked;
+        } else {
+
+        }
+        //var js = $.parseJSON(data);
+        //window.alert(js);
+        //box.checked = data.isRole;
+    });
+}

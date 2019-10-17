@@ -39,5 +39,31 @@ namespace CS4540PS2.Controllers {
             return Json(new { success = true });
         }
 
+        /// <summary>
+        /// Changes the given user's status of the given role. If the user has that role, the user is removed from that
+        /// role, if the user is not in that role the user is given that role.
+        /// If the user is the last administrator, a warning is returned.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="role"></param>
+        /// <returns></returns>
+        public JsonResult ChangeRole(string username, string role) {
+            int x = 0;
+            IdentityUser user = _userContext.Users.Where(u => u.UserName == username).FirstOrDefault();
+            if(user == null) {
+                return Json(new { success = false, reason = "The user could not be found." });
+            }
+            bool isInRole = _userManager.IsInRoleAsync(user, role).Result;
+            if (isInRole) {
+                if(role.Equals("Admin") && _userManager.GetUsersInRoleAsync("Admin").Result.Count() == 1) {
+                    return Json(new { success = false, reason = "This is the last administrator." });
+                }
+                _userManager.RemoveFromRoleAsync(user, role).Wait();
+            } else {
+                _userManager.AddToRoleAsync(user, role).Wait();
+            }
+            return Json(new { success = true, isRole = !isInRole });
+        }
+
     }
 }

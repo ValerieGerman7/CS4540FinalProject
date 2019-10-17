@@ -1,10 +1,10 @@
 ﻿@*
-/// Author: Valerie German
-/// Date: 25 Sept 2019
-/// Course: CS 4540, University of Utah
-/// Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
-/// I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
-/// File Contents: HTML page for viewing users.
+    /// Author: Valerie German
+    /// Date: 25 Sept 2019
+    /// Course: CS 4540, University of Utah
+    /// Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
+    /// I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
+    /// File Contents: HTML page for viewing users.
 *@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
@@ -21,28 +21,35 @@
             <th scope="col">User Name</th>
             <th scope="col">Email</th>
             <th scope="col">Email Confirmed</th>
-            <th scope="col">Roles</th>
+            <th scope="col">Administrator</th>
+            <th scope="col">Chair</th>
+            <th scope="col">Instructor</th>
             <th scope="col">Option</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (IdentityUser user in UserManager.Users.OrderBy(u => u.UserName)) {
+        @foreach (IdentityUser user in UserManager.Users.OrderBy(u => u.UserName).ToList<IdentityUser>()) {
             <tr>
                 <th scope="row">@user.UserName</th>
                 <td>@user.Email</td>
                 <td>@user.EmailConfirmed</td>
-                @{ 
-                    string roles = "";
-                    foreach(string role in UserManager.GetRolesAsync(user).Result) {
-                        roles += role + " ";
-                    }
-                    if (roles.Equals("")) { roles = "None"; }
-                }
-                <td>@roles</td>
                 <td>
-                    <form action="User/AddRole" method="post" onsubmit="AddUserToRole(event, '@user.UserName');">
-                        <input type="submit" value="Submit" />
-                    </form>
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input">
+                        @{
+                            bool isAdmin = UserManager.IsInRoleAsync(user, "Admin").Result;
+                            //ChangeUserRole(event, '@user.UserName', 'Admin' , @isAdmin, this);  , '@user.UserName', 'Admin' , @isAdmin
+                            <input type="checkbox" class="custom-control-input" id="@{<text>adminSwitch @user.UserName</text>}"
+                                   checked="@isAdmin"
+                                   onclick="ChangeUserRole(event, '@user.UserName', 'Admin');">
+                        }
+                        <label class="custom-control-label" for="@{<text>adminSwitch @user.UserName</text>}"></label>
+
+                    </div>
+                </td>
+                <td>@UserManager.IsInRoleAsync(user, "Chair").Result</td>
+                <td>@UserManager.IsInRoleAsync(user, "Instructor").Result</td>
+                <td>
                 </td>
             </tr>
         }
