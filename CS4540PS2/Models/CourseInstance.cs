@@ -23,6 +23,8 @@ namespace CS4540PS2.Models {
         public int Number { get; set; }
         public string Semester { get; set; }
         public int Year { get; set; }
+        public string Note { get; set; }
+        public DateTime? NoteModified { get; set; }
 
         public virtual ICollection<Instructors> Instructors { get; set; }
         public virtual ICollection<LearningOutcomes> LearningOutcomes { get; set; }
