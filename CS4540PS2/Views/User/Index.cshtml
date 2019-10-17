@@ -22,6 +22,7 @@
             <th scope="col">Email</th>
             <th scope="col">Email Confirmed</th>
             <th scope="col">Roles</th>
+            <th scope="col">Option</th>
         </tr>
     </thead>
     <tbody>
@@ -38,11 +39,19 @@
                     if (roles.Equals("")) { roles = "None"; }
                 }
                 <td>@roles</td>
+                <td>
+                    <form action="User/AddRole" method="post" onsubmit="AddUserToRole(event, '@user.UserName');">
+                        <input type="submit" value="Submit" />
+                    </form>
+                </td>
             </tr>
         }
 
     </tbody>
 </table>
+<p id="resultP">
+
+</p>
 
 <!--Future: move into tabs?-->
 <!-- Tabs (Referenced https://www.w3schools.com/bootstrap4/tryit.asp?filename=trybs_ref_js_tab-content&stacked=h)-->

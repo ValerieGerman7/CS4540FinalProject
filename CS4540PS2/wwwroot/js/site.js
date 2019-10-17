@@ -115,3 +115,24 @@ function Redirect(Controller, Action) {
     document.body.appendChild(form);
     form.submit();
 }
+
+function AddUserToRole(e, username) {
+    window.alert("here");
+    e.preventDefault();
+    $.ajax({
+        url: "/User/AddRole",
+        method: "POST",
+        data: {
+            username: username,
+            role : "Admin"
+        }
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        window.alert(errorThrown);
+    }).success(function (result) {
+        window.alert("...");
+        $("#resultP").text(result);
+        window.alert("success");
+    }).always(function () {
+        window.alert("Always");
+    });
+}

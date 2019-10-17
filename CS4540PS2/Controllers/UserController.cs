@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CS4540PS2.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 /// <summary>
@@ -19,16 +20,24 @@ namespace CS4540PS2.Controllers {
     public class UserController : Controller {
         private readonly LearningOutcomeDBContext _context;
         private readonly UserContext _userContext;
+        private UserManager<IdentityUser> _userManager;
         /// <summary>
         /// Construct a course controller with a database context.
         /// </summary>
         /// <param name="context"></param>
-        public UserController(LearningOutcomeDBContext context, UserContext userContext) {
+        public UserController(LearningOutcomeDBContext context, UserContext userContext, UserManager<IdentityUser> userManager) {
             _context = context;
             _userContext = userContext;
+            _userManager = userManager;
         }
         public IActionResult Index() {
             return View();
         }
+
+        public JsonResult AddRole(string username, string role) {
+            _userManager.AddToRoleAsync(_userContext.Users.Where(u => u.UserName == username).FirstOrDefault(), role).Wait();
+            return Json(new { success = true });
+        }
+
     }
 }
