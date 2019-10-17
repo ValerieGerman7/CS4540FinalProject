@@ -20,6 +20,7 @@
 
     <link rel="stylesheet" type="text/css" href="site.css" />
     <link rel="stylesheet" href="~/css/Learning_Outcomes.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css" />
     <title>@ViewData["Title"] - CS4540PS4</title>
 
     <environment include="Development">
@@ -82,18 +83,18 @@
                         </li>
                         <!-- Dropdown -->
                         <!--<li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Courses
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" asp-controller="Instructor" asp-action="Index">Your Courses</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" asp-controller="Instructor" asp-action="Course" asp-route-Dept="CS" asp-route-Num="2100" asp-route-Sem="Fall" asp-route-Year="2019">CS 2100</a>
-            <a class="dropdown-item" asp-controller="Instructor" asp-action="Course" asp-route-Dept="CS" asp-route-Num="3500" asp-route-Sem="Fall" asp-route-Year="2019">CS 3500</a>
-            <a class="dropdown-item" asp-controller="Instructor" asp-action="Course" asp-route-Dept="CS" asp-route-Num="4540" asp-route-Sem="Fall" asp-route-Year="2019">CS 4540</a>
+                                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Courses
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" asp-controller="Instructor" asp-action="Index">Your Courses</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" asp-controller="Instructor" asp-action="Course" asp-route-Dept="CS" asp-route-Num="2100" asp-route-Sem="Fall" asp-route-Year="2019">CS 2100</a>
+                            <a class="dropdown-item" asp-controller="Instructor" asp-action="Course" asp-route-Dept="CS" asp-route-Num="3500" asp-route-Sem="Fall" asp-route-Year="2019">CS 3500</a>
+                            <a class="dropdown-item" asp-controller="Instructor" asp-action="Course" asp-route-Dept="CS" asp-route-Num="4540" asp-route-Sem="Fall" asp-route-Year="2019">CS 4540</a>
 
-        </div>
-                        </li>-->
+                        </div>
+                                        </li>-->
                     }
 
                 </ul>
@@ -134,6 +135,7 @@
         </script>
     </environment>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.all.min.js"></script>
 
     @RenderSection("Scripts", required: false)
 </body>

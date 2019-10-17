@@ -131,31 +131,57 @@ function AddUserToRole(e, username) {
         window.alert(data.success);
     });
 }
-function test() {
-    window.alert("here");
-}
+//Sends a request to change the given user's current status for the
+//given role.
 function ChangeUserRole(e, username, role) {
     //window.alert("here");
     e.preventDefault();
-    $.ajax({
-        url: "/User/ChangeRole",
-        method: "POST",
-        data: {
-            username: username,
-            role: role
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to change " + username + "'s " + role + " status?",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: "Change Role Status"
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: "/User/ChangeRole",
+                method: "POST",
+                data: {
+                    username: username,
+                    role: role
+                }
+            }).fail(function () {
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!'
+                })
+            }).done(function (data) {
+                var box = e.target;
+                if (data.success) {
+                    box.checked = !box.checked;
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'success',
+                        title: 'The role was changed',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                } else {
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'error',
+                        title: 'Role change failed',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                }
+                //var js = $.parseJSON(data);
+                //window.alert(js);
+                //box.checked = data.isRole;
+            });
         }
-    }).fail(function () {
-        window.alert('Fail');
-    }).done(function (data) {
-        window.alert("Done" + data.success);
-        var box = e.target;
-        if (data.success) {
-            box.checked = !box.checked;
-        } else {
-
-        }
-        //var js = $.parseJSON(data);
-        //window.alert(js);
-        //box.checked = data.isRole;
-    });
+    })
+    
 }

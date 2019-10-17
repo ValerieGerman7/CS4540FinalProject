@@ -50,11 +50,11 @@
                     <input type="checkbox" class="custom-control-input">
                     @{
                         bool isChair = UserManager.IsInRoleAsync(user, "Chair").Result;
-                        <input type="checkbox" class="custom-control-input" id="@{<text>adminSwitch @user.UserName</text>}"
+                        <input type="checkbox" class="custom-control-input" id="@{<text>chairSwitch @user.UserName</text>}"
                                checked="@isChair"
                                onclick="ChangeUserRole(event, '@user.UserName', 'Chair');">
                     }
-                    <label class="custom-control-label" for="@{<text>adminSwitch @user.UserName</text>}"></label>
+                    <label class="custom-control-label" for="@{<text>chairSwitch @user.UserName</text>}"></label>
 
                 </div>
             </td>
@@ -63,11 +63,11 @@
                     <input type="checkbox" class="custom-control-input">
                     @{
                         bool isInst = UserManager.IsInRoleAsync(user, "Instructor").Result;
-                        <input type="checkbox" class="custom-control-input" id="@{<text>adminSwitch @user.UserName</text>}"
+                        <input type="checkbox" class="custom-control-input" id="@{<text>instSwitch @user.UserName</text>}"
                                checked="@isInst"
                                onclick="ChangeUserRole(event, '@user.UserName', 'Instructor');">
                     }
-                    <label class="custom-control-label" for="@{<text>adminSwitch @user.UserName</text>}"></label>
+                    <label class="custom-control-label" for="@{<text>instSwitch @user.UserName</text>}"></label>
 
                 </div>
             </td>
