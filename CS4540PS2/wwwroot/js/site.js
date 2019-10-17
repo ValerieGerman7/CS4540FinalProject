@@ -126,13 +126,8 @@ function AddUserToRole(e, username) {
             username: username,
             role : "Admin"
         }
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-        window.alert(errorThrown);
-    }).success(function (result) {
-        window.alert("...");
-        $("#resultP").text(result);
-        window.alert("success");
-    }).always(function () {
+    }).done(function (data) {
         window.alert("Always");
+        window.alert(data.success);
     });
 }
