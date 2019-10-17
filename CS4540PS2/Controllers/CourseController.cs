@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -167,6 +168,8 @@ namespace CS4540PS2.Controllers {
         public int Year { get; set; }
         public int ID { get; set; }
         public List<LearningOutcomeData> LearningOutcomes { get; set; }
+        public string Note { get; set; }
+        public DateTime? NoteModified { get; set; }
     }
     /// <summary>
     /// Struct for holding information about a course's learning outcome.

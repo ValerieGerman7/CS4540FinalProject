@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -38,6 +39,21 @@ namespace CS4540PS2.Controllers {
             var instances = _context.CourseInstance.Where(i => 
                 i.Instructors.Where(ins => ins.InstructorLoginEmail == User.Identity.Name).Any());
             return View(await instances.ToListAsync());
+        }
+
+        /// <summary>
+        /// Updates the course's note and the date modified.
+        /// </summary>
+        /// <param name="CourseInstanceId"></param>
+        /// <param name="NewNote"></param>
+        /// <returns></returns>
+        public JsonResult ChangeNote(int CourseInstanceId, string NewNote) {
+            CourseInstance course = _context.CourseInstance.Where(c => c.CourseInstanceId == CourseInstanceId).FirstOrDefault();
+            if (course == null) return Json(new { success = false });
+            course.Note = NewNote;
+            course.NoteModified = DateTime.Now;
+            _context.SaveChanges();
+            return Json(new { success = true });
         }
 
         /// <summary>
@@ -84,6 +100,8 @@ namespace CS4540PS2.Controllers {
                                     Semester = courses.Semester,
                                     Year = courses.Year,
                                     ID = courses.CourseInstanceId,
+                                    Note = courses.Note,
+                                    NoteModified = courses.NoteModified,
                                     LearningOutcomes = courses.LearningOutcomes.Select(lo =>
                                         new LearningOutcomeData {
                                             LOName = lo.Name,

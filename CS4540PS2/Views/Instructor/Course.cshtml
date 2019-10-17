@@ -17,6 +17,10 @@
     <h1>@Model.Department @Model.Number @Model.CourseName</h1>
     <h4>@Model.CourseDescription<!--Professor name--></h4>
     <hr />
+    <textarea name="note" id="CourseNote" class="form-control" rows="3" placeholder="Enter course note"
+              onchange="UpdateNote(event, @Model.ID)">@Model.Note</textarea>
+        @if (Model.NoteModified != null) {<text><i><label class="text-sm-right" id="NoteLabel">Last modified: @Model.NoteModified</label></i></text>}
+    <hr />
     <h2>Learning Outcomes</h2>
 
     <!--Modals are used for adding evaluation metrics or sample files in a simple popup.-->
