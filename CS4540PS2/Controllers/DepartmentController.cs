@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CS4540PS2.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 /// <summary>
 /// Author: Valerie German
@@ -36,6 +37,18 @@ namespace CS4540PS2.Controllers {
             }
         }
 
+        public async Task<IActionResult> Course(int CourseId) {
+            CourseInstance course = await _context.CourseInstance
+                .Include(lo => lo.LearningOutcomes)
+                .ThenInclude(em => em.EvaluationMetrics)
+                .ThenInclude(sa => sa.SampleFiles)
+                .Where(c => c.CourseInstanceId == CourseId).FirstOrDefaultAsync();
+            if(course == null) {
+                return NotFound();
+            }
+            return View("Course", course);
+        }
+
         /// <summary>
         /// Returns a department page, listing classes with the given department
         /// code.
@@ -57,6 +70,7 @@ namespace CS4540PS2.Controllers {
                 var getDept = from courses in _context.CourseInstance
                               where courses.Department == DeptCode
                               select new CourseStatData {
+                                  CourseId = courses.CourseInstanceId,
                                   CourseName = courses.Name,
                                   CourseNum = courses.Number,
                                   CourseDescript = courses.Description,
@@ -103,6 +117,7 @@ namespace CS4540PS2.Controllers {
     /// Struct containing information about a course.
     /// </summary>
     public struct CourseStatData {
+        public int CourseId { get; set; }
         public string CourseName { get; set; }
         public int CourseNum { get; set; }
         public string Semester { get; set; }

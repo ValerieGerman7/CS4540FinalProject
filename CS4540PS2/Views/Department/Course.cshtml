@@ -1,0 +1,92 @@
+﻿@model CS4540PS2.Models.CourseInstance
+@*
+    Author: Valerie German
+    Date: 18 Oct 2019
+    Course: CS 4540, University of Utah
+    Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
+    I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
+    File Contents: Webpage listing a course overview for a department chair.
+*@
+@{
+    ViewData["Title"] = "Course Overview";
+}
+<div id="ContentDiv">
+    <h1>@Model.Department @Model.Number @Model.Name</h1>
+    <h4>@Model.Description<!--Professor name--></h4>
+    <hr />
+    <h2>Learning Outcomes</h2>
+    <form id="exampleHomework" class="form-inline" method="get" action="~/files/Example_Homework.pdf" target="_blank"></form>
+    <form id="exampleStudentWork" class="form-inline" method="get" action="~/files/Example_Student_Work.pdf" target="_blank"></form>
+    @if (Model.LearningOutcomes.Count == 0) {
+        <p><b>This course has no assigned learning outcomes.</b></p>
+    }
+    @for (int i = 0; i < Model.LearningOutcomes.Count; i++) {
+        LearningOutcomes lo = Model.LearningOutcomes.ElementAt(i);
+        <!--Collapses separated in divs-->
+        <!--Collapse with information about a learning outcome-->
+        <!--This and following collapses created with help from https://getbootstrap.com/docs/4.0/components/collapse/-->
+        var index = i;
+        <button class="btn btn-primary sectionButton text-left" type="button" data-toggle="collapse"
+                data-target="#collapseContent@{<text>@index</text>}" aria-expanded="false"
+                aria-controls="collapseContent@{<text>@index</text>}">
+            @lo.Name
+        </button>
+        <div class="collapse" id="collapseContent@{<text>@index</text>}">
+            <!--Cards reference https://getbootstrap.com/docs/4.1/components/card/ (this is true of all following cards).-->
+            <div class="card card-body">
+                <div class="card">
+                    <div class="card-body">
+                        @lo.Description
+                    </div>
+                </div>
+                <div class="card">
+                    <textarea name="note" id="LONote" class="form-control" rows="3" placeholder="Enter learning outcome note"
+                              onchange="UpdateLONote(event, @lo.Loid)">@lo.Note</textarea>
+                    @if (lo.NoteModified != null) {<text><i><label class="text-sm-right" id="NoteLabel">Last modified: @lo.NoteModified by @lo.NoteUserModifed</label></i></text>}
+                </div>
+                <br />
+                <!--Evaluation metrics - each assignment/exam is split into a card-->
+                <h5>
+                    Evaluation Metrics
+                </h5>
+                <hr />
+                @if (lo.EvaluationMetrics.Count == 0) {
+                    <p><i>This learning outcome has no evaluation metrics</p>
+                }
+                @for (int emIndex = 0; emIndex < lo.EvaluationMetrics.Count(); emIndex++) {
+                    EvaluationMetrics em = lo.EvaluationMetrics.ElementAt(emIndex);
+                    <!-- Referenced https://getbootstrap.com/docs/4.1/components/card/-->
+                    <div class="card shadowBox">
+                        <div class="card-header">
+                            <b>@em.Name</b>
+                            <button class="btn btn-rounded btn-dark btn-sm float-right" onclick="document.getElementById('exampleHomework').submit()">Download Assignment File</button>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text indented">@em.Description</p>
+                            <!-- Referenced https://stackoverflow.com/questions/11620698/how-to-trigger-a-file-download-when-clicking-an-html-button-or-javascript for opening files.
+                See file forms as well.-->
+                            <p>
+                                <label class="sampleLabelText">
+                                    Sample Files: @if (em.SampleFiles.Count == 0) {
+                                        <text><i>There are no sample files.</i></text>
+                                    }
+                                </label>
+                                @for (int samIndex = 0; samIndex < em.SampleFiles.Count; samIndex++) {
+                                    SampleFiles sample = em.SampleFiles.ElementAt(samIndex);
+                                    <!--Change link to sample filename.-->
+                                    <button value="@sample.Score" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()"></button>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                    <br />
+                }
+
+            </div>
+        </div><!--End Collapse Div-->
+        <br /><br />
+    }
+    <br />
+    <hr />
+    <br />
+</div>

@@ -79,21 +79,12 @@ function RedirectToInstCourse(Dept, Num, Sem, Year) {
     document.body.appendChild(form);
     form.submit();
 }
-function RedirectToCourseDept(Dept, Num, Sem, Year) {
+function RedirectToCourseDept(CID) {
     var form = document.createElement("form");
-    var dept = document.createElement("input");
-    dept.name = "Dept"; dept.value = Dept;
-    form.appendChild(dept);
-    var num = document.createElement("input");
-    num.name = "Num"; num.value = Num;
-    form.appendChild(num);
-    var sem = document.createElement("input");
-    sem.name = "Sem"; sem.value = Sem;
-    form.appendChild(sem);
-    var year = document.createElement("input");
-    year.name = "Year"; year.value = Year;
-    form.appendChild(year);
-    form.action = "/LearningOutcomes/Course";
+    var course = document.createElement("input");
+    course.name = "CourseId"; course.value = CID;
+    form.appendChild(course);
+    form.action = "/Department/Course";
     form.hidden = 'hidden';
     document.body.appendChild(form);
     form.submit();
