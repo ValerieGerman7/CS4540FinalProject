@@ -48,7 +48,9 @@ namespace CS4540PS2.Controllers {
         /// <param name="NewNote"></param>
         /// <returns></returns>
         public JsonResult ChangeNote(int CourseInstanceId, string NewNote) {
-            CourseInstance course = _context.CourseInstance.Where(c => c.CourseInstanceId == CourseInstanceId).FirstOrDefault();
+            CourseInstance course = _context.CourseInstance
+                .Where(c => c.CourseInstanceId == CourseInstanceId && c.Instructors.Where(ins => ins.InstructorLoginEmail == User.Identity.Name).Any())
+                .FirstOrDefault();
             if (course == null) return Json(new { success = false });
             course.Note = NewNote;
             course.NoteModified = DateTime.Now;
@@ -64,7 +66,9 @@ namespace CS4540PS2.Controllers {
         /// <param name="NewNote"></param>
         /// <returns></returns>
         public JsonResult ChangeLONote(int LearningOutcomeId, string NewNote) {
-            LearningOutcomes lo = _context.LearningOutcomes.Where(l => l.Loid == LearningOutcomeId).FirstOrDefault();
+            LearningOutcomes lo = _context.LearningOutcomes.Where(l => l.Loid == LearningOutcomeId)
+                .Where(l => l.CourseInstance.Instructors.Where(ins => ins.InstructorLoginEmail == User.Identity.Name).Any())
+                .FirstOrDefault();
             if (lo == null) return Json(new { success = false });
             lo.Note = NewNote;
             lo.NoteModified = DateTime.Now;
