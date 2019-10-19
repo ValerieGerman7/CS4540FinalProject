@@ -40,8 +40,11 @@
                     </div>
                 </div>
                 <div class="card">
-                    <textarea name="note" id="LONote" class="form-control" rows="3" placeholder="Enter learning outcome note"
-                              onchange="UpdateLONote(event, @lo.Loid)">@lo.Note</textarea>
+                    @{ 
+                        var noteId = "LONote" + lo.Loid;
+                    }
+                    <textarea name="note" id="@noteId" class="form-control" rows="3" placeholder="Enter learning outcome note"
+                              onchange="UpdateLONoteDept(event, @lo.Loid, '@noteId')">@lo.Note</textarea>
                     @if (lo.NoteModified != null) {<text><i><label class="text-sm-right" id="NoteLabel">Last modified: @lo.NoteModified by @lo.NoteUserModifed</label></i></text>}
                 </div>
                 <br />

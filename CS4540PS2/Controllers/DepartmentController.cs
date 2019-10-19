@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CS4540PS2.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,8 +20,10 @@ namespace CS4540PS2.Controllers {
     [Authorize(Roles="Chair")]
     public class DepartmentController : Controller {
         private readonly LearningOutcomeDBContext _context;
-        public DepartmentController(LearningOutcomeDBContext context) {
+        private readonly RoleManager<IdentityRole> _roleManager;
+        public DepartmentController(LearningOutcomeDBContext context, RoleManager<IdentityRole> role) {
             _context = context;
+            _roleManager = role;
         }
 
         /// <summary>
@@ -37,6 +40,12 @@ namespace CS4540PS2.Controllers {
             }
         }
 
+        /// <summary>
+        /// Returns a course overview (chair view) containing information about a course, its learning
+        /// outcomes, evaluation metrics and sample files.
+        /// </summary>
+        /// <param name="CourseId"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Course(int CourseId) {
             CourseInstance course = await _context.CourseInstance
                 .Include(lo => lo.LearningOutcomes)
@@ -47,6 +56,23 @@ namespace CS4540PS2.Controllers {
                 return NotFound();
             }
             return View("Course", course);
+        }
+
+        /// <summary>
+        /// Updates the identified learning outcome's note along with the last modified date and last user
+        /// modifying date.
+        /// </summary>
+        /// <param name="LearningOutcomeId"></param>
+        /// <param name="NewNote"></param>
+        /// <returns></returns>
+        public JsonResult ChangeNote(int LearningOutcomeId, string NewNote) {
+            LearningOutcomes lo = _context.LearningOutcomes.Where(l => l.Loid == LearningOutcomeId).FirstOrDefault();
+            if (lo == null) return Json(new { success = false });
+            lo.Note = NewNote;
+            lo.NoteModified = DateTime.Now;
+            lo.NoteUserModifed = User.Identity.Name;
+            _context.SaveChanges();
+            return Json(new { success = true });
         }
 
         /// <summary>
