@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 /// <summary>
 /// Author: Valerie German
-/// Date: 25 Sept 2019
+/// Date: 18 Oct 2019
 /// Course: CS 4540, University of Utah
 /// Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
 /// I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
@@ -30,13 +30,12 @@ namespace CS4540PS2.Controllers {
             _userContext = userContext;
             _userManager = userManager;
         }
+        /// <summary>
+        /// View containing all users, where user roles can be modified.
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Index() {
             return View();
-        }
-
-        public JsonResult AddRole(string username, string role) {
-            _userManager.AddToRoleAsync(_userContext.Users.Where(u => u.UserName == username).FirstOrDefault(), role).Wait();
-            return Json(new { success = true });
         }
 
         /// <summary>

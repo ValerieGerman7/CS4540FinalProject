@@ -1,9 +1,9 @@
 ﻿//Author: Valerie German
-//Date: 28 Aug 2019
+//Date: 18 Oct 2019
 //Course: CS 4540, University of Utah
 //Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
 //I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
-//File Contents: This file contains the JavaScript for the PS1 webpages, modified for PS2 wepages.
+//File Contents: This file contains the JavaScript for the PS1 webpages, modified for PS2-5 wepages.
 
 //--Initializing--
 //Set Sample file button colors and text.
@@ -41,6 +41,7 @@ function RedirectToAction(action) {
     window.location.href = "/Home/" + action;
 }
 
+//Redirects to the Course overview page (obsolete)
 function RedirectToCourse(Dept, Num, Sem, Year) {
     var form = document.createElement("form");
     var dept = document.createElement("input");
@@ -60,6 +61,7 @@ function RedirectToCourse(Dept, Num, Sem, Year) {
     document.body.appendChild(form);
     form.submit();
 }
+//Redirects to the instructor's view of a course.
 function RedirectToInstCourse(Dept, Num, Sem, Year) {
     var form = document.createElement("form");
     var dept = document.createElement("input");
@@ -79,6 +81,7 @@ function RedirectToInstCourse(Dept, Num, Sem, Year) {
     document.body.appendChild(form);
     form.submit();
 }
+//Redirects to the chair's view of a course.
 function RedirectToCourseDept(CID) {
     var form = document.createElement("form");
     var course = document.createElement("input");
@@ -89,6 +92,7 @@ function RedirectToCourseDept(CID) {
     document.body.appendChild(form);
     form.submit();
 }
+//Redirects to the chair's department overview page.
 function RedirectToDept(Dept) {
     var form = document.createElement("form");
     var dept = document.createElement("input");
@@ -99,6 +103,7 @@ function RedirectToDept(Dept) {
     document.body.appendChild(form);
     form.submit();
 }
+//Redirects to the given controller with the given action.
 function Redirect(Controller, Action) {
     var form = document.createElement("form");
     form.action = "/" + Controller + "/" + Action;
@@ -106,7 +111,8 @@ function Redirect(Controller, Action) {
     document.body.appendChild(form);
     form.submit();
 }
-
+//Requests to add a user to a role in the User controller
+//(obsolete)
 function AddUserToRole(e, username) {
     window.alert("here");
     e.preventDefault();

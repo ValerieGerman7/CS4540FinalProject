@@ -1,10 +1,10 @@
 ﻿@*
     /// Author: Valerie German
-    /// Date: 25 Sept 2019
+    /// Date: 18 Oct 2019
     /// Course: CS 4540, University of Utah
     /// Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
     /// I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
-    /// File Contents: HTML page for viewing users.
+    /// File Contents: HTML page for viewing users and modifying their roles.
 *@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
@@ -76,50 +76,5 @@
 
     </tbody>
 </table>
-<p id="resultP">
 
-</p>
 
-<!--Future: move into tabs?-->
-<!-- Tabs (Referenced https://www.w3schools.com/bootstrap4/tryit.asp?filename=trybs_ref_js_tab-content&stacked=h)-->
-<!--
-<ul class="nav nav-tabs">
-    <li class="nav-item">
-        <a class="nav-link active" data-toggle="tab" href="#admin">Administrators</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#chair">Department Chairs</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#instructor">Instructors</a>
-    </li>
-</ul>
-<div class="tab-content">
-    <div id="admin" class="container tab-pane active">
-        <br />
-        <h3>Administrators</h3>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">User Name</th>
-                    <th scope="col">Email</th>
-                </tr>
-            </thead>
-            <tbody>
-
-                <tr>
-                    <th scope="row">X</th>
-                    <td>Ex</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div id="chair" class="container tab-pane fade">
-        <br />
-        <h3>Chair</h3>
-    </div>
-    <div id="instructor" class="container tab-pane fade">
-        <br />
-        <h3>Instructor</h3>
-    </div>
-</div>-->
