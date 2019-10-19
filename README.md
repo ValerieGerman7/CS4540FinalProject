@@ -7,15 +7,19 @@ Course: CS 4540, University of Utah
 Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
 
 Description:
+	Links on the home page are in bold for assignment pages.
 		Instructor notes can be edited on the instructor's course page. The course note appears just below the description and each learning outcome
 	note appears just below its descriptions. Note creation/editing/removal can be done here (essentially the not matches the text after the user
 	removes focus from the textarea).
 		Chairs may edit learning outcome notes on the course page (go to the department and select a course to get to course overview), the note
 	is displayed under the learning outcome's description.
 		Notes will have a notification if the change was successful.
+		AJAX in the JavaScript functions for notes can be found under wwwroot/js/note.js
 	
 		Role changes can be done by the administrator, under the User's page. Confirmation must be done for any change and success will be displayed
-	with a notification.
+	with a notification. If the user tries to remove the last administrator, a fail notification is returned.
+
+	
 
 Advanced Features Completed:
 		For course and learning outcome notes, the date modified is shown underneath the note (if a note exists). For learning outcome notes, the name 
@@ -48,6 +52,7 @@ https://stackoverflow.com/questions/34343599/how-to-seed-users-and-roles-with-co
 -Pagination: https://getbootstrap.com/docs/4.0/components/pagination/
 (PS5)
 -SweetAlert: https://sweetalert2.github.io/
--Include: https://stackoverflow.com/questions/57129718/eagerly-loading-multiple-levels-error-the-include-property-lambda-expression-i
+-Include: https://stackoverflow.com/questions/57129718/eagerly-loading-multiple-levels-error-the-include-property-lambda-expression-i,
+https://stackoverflow.com/questions/3356541/entity-framework-linq-query-include-multiple-children-entities
 -Label text: https://stackoverflow.com/questions/3584145/how-to-change-the-text-of-a-label
 -Ajax then: https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
