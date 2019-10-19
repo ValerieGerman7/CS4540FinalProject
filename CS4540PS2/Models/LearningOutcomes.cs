@@ -13,17 +13,16 @@ namespace CS4540PS2.Models {
     public partial class LearningOutcomes {
         public LearningOutcomes() {
             EvaluationMetrics = new HashSet<EvaluationMetrics>();
+            LONotes = new HashSet<LONotes>();
         }
 
         public int Loid { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int CourseInstanceId { get; set; }
-        public string Note { get; set; }
-        public DateTime? NoteModified { get; set; }
-        public string NoteUserModifed { get; set; }
 
         public virtual CourseInstance CourseInstance { get; set; }
         public virtual ICollection<EvaluationMetrics> EvaluationMetrics { get; set; }
+        public virtual ICollection<LONotes> LONotes { get; set; }
     }
 }

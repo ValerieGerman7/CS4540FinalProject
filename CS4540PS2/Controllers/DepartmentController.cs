@@ -51,6 +51,8 @@ namespace CS4540PS2.Controllers {
                 .Include(lo => lo.LearningOutcomes)
                 .ThenInclude(em => em.EvaluationMetrics)
                 .ThenInclude(sa => sa.SampleFiles)
+                .Include(lo => lo.LearningOutcomes)
+                .ThenInclude(no => no.LONotes)
                 .Where(c => c.CourseInstanceId == CourseId).FirstOrDefaultAsync();
             if(course == null) {
                 return NotFound();
@@ -66,13 +68,17 @@ namespace CS4540PS2.Controllers {
         /// <param name="NewNote"></param>
         /// <returns></returns>
         public JsonResult ChangeNote(int LearningOutcomeId, string NewNote) {
-            LearningOutcomes lo = _context.LearningOutcomes.Where(l => l.Loid == LearningOutcomeId).FirstOrDefault();
+            LearningOutcomes lo = _context.LearningOutcomes.Include(l => l.LONotes)
+                .Where(l => l.Loid == LearningOutcomeId).FirstOrDefault();
             if (lo == null) return Json(new { success = false });
-            lo.Note = NewNote;
-            lo.NoteModified = DateTime.Now;
-            lo.NoteUserModifed = User.Identity.Name;
+            if(lo.LONotes.Count == 0) {
+                lo.LONotes.Add(new LONotes());
+            }
+            lo.LONotes.First().Note = NewNote;
+            lo.LONotes.First().NoteModified = DateTime.Now;
+            lo.LONotes.First().NoteUserModifed = User.Identity.Name;
             _context.SaveChanges();
-            return Json(new { success = true, noteContent = NewNote, modified = lo.NoteModified, user = User.Identity.Name });
+            return Json(new { success = true, noteContent = NewNote, modified = lo.LONotes.First().NoteModified, user = User.Identity.Name });
         }
 
         /// <summary>

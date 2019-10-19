@@ -119,15 +119,21 @@ namespace CS4540PS2.Data {
             if (context.CourseInstance.Any()) {
                 return;
             }
+            var cnote = new CourseNotes() {
+                Note = "Sample note on course",
+                NoteModified = DateTime.Now
+            };
             var ci0 = new CourseInstance { Name = "Web Software Architecture",
                 Description = "Software architectures, programming models, and programming environments pertinent to developing web " +
                 "applications.  Topics include client-server model, multi-tier software architecture, client-side scripting (JavaScript), " +
                 "server-side programming (Servlets and JavaServer Pages), component reuse (JavaBeans), database connectivity (JDBC), and " +
                 "web servers.",
                 Department = "CS", Number = 4540, Semester = "Fall", Year = 2019,
-                Note = "Sample note on course",
-                NoteModified = DateTime.Now
+                CourseNotes = new List<CourseNotes>() {
+                    cnote
+                }
             };
+            cnote.CourseInstance = ci0;
             var ci1 = new CourseInstance { Name = "Introduction To Algorithms and Data Structures",
                 Description = "This course provides an introduction to the problem of engineering computational efficiency into programs. " +
                 "Students will learn about classical algorithms (including sorting, searching, and graph traversal), data structures " +
@@ -143,13 +149,19 @@ namespace CS4540PS2.Data {
                 "source code management, object-oriented analysis and design), and team development practice. Much of the work will be in " +
                 "groups and will involve modifying preexisting software systems.",
                 Department = "CS", Number = 3500, Semester = "Fall", Year = 2019 };
+            CourseNotes cnote1 = new CourseNotes() {
+                Note = "Sample note on course",
+                NoteModified = DateTime.Now
+            };
             var ci3 = new CourseInstance { Name = "Discrete Structures",
                 Description = "Introduction to propositional logic, predicate logic, formal logical arguments, finite sets, functions, relations," +
                 " inductive proofs, recurrence relations, graphs, probability, and their applications to Computer Science.",
                 Department = "CS", Number = 2100, Semester = "Fall", Year = 2019,
-                Note = "Sample not on discrete structures.",
-                NoteModified = DateTime.Now
+                CourseNotes = new List<CourseNotes>() {
+                    cnote1      
+                }
             };
+            cnote1.CourseInstance = ci3;
             var ci4 = new CourseInstance { Name = "Computer Systems",
                 Description = "Introduction to computer systems from a programmer's point of view.  Machine level representations of programs, " +
                 "optimizing program performance, memory hierarchy, linking, exceptional control flow, measuring program performance, virtual memory, " +
@@ -168,15 +180,23 @@ namespace CS4540PS2.Data {
             foreach(CourseInstance co in courses) {
                 context.CourseInstance.Add(co);
             }
+            context.CourseNotes.Add(cnote);
+            context.CourseNotes.Add(cnote1);
             context.SaveChanges();
             #region Learning Outcomes
             //CS4540
-            var lo0 = new LearningOutcomes { CourseInstance = ci0, Name = "HTML and CSS",
-                Description = "Construct web pages using modern HTML and CSS practices, including modern frameworks.",
+            var lonote = new LONotes() {
                 Note = "Sample note on HTML learning outcome",
                 NoteModified = DateTime.Now,
                 NoteUserModifed = "professor_jim@cs.utah.edu"
             };
+            var lo0 = new LearningOutcomes { CourseInstance = ci0, Name = "HTML and CSS",
+                Description = "Construct web pages using modern HTML and CSS practices, including modern frameworks.",
+                LONotes = new List<LONotes>() {
+                    lonote
+                }
+            };
+            lonote.Lo = lo0;
             var lo1 = new LearningOutcomes { CourseInstance = ci0, Name = "Accessibility",
                 Description = "Define accessibility and utilize techniques to create accessible web pages." };
             var lo2 = new LearningOutcomes { CourseInstance = ci0, Name = "MVC",
@@ -265,14 +285,20 @@ namespace CS4540PS2.Data {
                 Description = "Analyze problems to determine underlying recurrence relations, as well as solve such relations by rephrasing " +
                 "as closed formulas."
             };
+            var lonote1 = new LONotes() {
+                Note = "Sample note on real world application learning outcome",
+                NoteModified = DateTime.Now,
+                NoteUserModifed = "chair_whitaker@cs.utah.edu"
+            };
             var lo21 = new LearningOutcomes {
                 CourseInstance = ci3, Name = "Real-World Application",
                 Description = "Assign practical examples to the appropriate set, function, or relation model, while employing the associated " +
                 "terminology and operations.",
-                Note = "Sample note on real world application.",
-                NoteModified = DateTime.Now,
-                NoteUserModifed = "chair_whitaker@cs.utah.edu"
+                LONotes = new List<LONotes>() {
+                    lonote1
+                }
             };
+            lonote1.Lo = lo21;
             var lo22 = new LearningOutcomes {
                 CourseInstance = ci3, Name = "Counting, Permutations, Combinations and Combinatorics",
                 Description = "Map real-world applications to appropriate counting formalisms, including permutations and combinations of sets, " +
@@ -363,6 +389,8 @@ namespace CS4540PS2.Data {
             foreach(LearningOutcomes lo in learningo) {
                 context.LearningOutcomes.Add(lo);
             }
+            context.LONotes.Add(lonote);
+            context.LONotes.Add(lonote1);
             context.SaveChanges();
             //CS4540
             var em0 = new EvaluationMetrics { Lo=lo0, Name = "PS1", Description = "Students will write static HTML web pages." };

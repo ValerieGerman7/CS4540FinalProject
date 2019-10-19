@@ -24,6 +24,8 @@ namespace CS4540PS2.Models {
         public virtual DbSet<Instructors> Instructors { get; set; }
         public virtual DbSet<LearningOutcomes> LearningOutcomes { get; set; }
         public virtual DbSet<SampleFiles> SampleFiles { get; set; }
+        public virtual DbSet<CourseNotes> CourseNotes { get; set; }
+        public virtual DbSet<LONotes> LONotes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             if (!optionsBuilder.IsConfigured) {

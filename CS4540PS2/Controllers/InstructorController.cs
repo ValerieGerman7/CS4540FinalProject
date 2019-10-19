@@ -48,14 +48,17 @@ namespace CS4540PS2.Controllers {
         /// <param name="NewNote"></param>
         /// <returns></returns>
         public JsonResult ChangeNote(int CourseInstanceId, string NewNote) {
-            CourseInstance course = _context.CourseInstance
+            CourseInstance course = _context.CourseInstance.Include(c => c.CourseNotes)
                 .Where(c => c.CourseInstanceId == CourseInstanceId && c.Instructors.Where(ins => ins.InstructorLoginEmail == User.Identity.Name).Any())
                 .FirstOrDefault();
             if (course == null) return Json(new { success = false });
-            course.Note = NewNote;
-            course.NoteModified = DateTime.Now;
+            if(course.CourseNotes.Count == 0) {
+                course.CourseNotes.Add(new CourseNotes());
+            }
+            course.CourseNotes.First().Note = NewNote;
+            course.CourseNotes.First().NoteModified = DateTime.Now;
             _context.SaveChanges();
-            return Json(new { success = true, noteContent = NewNote, modified = course.NoteModified });
+            return Json(new { success = true, noteContent = NewNote, modified = course.CourseNotes.First().NoteModified });
         }
 
         /// <summary>
@@ -66,15 +69,18 @@ namespace CS4540PS2.Controllers {
         /// <param name="NewNote"></param>
         /// <returns></returns>
         public JsonResult ChangeLONote(int LearningOutcomeId, string NewNote) {
-            LearningOutcomes lo = _context.LearningOutcomes.Where(l => l.Loid == LearningOutcomeId)
+            LearningOutcomes lo = _context.LearningOutcomes.Where(l => l.Loid == LearningOutcomeId).Include(l => l.LONotes)
                 .Where(l => l.CourseInstance.Instructors.Where(ins => ins.InstructorLoginEmail == User.Identity.Name).Any())
                 .FirstOrDefault();
             if (lo == null) return Json(new { success = false });
-            lo.Note = NewNote;
-            lo.NoteModified = DateTime.Now;
-            lo.NoteUserModifed = User.Identity.Name;
+            if(lo.LONotes.Count == 0) {
+                lo.LONotes.Add(new LONotes());
+            }
+            lo.LONotes.First().Note = NewNote;
+            lo.LONotes.First().NoteModified = DateTime.Now;
+            lo.LONotes.First().NoteUserModifed = User.Identity.Name;
             _context.SaveChanges();
-            return Json(new { success = true, noteContent = NewNote, modified = lo.NoteModified, user = User.Identity.Name });
+            return Json(new { success = true, noteContent = NewNote, modified = lo.LONotes.First().NoteModified, user = User.Identity.Name });
         }
 
         /// <summary>
@@ -121,16 +127,16 @@ namespace CS4540PS2.Controllers {
                                     Semester = courses.Semester,
                                     Year = courses.Year,
                                     ID = courses.CourseInstanceId,
-                                    Note = courses.Note,
-                                    NoteModified = courses.NoteModified,
+                                    Note = (courses.CourseNotes.FirstOrDefault() == null ? null : courses.CourseNotes.FirstOrDefault().Note),
+                                    NoteModified = (courses.CourseNotes.FirstOrDefault() == null ? null : courses.CourseNotes.FirstOrDefault().NoteModified),
                                     LearningOutcomes = courses.LearningOutcomes.Select(lo =>
                                         new LearningOutcomeData {
                                             LOName = lo.Name,
                                             LODescription = lo.Description,
                                             LOID = lo.Loid,
-                                            Note = lo.Note,
-                                            NoteModified = lo.NoteModified,
-                                            NoteUserModified = lo.NoteUserModifed,
+                                            Note = (lo.LONotes.FirstOrDefault() == null ? null : lo.LONotes.FirstOrDefault().Note),
+                                            NoteModified = (lo.LONotes.FirstOrDefault() == null ? null : lo.LONotes.FirstOrDefault().NoteModified),
+                                            NoteUserModified = (lo.LONotes.FirstOrDefault() == null ? null : lo.LONotes.FirstOrDefault().NoteUserModifed),
                                             EvaluationMetrics = lo.EvaluationMetrics.Where(em => em.Loid == lo.Loid)
                                             .Select(x => new EvaluationMetricData {
                                                 Name = x.Name,
