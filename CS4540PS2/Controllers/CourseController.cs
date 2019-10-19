@@ -178,6 +178,9 @@ namespace CS4540PS2.Controllers {
         public string LOName { get; set; }
         public string LODescription { get; set; }
         public int LOID { get; set; }
+        public string Note { get; set; }
+        public DateTime? NoteModified { get; set; }
+        public string NoteUserModified { get; set; }
         public List<EvaluationMetricData> EvaluationMetrics { get; set; }
     }
     /// <summary>

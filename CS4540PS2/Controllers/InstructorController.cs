@@ -53,7 +53,24 @@ namespace CS4540PS2.Controllers {
             course.Note = NewNote;
             course.NoteModified = DateTime.Now;
             _context.SaveChanges();
-            return Json(new { success = true });
+            return Json(new { success = true, noteContent = NewNote, modified = course.NoteModified });
+        }
+
+        /// <summary>
+        /// Updates the identified learning outcome's note along with the last modified date and last user
+        /// modifying date.
+        /// </summary>
+        /// <param name="LearningOutcomeId"></param>
+        /// <param name="NewNote"></param>
+        /// <returns></returns>
+        public JsonResult ChangeLONote(int LearningOutcomeId, string NewNote) {
+            LearningOutcomes lo = _context.LearningOutcomes.Where(l => l.Loid == LearningOutcomeId).FirstOrDefault();
+            if (lo == null) return Json(new { success = false });
+            lo.Note = NewNote;
+            lo.NoteModified = DateTime.Now;
+            lo.NoteUserModifed = User.Identity.Name;
+            _context.SaveChanges();
+            return Json(new { success = true, noteContent = NewNote, modified = lo.NoteModified, user = User.Identity.Name });
         }
 
         /// <summary>
@@ -107,6 +124,9 @@ namespace CS4540PS2.Controllers {
                                             LOName = lo.Name,
                                             LODescription = lo.Description,
                                             LOID = lo.Loid,
+                                            Note = lo.Note,
+                                            NoteModified = lo.NoteModified,
+                                            NoteUserModified = lo.NoteUserModifed,
                                             EvaluationMetrics = lo.EvaluationMetrics.Where(em => em.Loid == lo.Loid)
                                             .Select(x => new EvaluationMetricData {
                                                 Name = x.Name,

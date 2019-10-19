@@ -72,7 +72,7 @@ namespace CS4540PS2.Controllers {
             lo.NoteModified = DateTime.Now;
             lo.NoteUserModifed = User.Identity.Name;
             _context.SaveChanges();
-            return Json(new { success = true });
+            return Json(new { success = true, noteContent = NewNote, modified = lo.NoteModified, user = User.Identity.Name });
         }
 
         /// <summary>

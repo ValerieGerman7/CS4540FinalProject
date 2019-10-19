@@ -40,12 +40,13 @@
                     </div>
                 </div>
                 <div class="card">
-                    @{ 
+                    @{
                         var noteId = "LONote" + lo.Loid;
+                        var noteLabelId = "LONoteLabel" + lo.Loid;
                     }
                     <textarea name="note" id="@noteId" class="form-control" rows="3" placeholder="Enter learning outcome note"
-                              onchange="UpdateLONoteDept(event, @lo.Loid, '@noteId')">@lo.Note</textarea>
-                    @if (lo.NoteModified != null) {<text><i><label class="text-sm-right" id="NoteLabel">Last modified: @lo.NoteModified by @lo.NoteUserModifed</label></i></text>}
+                              onchange="UpdateLONoteDept(event, @lo.Loid, '@noteId', '@noteLabelId')">@lo.Note</textarea>
+                    <i><label class="text-sm-right" id="@noteLabelId">@if (lo.NoteModified != null) {<text>Last modified: @lo.NoteModified by @lo.NoteUserModifed</text>}</label></i>
                 </div>
                 <br />
                 <!--Evaluation metrics - each assignment/exam is split into a card-->
