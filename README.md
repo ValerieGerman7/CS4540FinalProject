@@ -1,39 +1,14 @@
-# CS4540PS4
-CS 4540 Web Software Architecture PS4 Assignment
+# CS4540PS5
+CS 4540 Web Software Architecture PS5 Assignment
 
 Author: Valerie German
 Date: 27 Sept 2019
 Course: CS 4540, University of Utah
 Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
 
-Note:
-		The home page contains links to pages, listed with the associated user type authorized to access them. The instructor
-	list contains links to two different classes. The home page may be accessed by anyone, any other page requires the user
-	to be logged in.
-		Admins can view a list of all learning outcomes, as well as create, modify and delete learning outcomes. They can view
-	a list of all available courses (note the link on each course is invalid - no current course overview page for admins.)
-	Courses may be added, modified and deleted. Admins may also view a list of all users and their roles.
-		Professors can view a list of their courses, and a course overview page containing the course's learning outcomes,
-	evaluation metrics and sample files.
-		Chairs may view a department overview - listing all classes in the department and the evaluation metric and sample file
-	progress. They also have access to a page that links to all the departments (note this only shows the department code 
-	currently).
-
-Authentication and Authorization:
-		To authorize pages, I split the different access levels to use controllers, so only one authorize statement would
-	cover all the web pages associated. The InstructorController was the only one to check the actual user, since it has
-	specific courses for specific instructors. This verified the IdentityUser with a table in the database which associates
-	course instances with users. Ideally, the database will have a forien key directly linked to users, however linking
-	with the default user tables was a little more difficult than I thought with scaffolding so it currently uses an inserted
-	user email in the seed file.
-		Overall, the support for users/identity is very convienient in .NET and after a little setup was very simple to use.
-
-Extra:
-		Creating LearningOutcomes uses a drop down containing the course's department, number, name and semester/year.
-		The list of learning outcomes is displayed in pages (currently 5 at a time), with some table design changes to make it 
-	more visually appealing. An Admin may go to the course to see all learning outcomes in a course, and add learning outcomes
-	to that course directly by the + button on the right (labeled). General additional styling was applied to the learning 
-	outcome pages (links to buttons, cleaner table).
+Advanced Features Completed:
+		For course and learning outcome notes, the date modified is shown underneath the note (if a note exists). For learning outcome notes, the name 
+	of the user who modified the note last is also displayed.
 	
   
 References:
@@ -60,3 +35,8 @@ References:
 https://stackoverflow.com/questions/34343599/how-to-seed-users-and-roles-with-code-first-migration-using-identity-asp-net-cor
 -Tabs: https://www.w3schools.com/bootstrap4/tryit.asp?filename=trybs_ref_js_tab-content&stacked=h
 -Pagination: https://getbootstrap.com/docs/4.0/components/pagination/
+(PS5)
+-SweetAlert: https://sweetalert2.github.io/
+-Include: https://stackoverflow.com/questions/57129718/eagerly-loading-multiple-levels-error-the-include-property-lambda-expression-i
+-Label text: https://stackoverflow.com/questions/3584145/how-to-change-the-text-of-a-label
+-Ajax then: https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call

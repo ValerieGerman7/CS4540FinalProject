@@ -76,7 +76,7 @@ function UpdateLONoteInst(e, loId, noteId, noteLabelId) {
         $('#' + noteLabelId).text("Last modified: " + date + " by " + data.user);
     });
 }
-//Updates teh learning outcome note for a chair.
+//Updates the learning outcome note for a chair.
 function UpdateLONoteDept(e, loId, noteId, noteLabelId) {
     e.preventDefault();
     $.ajax({

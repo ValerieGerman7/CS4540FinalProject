@@ -124,14 +124,18 @@ namespace CS4540PS2.Data {
                 "applications.  Topics include client-server model, multi-tier software architecture, client-side scripting (JavaScript), " +
                 "server-side programming (Servlets and JavaServer Pages), component reuse (JavaBeans), database connectivity (JDBC), and " +
                 "web servers.",
-                Department = "CS", Number = 4540, Semester = "Fall", Year = 2019 };
+                Department = "CS", Number = 4540, Semester = "Fall", Year = 2019,
+                Note = "Sample note on course",
+                NoteModified = DateTime.Now
+            };
             var ci1 = new CourseInstance { Name = "Introduction To Algorithms and Data Structures",
                 Description = "This course provides an introduction to the problem of engineering computational efficiency into programs. " +
                 "Students will learn about classical algorithms (including sorting, searching, and graph traversal), data structures " +
                 "(including stacks, queues, linked lists, trees, hash tables, and graphs), and analysis of program space and time " +
                 "requirements. Students will complete extensive programming exercises that require the application of elementary techniques " +
                 "from software engineering.",
-                Department = "CS", Number = 2420, Semester = "Fall", Year = 2019 };
+                Department = "CS", Number = 2420, Semester = "Fall", Year = 2019
+            };
             var ci2 = new CourseInstance { Name = "Software Practice",
                 Description = "Practical exposure to the process of creating large software systems, including requirements specifications, " +
                 "design, implementation, testing, and maintenance. Emphasis on software process, software tools (debuggers, profilers, source " +
@@ -142,7 +146,10 @@ namespace CS4540PS2.Data {
             var ci3 = new CourseInstance { Name = "Discrete Structures",
                 Description = "Introduction to propositional logic, predicate logic, formal logical arguments, finite sets, functions, relations," +
                 " inductive proofs, recurrence relations, graphs, probability, and their applications to Computer Science.",
-                Department = "CS", Number = 2100, Semester = "Fall", Year = 2019 };
+                Department = "CS", Number = 2100, Semester = "Fall", Year = 2019,
+                Note = "Sample not on discrete structures.",
+                NoteModified = DateTime.Now
+            };
             var ci4 = new CourseInstance { Name = "Computer Systems",
                 Description = "Introduction to computer systems from a programmer's point of view.  Machine level representations of programs, " +
                 "optimizing program performance, memory hierarchy, linking, exceptional control flow, measuring program performance, virtual memory, " +
@@ -165,7 +172,10 @@ namespace CS4540PS2.Data {
             #region Learning Outcomes
             //CS4540
             var lo0 = new LearningOutcomes { CourseInstance = ci0, Name = "HTML and CSS",
-                Description = "Construct web pages using modern HTML and CSS practices, including modern frameworks."
+                Description = "Construct web pages using modern HTML and CSS practices, including modern frameworks.",
+                Note = "Sample note on HTML learning outcome",
+                NoteModified = DateTime.Now,
+                NoteUserModifed = "professor_jim@cs.utah.edu"
             };
             var lo1 = new LearningOutcomes { CourseInstance = ci0, Name = "Accessibility",
                 Description = "Define accessibility and utilize techniques to create accessible web pages." };
@@ -258,7 +268,10 @@ namespace CS4540PS2.Data {
             var lo21 = new LearningOutcomes {
                 CourseInstance = ci3, Name = "Real-World Application",
                 Description = "Assign practical examples to the appropriate set, function, or relation model, while employing the associated " +
-                "terminology and operations."
+                "terminology and operations.",
+                Note = "Sample note on real world application.",
+                NoteModified = DateTime.Now,
+                NoteUserModifed = "chair_whitaker@cs.utah.edu"
             };
             var lo22 = new LearningOutcomes {
                 CourseInstance = ci3, Name = "Counting, Permutations, Combinations and Combinatorics",
