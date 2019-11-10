@@ -17,7 +17,7 @@ using Microsoft.EntityFrameworkCore;
 /// File Contents: This file contains controller for department webpages. Chair pages for viewing departments and courses.
 /// </summary>
 namespace CS4540PS2.Controllers {
-    [Authorize(Roles="Chair")]
+    [Authorize(Roles = "Chair")]
     public class DepartmentController : Controller {
         private readonly LearningOutcomeDBContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -54,7 +54,7 @@ namespace CS4540PS2.Controllers {
                 .Include(lo => lo.LearningOutcomes)
                 .ThenInclude(no => no.LONotes)
                 .Where(c => c.CourseInstanceId == CourseId).FirstOrDefaultAsync();
-            if(course == null) {
+            if (course == null) {
                 return NotFound();
             }
             return View("Course", course);
@@ -71,7 +71,7 @@ namespace CS4540PS2.Controllers {
             LearningOutcomes lo = _context.LearningOutcomes.Include(l => l.LONotes)
                 .Where(l => l.Loid == LearningOutcomeId).FirstOrDefault();
             if (lo == null) return Json(new { success = false });
-            if(lo.LONotes.Count == 0) {
+            if (lo.LONotes.Count == 0) {
                 lo.LONotes.Add(new LONotes());
             }
             lo.LONotes.First().Note = NewNote;
@@ -88,76 +88,10 @@ namespace CS4540PS2.Controllers {
         /// <param name="DeptCode"></param>
         /// <returns></returns>
         public async Task<IActionResult> Department(string DeptCode) {
-            if(DeptCode == null) { DeptCode = "CS"; } //Temp for viewing
-            return View("Department", GetDeptData(DeptCode));
+            if (DeptCode == null) { DeptCode = "CS"; } //Temp for viewing
+            return View("Department", _context.CourseInstance.Include(c => c.LearningOutcomes)
+                .ThenInclude(lo => lo.EvaluationMetrics).ThenInclude(em => em.SampleFiles)
+                .Where(c => c.Department == DeptCode));
         }
-
-        /// <summary>
-        /// Returns information about a department's courses.
-        /// </summary>
-        /// <param name="DeptCode"></param>
-        /// <returns></returns>
-        public DepartmentData GetDeptData(string DeptCode) {
-            using (_context) {
-                var getDept = from courses in _context.CourseInstance
-                              where courses.Department == DeptCode
-                              select new CourseStatData {
-                                  CourseId = courses.CourseInstanceId,
-                                  CourseName = courses.Name,
-                                  CourseNum = courses.Number,
-                                  CourseDescript = courses.Description,
-                                  Semester = courses.Semester,
-                                  Year = courses.Year,
-                                  NumLearningOutcomes = (from lo in _context.LearningOutcomes
-                                                         where lo.CourseInstanceId == courses.CourseInstanceId
-                                                         select lo.Name).Count(),
-                                  NumLOWithEvaluationMetrics = (from lo in _context.LearningOutcomes
-                                                                where lo.CourseInstanceId == courses.CourseInstanceId
-                                                                && lo.EvaluationMetrics.Count > 0
-                                                                select lo.Name).Count(),
-                                  NumEvaluationMetrics = (from lo in _context.LearningOutcomes
-                                                          join em in _context.EvaluationMetrics on lo.Loid equals em.Loid
-                                                          where lo.CourseInstanceId == courses.CourseInstanceId
-                                                          select em.Name).Count(),
-                                  NumEMWithSamples = (from lo in _context.LearningOutcomes
-                                                      join em in _context.EvaluationMetrics on lo.Loid equals em.Loid
-                                                      where lo.CourseInstanceId == courses.CourseInstanceId
-                                                      && em.SampleFiles.Count > 0
-                                                      select em.Name).Count(),
-                              };
-                List<CourseStatData> x = getDept.ToList<CourseStatData>();
-                DepartmentData d = new DepartmentData {
-                    DeptName = (DeptCode.Equals("CS") ? "Computer Science" : DeptCode),
-                    DeptCode = DeptCode,
-                    Courses = x
-                };
-                return d;
-            }
-        }
-
-    }
-
-    /// <summary>
-    /// Struct containing information about a department.
-    /// </summary>
-    public struct DepartmentData {
-        public string DeptName { get; set; }
-        public string DeptCode { get; set; }
-        public List<CourseStatData> Courses { get; set; }
-    }
-    /// <summary>
-    /// Struct containing information about a course.
-    /// </summary>
-    public struct CourseStatData {
-        public int CourseId { get; set; }
-        public string CourseName { get; set; }
-        public int CourseNum { get; set; }
-        public string Semester { get; set; }
-        public int Year { get; set; }
-        public string CourseDescript { get; set; }
-        public int NumLearningOutcomes { get; set; }
-        public int NumLOWithEvaluationMetrics { get; set; }
-        public int NumEvaluationMetrics { get; set; }
-        public int NumEMWithSamples { get; set; }
     }
 }

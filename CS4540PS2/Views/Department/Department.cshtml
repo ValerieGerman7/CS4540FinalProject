@@ -1,4 +1,4 @@
-﻿@model CS4540PS2.Controllers.DepartmentData
+﻿@model IEnumerable<CS4540PS2.Models.CourseInstance>
 @*
     Author: Valerie German
     Date: 18 Oct 2019
@@ -10,28 +10,45 @@
 @{
     @using Newtonsoft.Json.Linq;
     @using CS4540PS2.Controllers;
-    ViewData["Title"] = Model.DeptName;
+    ViewData["Title"] = Model.Any() ? Model.First().Department : "Unknown Department";
 }
 <div id="ContentDiv">
-    <h1>@Model.DeptName Department</h1>
+    <h1>@Model.First().Department Department</h1>
     <div align="right">
         <a asp-controller="Department" asp-action="Index">All Departments</a>
     </div>
     <hr />
     <!--Options to search the classes by progress, class name, professor ... may be added here (future work) -->
     <!--Information about each class's progress is separated by divs, each with the same structure.-->
-    @{ foreach (CourseStatData course in Model.Courses) {
-            var LOProgress = 100 * course.NumLOWithEvaluationMetrics / (course.NumLearningOutcomes == 0 ? 1 : course.NumLearningOutcomes);
-            var EMProgress = 100 * course.NumEMWithSamples / (course.NumEvaluationMetrics == 0 ? 1 : course.NumEvaluationMetrics);
+    @{ foreach (CourseInstance course in Model) {
+            var LOProgress = 100 * (course.LearningOutcomes.Where(lo => lo.EvaluationMetrics.Any()).Count());
+            var loCount = course.LearningOutcomes.Count();
+            if (loCount > 0) {
+                LOProgress = LOProgress / loCount;
+            } else {
+                LOProgress = 0;
+            }
+            var ems = 0;
+            var emsWithSamples = 0;
+            foreach(LearningOutcomes lo in course.LearningOutcomes) {
+                ems += lo.EvaluationMetrics.Count();
+                emsWithSamples += lo.EvaluationMetrics.Where(em => em.SampleFiles.Any()).Count();
+            }
+            var EMProgress = 100 * emsWithSamples;
+            if (ems > 0) {
+                EMProgress = EMProgress / ems;
+            } else {
+                EMProgress = 0;
+            }
             var totalProgress = LOProgress + EMProgress;
             var progressColor = (totalProgress == 200 ? "completeProgress" : (totalProgress >= 160 ? "highProgress" :
                 (totalProgress >= 90 ? "medProgress" : "lowProgress")));
             <!-- This div contains the progress for a single class. Bootstrap cards are used to separate data. See https://getbootstrap.com/docs/4.1/components/card/. This
             reference is used for all following cards. -->
-            <div class="card mb-3 shadowBox @progressColor" onclick="RedirectToCourseDept(@course.CourseId);">
-                <div class="card-header courseHeader">@Model.DeptCode @course.CourseNum - @course.CourseName  <small>@course.Semester, @course.Year</small></div>
+            <div class="card mb-3 shadowBox @progressColor" onclick="RedirectToCourseDept(@course.CourseInstanceId);">
+                <div class="card-header courseHeader">@course.Department @course.Number - @course.Name  <small>@course.Semester, @course.Year</small></div>
                 <div class="card-body">
-                    <p class="card-text classInfo" align="left">@course.CourseDescript</p>
+                    <p class="card-text classInfo" align="left">@course.Description</p>
                     <div class="progressDiv progressInfo" align="right">
                         <!--Progress display for class (same structure for following class examples). Referenced https://getbootstrap.com/docs/4.1/components/progress/. This
                             reference is used for all following progress bars (same structure).-->

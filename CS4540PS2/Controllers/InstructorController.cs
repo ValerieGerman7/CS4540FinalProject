@@ -96,64 +96,19 @@ namespace CS4540PS2.Controllers {
                 return View("Error", new ErrorViewModel() {
                     ErrorMessage = "Insufficient information to locate course."
                 });
-            CourseInfo info = GetCourseInfo(Dept, (int)Num, Sem, (int)Year, _context, User.Identity.Name);
-            if (info.CourseName == null)
+            CourseInstance course = _context.CourseInstance.Where(c => c.Department == Dept && c.Number == Num
+                && c.Semester == Sem && c.Year == Year)
+                .Include(c => c.CourseNotes)
+                .Include(c => c.LearningOutcomes)
+                .ThenInclude(lo => lo.EvaluationMetrics)
+                .ThenInclude(em => em.SampleFiles)
+                .Include(c => c.LearningOutcomes)
+                .ThenInclude(lo => lo.LONotes)
+                .FirstOrDefault();
+            if (course == null)
                 return Forbid();
-            return View("Course", info);
+            return View("Course", course);
         }
 
-        /// <summary>
-        /// Returns an object containing relevant information about the given course.
-        /// </summary>
-        /// <param name="Dept"></param>
-        /// <param name="Num"></param>
-        /// <param name="Sem"></param>
-        /// <param name="Year"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
-        public static CourseInfo GetCourseInfo(string Dept, int Num, string Sem, int Year, LearningOutcomeDBContext context, string userEmail) {
-            using (context) {
-                var getCourse = from courses in context.CourseInstance
-                                where courses.Department == Dept
-                                && courses.Number == Num
-                                && courses.Semester == Sem
-                                && courses.Year == Year
-                                && courses.Instructors.Where(i => i.InstructorLoginEmail == userEmail).Any()
-                                select new CourseInfo {
-                                    CourseName = courses.Name,
-                                    CourseDescription = courses.Description,
-                                    Department = courses.Department,
-                                    Number = courses.Number,
-                                    Semester = courses.Semester,
-                                    Year = courses.Year,
-                                    ID = courses.CourseInstanceId,
-                                    Note = (courses.CourseNotes.FirstOrDefault() == null ? null : courses.CourseNotes.FirstOrDefault().Note),
-                                    NoteModified = (courses.CourseNotes.FirstOrDefault() == null ? null : courses.CourseNotes.FirstOrDefault().NoteModified),
-                                    LearningOutcomes = courses.LearningOutcomes.Select(lo =>
-                                        new LearningOutcomeData {
-                                            LOName = lo.Name,
-                                            LODescription = lo.Description,
-                                            LOID = lo.Loid,
-                                            Note = (lo.LONotes.FirstOrDefault() == null ? null : lo.LONotes.FirstOrDefault().Note),
-                                            NoteModified = (lo.LONotes.FirstOrDefault() == null ? null : lo.LONotes.FirstOrDefault().NoteModified),
-                                            NoteUserModified = (lo.LONotes.FirstOrDefault() == null ? null : lo.LONotes.FirstOrDefault().NoteUserModifed),
-                                            EvaluationMetrics = lo.EvaluationMetrics.Where(em => em.Loid == lo.Loid)
-                                            .Select(x => new EvaluationMetricData {
-                                                Name = x.Name,
-                                                Description = x.Description,
-                                                EMID = x.Emid,
-                                                Samples = x.SampleFiles.Where(sample => sample.Emid == x.Emid)
-                                                        .Select(sampleSelect => new SamplesData {
-                                                            Score = sampleSelect.Score,
-                                                            FileName = sampleSelect.FileName,
-                                                            SID = sampleSelect.Sid
-                                                        }).ToList<SamplesData>()
-                                            }).ToList<EvaluationMetricData>()
-                                        }
-                                    ).ToList<LearningOutcomeData>()
-                                };
-                return getCourse.FirstOrDefault();
-            }
-        }
     }
 }

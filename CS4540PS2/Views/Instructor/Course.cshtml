@@ -1,4 +1,4 @@
-﻿@model CS4540PS2.Controllers.CourseInfo
+﻿@model CS4540PS2.Models.CourseInstance
 @*
     Author: Valerie German
     Date: 18 Oct 2019
@@ -10,16 +10,16 @@
 @{
     @using Newtonsoft.Json.Linq;
     @using CS4540PS2.Controllers;
-    ViewData["Title"] = Model.CourseName;
+    ViewData["Title"] = Model.Name;
 }
 
     <div id="ContentDiv">
-        <h1>@Model.Department @Model.Number @Model.CourseName</h1>
-        <h4>@Model.CourseDescription<!--Professor name--></h4>
+        <h1>@Model.Department @Model.Number @Model.Name</h1>
+        <h4>@Model.Description<!--Professor name--></h4>
         <hr />
         <textarea name="note" id="CourseNote" class="form-control" rows="3" placeholder="Enter course note"
-                  onchange="UpdateNote(event, @Model.ID)">@Model.Note</textarea>
-        <i><label class="text-sm-right" id="NoteLabel">@if (Model.NoteModified != null) {<text>Last modified: @Model.NoteModified</text>}</label></i>
+                  onchange="UpdateNote(event, @Model.CourseInstanceId)">@if (Model.CourseNotes.Count != 0) { <text>@Model.CourseNotes.First().Note</text>}</textarea>
+        <i><label class="text-sm-right" id="NoteLabel">@if (Model.CourseNotes.Count() != 0) {<text>Last modified: @Model.CourseNotes.First().NoteModified</text>}</label></i>
         
         <hr />
         <h2>Learning Outcomes</h2>
@@ -98,31 +98,34 @@
         @if (Model.LearningOutcomes.Count == 0) {
             <p><b>This course has no assigned learning outcomes.</b></p>
         }
-        @foreach (LearningOutcomeData lo in Model.LearningOutcomes) {
+        
+        @foreach (LearningOutcomes lo in Model.LearningOutcomes) {
             <!--Collapses separated in divs-->
             <!--Collapse with information about a learning outcome-->
             <!--This and following collapses created with help from https://getbootstrap.com/docs/4.0/components/collapse/-->
             <button class="btn btn-primary sectionButton text-left" type="button" data-toggle="collapse"
-                    data-target="#collapseContent@{<text>@Model.LearningOutcomes.IndexOf(lo)</text>}" aria-expanded="false"
-                    aria-controls="collapseContent@{<text>@Model.LearningOutcomes.IndexOf(lo)</text>}">
-                @lo.LOName
+                    data-target="#collapseContent@{<text>@lo.Loid</text>}" aria-expanded="false"
+                    aria-controls="collapseContent@{<text>@lo.Loid</text>}">
+                @lo.Name
             </button>
-            <div class="collapse" id="collapseContent@{<text>@Model.LearningOutcomes.IndexOf(lo)</text>}">
+            <div class="collapse" id="collapseContent@{<text>@lo.Loid</text>}">
                 <!--Cards reference https://getbootstrap.com/docs/4.1/components/card/ (this is true of all following cards).-->
                 <div class="card card-body">
                     <div class="card">
                         <div class="card-body">
-                            @lo.LODescription
+                            @lo.Description
                         </div>
                     </div>
                     <div class="card">
                         @{
-                            var noteId = "LONote" + lo.LOID;
-                            var noteLabelId = "LONoteLabel" + lo.LOID;
+                            var noteId = "LONote" + lo.Loid;
+                            var noteLabelId = "LONoteLabel" + lo.Loid;
                         }
                         <textarea name="note" id="@noteId" class="form-control" rows="3" placeholder="Enter learning outcome note"
-                                  onchange="UpdateLONoteInst(event, @lo.LOID, '@noteId', '@noteLabelId')">@lo.Note</textarea>
-                        <i><label class="text-sm-right" id="@noteLabelId">@if (lo.NoteModified != null) {<text>Last modified: @lo.NoteModified by @lo.NoteUserModified</text>}</label></i>
+                                  onchange="UpdateLONoteInst(event, @lo.Loid, '@noteId', '@noteLabelId')"
+                                  >@if(lo.LONotes.Any()){<text>@lo.LONotes.First().Note</text>}</textarea>
+                        <i><label class="text-sm-right" id="@noteLabelId"
+                                  >@if (lo.LONotes.Any()) {<text>Last modified: @lo.LONotes.First().NoteModified by @lo.LONotes.First().NoteUserModifed</text>}</label></i>
                     </div>
                     <br />
                     <!--Evaluation metrics - each assignment/exam is split into a card-->
@@ -136,7 +139,7 @@
                     @if (lo.EvaluationMetrics.Count == 0) {
                         <p><i>This learning outcome has no evaluation metrics - <b>warning</b> metrics are required, please add at least one.</i></p>
                     }
-                    @foreach (EvaluationMetricData em in lo.EvaluationMetrics) {
+                    @foreach (EvaluationMetrics em in lo.EvaluationMetrics) {
                         <!-- Referenced https://getbootstrap.com/docs/4.1/components/card/-->
                         <div class="card shadowBox">
                             <div class="card-header">
@@ -149,11 +152,11 @@
                 See file forms as well.-->
                                 <p>
                                     <label class="sampleLabelText">
-                                        Sample Files: @if (em.Samples.Count == 0) {
+                                        Sample Files: @if (!em.SampleFiles.Any()) {
                                             <text><i>There are no sample files. <b>Upload at least one sample.</b></i></text>
                                         }
                                     </label>
-                                    @foreach (SamplesData sample in em.Samples) {
+                                    @foreach (SampleFiles sample in em.SampleFiles) {
                                         <!--Change link to sample filename.-->
                                         <button value="@sample.Score" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()"></button>
                                     }

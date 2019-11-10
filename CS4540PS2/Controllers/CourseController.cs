@@ -156,49 +156,5 @@ namespace CS4540PS2.Controllers {
 
     }
 
-    /// <summary>
-    /// Struct for holding information about a specific course
-    /// </summary>
-    public struct CourseInfo {
-        public string CourseName { get; set; }
-        public string CourseDescription { get; set; }
-        public string Department { get; set; }
-        public int Number { get; set; }
-        public string Semester { get; set; }
-        public int Year { get; set; }
-        public int ID { get; set; }
-        public List<LearningOutcomeData> LearningOutcomes { get; set; }
-        public string Note { get; set; }
-        public DateTime? NoteModified { get; set; }
-    }
-    /// <summary>
-    /// Struct for holding information about a course's learning outcome.
-    /// </summary>
-    public struct LearningOutcomeData {
-        public string LOName { get; set; }
-        public string LODescription { get; set; }
-        public int LOID { get; set; }
-        public string Note { get; set; }
-        public DateTime? NoteModified { get; set; }
-        public string NoteUserModified { get; set; }
-        public List<EvaluationMetricData> EvaluationMetrics { get; set; }
-    }
-    /// <summary>
-    /// Struct for holding information about an evalutation metric.
-    /// </summary>
-    public struct EvaluationMetricData {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public int EMID { get; set; }
-        public List<SamplesData> Samples { get; set; }
-    }
-    /// <summary>
-    /// Struct for holding information about a sample.
-    /// </summary>
-    public struct SamplesData {
-        public string FileName { get; set; }
-        public int Score { get; set; }
-        public int SID { get; set; }
-    }
 
 }
