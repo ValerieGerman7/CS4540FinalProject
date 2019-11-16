@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CS4540PS2.Migrations
 {
-    [DbContext(typeof(LearningOutcomeDBContext))]
+    [DbContext(typeof(LOTDBContext))]
     partial class LearningOutcomeDBContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

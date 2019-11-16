@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 /// <summary>
 /// Author: Valerie German
-/// Date: 25 Sept 2019
+/// Date: 16 Nov 2019
 /// Course: CS 4540, University of Utah
 /// Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
 /// I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
@@ -111,7 +111,7 @@ namespace CS4540PS2.Data {
                 //await context.SaveChangesAsync();
             }
         }
-        public static void Initialize(LearningOutcomeDBContext context) {
+        public static void Initialize(LOTDBContext context) {
             if (context.Database.EnsureCreated()) {
                 //context.Database.Migrate();
             }
@@ -119,6 +119,16 @@ namespace CS4540PS2.Data {
             if (context.CourseInstance.Any()) {
                 return;
             }
+            var user0 = new UserLocator() { UserLoginEmail = "professor_jim@cs.utah.edu", UserTitle = "Jim de St. Germain" };
+            var user1 = new UserLocator() { UserLoginEmail = "admin_erin@cs.utah.edu", UserTitle = "Erin Parker" };
+            var user2 = new UserLocator() { UserLoginEmail = "chair_whitaker@cs.utah.edu", UserTitle = "Ross Whitaker" };
+            var user3 = new UserLocator() { UserLoginEmail = "professor_mary@cs.utah.edu", UserTitle = "Mary Hall" };
+            var user4 = new UserLocator() { UserLoginEmail = "professor_danny@cs.utah.edu", UserTitle = "Danny Kopta" };
+            var users = new UserLocator[] { user0, user1, user2, user3, user4 };
+            foreach(UserLocator user in users) {
+                context.UserLocator.Add(user);
+            }
+            context.SaveChanges();
             var cnote = new CourseNotes() {
                 Note = "Sample note on course",
                 NoteModified = DateTime.Now
@@ -188,7 +198,7 @@ namespace CS4540PS2.Data {
             var lonote = new LONotes() {
                 Note = "Sample note on HTML learning outcome",
                 NoteModified = DateTime.Now,
-                NoteUserModifed = "professor_jim@cs.utah.edu"
+                NoteUserModified = "professor_jim@cs.utah.edu"
             };
             var lo0 = new LearningOutcomes { CourseInstance = ci0, Name = "HTML and CSS",
                 Description = "Construct web pages using modern HTML and CSS practices, including modern frameworks.",
@@ -288,7 +298,7 @@ namespace CS4540PS2.Data {
             var lonote1 = new LONotes() {
                 Note = "Sample note on real world application learning outcome",
                 NoteModified = DateTime.Now,
-                NoteUserModifed = "chair_whitaker@cs.utah.edu"
+                NoteUserModified = "chair_whitaker@cs.utah.edu"
             };
             var lo21 = new LearningOutcomes {
                 CourseInstance = ci3, Name = "Real-World Application",
@@ -463,12 +473,12 @@ namespace CS4540PS2.Data {
             }
             context.SaveChanges();
             var instructorAssignments = new Instructors[] {
-                new Instructors { CourseInstance=ci0, InstructorLoginEmail="professor_jim@cs.utah.edu", InstructorTitle="Professor Jim de St. Germain" },
-                new Instructors { CourseInstance=ci1, InstructorLoginEmail="professor_jim@cs.utah.edu", InstructorTitle="Professor Jim de St. Germain" },
-                new Instructors { CourseInstance=ci2, InstructorLoginEmail="professor_jim@cs.utah.edu", InstructorTitle="Professor Jim de St. Germain" },
-                new Instructors { CourseInstance=ci3, InstructorLoginEmail="professor_mary@cs.utah.edu", InstructorTitle="Professor Mary Hall" },
-                new Instructors { CourseInstance=ci4, InstructorLoginEmail="professor_mary@cs.utah.edu", InstructorTitle="Professor Mary Hall" },
-                new Instructors { CourseInstance=ci4, InstructorLoginEmail="professor_danny@cs.utah.edu", InstructorTitle="Professor Danny Kopta" }
+                new Instructors { CourseInstance=ci0, User=user0 },
+                new Instructors { CourseInstance=ci1, User=user0 },
+                new Instructors { CourseInstance=ci2, User=user0 },
+                new Instructors { CourseInstance=ci3, User=user3 },
+                new Instructors { CourseInstance=ci4, User=user3 },
+                new Instructors { CourseInstance=ci4, User=user4 }
             };
             foreach(Instructors inst in instructorAssignments) {
                 context.Instructors.Add(inst);

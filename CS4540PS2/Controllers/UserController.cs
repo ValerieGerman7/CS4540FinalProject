@@ -18,14 +18,14 @@ using Microsoft.AspNetCore.Mvc;
 namespace CS4540PS2.Controllers {
     [Authorize(Roles="Admin")]
     public class UserController : Controller {
-        private readonly LearningOutcomeDBContext _context;
+        private readonly LOTDBContext _context;
         private readonly UserContext _userContext;
         private UserManager<IdentityUser> _userManager;
         /// <summary>
         /// Construct a course controller with a database context.
         /// </summary>
         /// <param name="context"></param>
-        public UserController(LearningOutcomeDBContext context, UserContext userContext, UserManager<IdentityUser> userManager) {
+        public UserController(LOTDBContext context, UserContext userContext, UserManager<IdentityUser> userManager) {
             _context = context;
             _userContext = userContext;
             _userManager = userManager;

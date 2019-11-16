@@ -125,7 +125,7 @@
                                   onchange="UpdateLONoteInst(event, @lo.Loid, '@noteId', '@noteLabelId')"
                                   >@if(lo.LONotes.Any()){<text>@lo.LONotes.First().Note</text>}</textarea>
                         <i><label class="text-sm-right" id="@noteLabelId"
-                                  >@if (lo.LONotes.Any()) {<text>Last modified: @lo.LONotes.First().NoteModified by @lo.LONotes.First().NoteUserModifed</text>}</label></i>
+                                  >@if (lo.LONotes.Any()) {<text>Last modified: @lo.LONotes.First().NoteModified by @lo.LONotes.First().NoteUserModified</text>}</label></i>
                     </div>
                     <br />
                     <!--Evaluation metrics - each assignment/exam is split into a card-->

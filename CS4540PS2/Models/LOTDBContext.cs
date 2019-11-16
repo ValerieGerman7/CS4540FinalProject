@@ -11,11 +11,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 /// File Contents: This file contains the context for the learning outcomes database.
 /// </summary>
 namespace CS4540PS2.Models {
-    public partial class LearningOutcomeDBContext : DbContext {
-        public LearningOutcomeDBContext() {
+    public partial class LOTDBContext : DbContext {
+        public LOTDBContext() {
         }
 
-        public LearningOutcomeDBContext(DbContextOptions<LearningOutcomeDBContext> options)
+        public LOTDBContext(DbContextOptions<LOTDBContext> options)
             : base(options) {
         }
 
@@ -26,10 +26,14 @@ namespace CS4540PS2.Models {
         public virtual DbSet<SampleFiles> SampleFiles { get; set; }
         public virtual DbSet<CourseNotes> CourseNotes { get; set; }
         public virtual DbSet<LONotes> LONotes { get; set; }
+        public virtual DbSet<UserLocator> UserLocator { get; set; }
+        public virtual DbSet<Notifications> Notifications { get; set; }
+        public virtual DbSet<CourseStatus> CourseStatus { get; set; }
+        public virtual DbSet<Departments> Departments { get; set; }
+        public virtual DbSet<Messages> Messages { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             if (!optionsBuilder.IsConfigured) {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=TEST1;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;");
             }
         }
@@ -79,7 +83,7 @@ namespace CS4540PS2.Models {
                 entity.HasKey(e => e.Ikey)
                     .HasName("PK__Instruct__8D7A08C6F8CFADF9");
 
-                entity.HasIndex(e => new { e.CourseInstanceId, e.InstructorLoginEmail })
+                entity.HasIndex(e => new { e.CourseInstanceId, e.UserId })
                     .HasName("UQ__Instruct__9386E1D4FC8546A5")
                     .IsUnique();
 
@@ -87,11 +91,7 @@ namespace CS4540PS2.Models {
 
                 entity.Property(e => e.CourseInstanceId).HasColumnName("CourseInstanceID");
 
-                entity.Property(e => e.InstructorLoginEmail).IsRequired();
-
-                entity.Property(e => e.InstructorTitle)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.UserId).IsRequired();
 
                 entity.HasOne(d => d.CourseInstance)
                     .WithMany(p => p.Instructors)
@@ -128,6 +128,17 @@ namespace CS4540PS2.Models {
                     .HasForeignKey(d => d.Emid)
                     .HasConstraintName("FK__SampleFile__EMID__2C3393D0");
             });
+            
+            /*modelBuilder.Entity<CourseNotes>(entity => {
+                entity.HasKey(e => e.NoteId);
+                entity.Property(e => e.NoteId).HasColumnName("NoteId");
+                entity.Property(e => e.Note).HasColumnName("Note");
+                entity.Property(e => e.NoteModified).HasColumnName("NoteModified");
+            });
+            modelBuilder.Entity<Messages>(entity => {
+                entity.HasKey(e => e.Id);
+                entity.HasOne()
+            })*/
         }
     }
 }

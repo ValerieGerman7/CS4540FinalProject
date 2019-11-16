@@ -47,7 +47,7 @@
                     }
                     <textarea name="note" id="@noteId" class="form-control" rows="3" placeholder="Enter learning outcome note"
                               onchange="UpdateLONoteDept(event, @lo.Loid, '@noteId', '@noteLabelId')">@if (note != null) { <text>@note.Note</text> }</textarea>
-                    <i><label class="text-sm-right" id="@noteLabelId">@if (note != null) {<text>Last modified: @note.NoteModified by @note.NoteUserModifed</text>}</label></i>
+                    <i><label class="text-sm-right" id="@noteLabelId">@if (note != null) {<text>Last modified: @note.NoteModified by @note.NoteUserModified</text>}</label></i>
                 </div>
                 <br />
                 <!--Evaluation metrics - each assignment/exam is split into a card-->

@@ -19,12 +19,12 @@ using System.Threading.Tasks;
 namespace CS4540PS2.Controllers {
     [Authorize(Roles="Admin")]
     public class CourseController : Controller {
-        private readonly LearningOutcomeDBContext _context;
+        private readonly LOTDBContext _context;
         /// <summary>
         /// Construct a course controller with a database context.
         /// </summary>
         /// <param name="context"></param>
-        public CourseController(LearningOutcomeDBContext context) {
+        public CourseController(LOTDBContext context) {
             _context = context;
         }
 
