@@ -9,6 +9,8 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+@inject LearningOutcomeDBContext context
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,6 +22,7 @@
 
     <link rel="stylesheet" type="text/css" href="site.css" />
     <link rel="stylesheet" href="~/css/Learning_Outcomes.css" />
+    <script src="https://kit.fontawesome.com/993c01b040.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css" />
     <title>@ViewData["Title"] - CS4540PS4</title>
 
@@ -47,7 +50,8 @@
                     <li class="nav-item active">
                         <a class="nav-link navbar-brand" asp-controller="Home" asp-action="Index">Home <span class="sr-only">(current)</span></a>
                     </li>
-                    @if (User.IsInRole("Admin")) {
+                    @if (User.IsInRole("Admin"))
+                    {
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="LearningOutcomes" asp-action="Index">Learning Outcomes</a>
                         </li>
@@ -65,7 +69,8 @@
                             <a class="nav-link" asp-controller="User" asp-action="Index">Users</a>
                         </li>
                     }
-                    @if (User.IsInRole("Chair")) {
+                    @if (User.IsInRole("Chair"))
+                    {
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Departments
@@ -77,7 +82,8 @@
                             </div>
                         </li>
                     }
-                    @if (User.IsInRole("Instructor")) {
+                    @if (User.IsInRole("Instructor"))
+                    {
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Instructor" asp-action="Index">Courses</a>
                         </li>
@@ -103,11 +109,72 @@
             </div>
         </nav>
     </header>
+    @{ 
+
+        var email = UserManager.GetUserName(User);
+
+    }
+
     <div class="container">
         <partial name="_CookieConsentPartial" />
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
+    </div>
+    <!--Message box-->
+    @foreach (IdentityUser user in UserManager.Users)
+    {
+        var strId = user.Id + "box";
+        var buttonId = user.Id + "b";
+        <div class="message_box" id=@strId>
+            <div class="message_header" id=@buttonId>
+                <p class="username">@user.Email</p>
+                <i class="fas fa-times"></i>
+            </div>
+
+            <hr />
+
+            <div class="messages">
+                <div class="single_message">
+                    <i class="fas fa-circle"></i>
+                    <p>
+                        This is a message.
+                    </p>
+                </div>
+                <div class="single_message2">
+                    <p>
+                        A message from me!
+                    </p>
+                    <i class="fas fa-circle"></i>
+                </div>
+            </div>
+
+            <div class="input_box">
+                <textarea class="message_input" placeholder="Type a message...">
+
+            </textarea>
+                <i class="fas fa-location-arrow"></i>
+            </div>
+
+        </div>
+    }
+
+    <!--Contact box-->
+    <div class="chat_box">
+        <div class="chat_header">
+            <h2 class="chat_heading">Users</h2>
+        </div>
+        <hr />
+        <div class="user_list">
+            @foreach (IdentityUser id in UserManager.Users)
+            {
+                <div class="user" id=@id.Id>
+                    <p class="username">@id.UserName</p>
+                    <i class="fas fa-circle"></i>
+                </div>
+            }
+
+        </div>
     </div>
 
     <footer class="border-top footer text-muted">

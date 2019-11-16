@@ -54,3 +54,120 @@ body {
   height: 60px;
   line-height: 60px; /* Vertically center the text there */
 }
+
+/*CONTACT BOX NEAR FOOTER*/
+.chat_box {
+    background: #fff;
+    width: 20rem;
+    position: absolute;
+    bottom: 60px;
+    right: 1rem;
+}
+.chat_box p {
+    margin-bottom: 0 !important;
+}
+.chat_header {
+    cursor: pointer;
+}
+.chat_heading, message_heading {
+    font-weight: 500;
+    font-size: 2rem;
+}
+
+.user {
+    display: grid;
+    grid-template-columns: 90% 10%;
+    align-items: center;
+    cursor: pointer;
+}
+
+.fa-circle {
+    font-size: 0.5rem;
+    color: #52de97;
+    justify-self: end;
+}
+
+.username {
+    display: inline-block;
+    font-weight: 500;
+}
+
+.user_list {
+    height: 15rem;
+    padding: 1rem;
+}
+
+/*MESSAGE BOX*/
+.message_box {
+    background: #fff;
+    width: 15rem;
+    position: absolute;
+    bottom: 60px;
+    right: 22rem;
+    display: none;
+}
+.message_header p {
+    margin-bottom: 0 !important;
+}
+.message_header {
+    
+    display: grid;
+    grid-template-columns: 90% 10%;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+.messages {
+    height: 12rem;
+    overflow: auto;
+}
+
+.single_message2 {
+    margin: 1rem, 1rem, 0rem, 1rem;
+    display: grid;
+    width: 90%;
+    grid-template-columns: 90% 10%;
+    justify-items: end;
+    align-items: center;
+}
+
+.single_message {
+    display: grid;
+    margin: 1rem, 1rem, 1rem, .5rem;
+    grid-template-columns: 10% 90%;
+    width: 90%;
+    align-items: center;
+}
+.single_message p {
+     background: #e9ebee;
+    padding: 5px 10px;
+    border-radius: 1rem;
+     margin-bottom: 0 !important;
+}
+
+.input_box {
+    display: grid;
+    grid-template-columns: 90% 10%;
+    padding: .5rem, .5rem, .2rem, .5rem;
+    border-top: 1px solid black;
+    align-items: center;
+}
+
+.message_input {
+    border: none;
+    width: 95%;
+    resize: none;
+}
+
+.fa-location-arrow {
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+
+    .single_message2 p {
+        background: #1877f2;
+        padding: 5px 10px;
+        border-radius: 1rem;
+        margin-bottom: 0.2rem !important;
+    }
