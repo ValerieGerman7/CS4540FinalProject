@@ -10,10 +10,31 @@
     ViewData["Title"] = "Courses";
 }
 
-<h2>All Existing Courses</h2>
+<h1>Course Catalogue</h1>
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Search: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+        </p>
+    </div>
+</form>
+<div name="orderByBar" id="orderByMenu" class="dropdown">
+    <button name="orderByDropDownMenuButton" id="orderByDropDownMenuButton" class="btn btn-default dropdown-toggle"
+            type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Order By
+    </button>
+    <div name="orderByDropDownMenuItems" id="orderByDropDownMenuItems" class="dropdown-menu" aria-labelledby="orderByDropDownMenuButton">
+        <a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["DepartmentSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Department</a>
+        <a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["CourseNumSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Course Number</a>
+        <a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["CourseTitleSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Course Title</a>
+        <a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["SemesterSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Semester</a>
+        <a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["YearSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Year</a>
+    </div>
+</div>
 <hr />
 
-@foreach (CourseInstance course in Model) {
+@foreach (CourseInstance course in Model)
+{
     <div class="card shadowBox">
         <div class="card-body" onclick="RedirectToCourse('@course.Department', @course.Number, '@course.Semester', @course.Year);">
             <p>@course.Department @course.Number - <b>@course.Name</b> </p>
@@ -31,3 +52,57 @@
     </div>
     <br />
 }
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<ul class="pagination">
+    <li>
+        <a asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-pageNumber="1"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           class="btn btn-default @prevDisabled">
+            <<
+        </a>
+    </li>
+    <li>
+        <a asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-pageNumber="@(Model.PageIndex - 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           class="btn btn-default @prevDisabled">
+            <
+        </a>
+    </li>
+    <li>
+        <form asp-action="Index"
+              asp-route-sortOrder="@ViewData["CurrentSort"]"
+              asp-route-pageNumber=pageNumTextBox.text
+              asp-route-currentFilter="@ViewData["CurrentFilter"]">
+            <input type="text" name="pageNumTextBox" id="pageNumTextBox" value="@Model.PageIndex"
+                   style="width:35px;text-align:center;" disabled/>
+        </form>
+    </li>
+    <li>
+        <a asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-pageNumber="@(Model.PageIndex + 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           class="btn btn-default @nextDisabled">
+            >
+        </a>
+    </li>
+    <li>
+        <a asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-pageNumber="@(Model.TotalPages)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           class="btn btn-default @nextDisabled">
+            >>
+        </a>
+    </li>
+</ul>
+<a asp-action="Index">Back to Full List</a>

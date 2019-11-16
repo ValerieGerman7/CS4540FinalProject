@@ -27,73 +27,40 @@
 
 <div align="left" class="halfWidth">
     <h1>Learning Outcomes</h1>
-</div><div align="right" class="halfWidth">
-    <a asp-action="Create"><button class="btn btn-sm btn-primary">Create New</button></a>
 </div>
-<hr />
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th scope="col">
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CourseInstance)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.OrderBy(i => i.CourseInstance.Number).ThenBy(i => i.Name).ToList().GetRange(Page * TableSize, TableSize)) {
-            <tr>
-                <td scope="row">
-                    <b>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </b>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    <p><b>@item.CourseInstance.Department  @item.CourseInstance.Number</b> - <i>@item.CourseInstance.Name</i></p>
-                    <a asp-action="Course" asp-route-Dept="@item.CourseInstance.Department" asp-route-Num="@item.CourseInstance.Number"
-                       asp-route-Sem="@item.CourseInstance.Semester" asp-route-Year="@item.CourseInstance.Year"><button class="btn btn-sm btn-dark">Go To Course</button></a>
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Loid"><button class="btn btn-sm btn-primary">Edit</button></a>
-                    <a asp-action="Details" asp-route-id="@item.Loid"><button class="btn btn-sm btn-light">Details</button></a>
-                    <a asp-action="Delete" asp-route-id="@item.Loid"><button class="btn btn-sm btn-danger">Delete</button></a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
 
-<nav aria-label="Page navigation example">
-    <ul class="pagination">
-        <li class="page-item @if (Page == 0) { <text>disabled</text> }">
-            <a class="page-link" asp-controller="LearningOutcomes" asp-action="Index" asp-route-id="@(Page - 1)">Previous</a>
-        </li>
-        <li class="page-item @if (Page == 0) {<text>active</text>}">
-            <a class="page-link" asp-controller="LearningOutcomes" asp-action="Index" asp-route-id="@if (Page == 0) {<text>1</text>} else { <text>@(Page)</text> }">
-                @if (Page == 0) {<text>1</text>} else { <text>@(Page - 1)</text>}
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>Search: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" /></p>
+        <p><a asp-action="Index">Back to Full List</a><br /></p>
+        <p><a asp-action="Create"><button class="btn btn-sm btn-primary">Create New</button></a></p>
+    </div>
+</form>
+<hr />
+
+@foreach (LearningOutcomes lo in Model)
+{
+    <div class="card shadowBox">
+        <div class="card-body">
+            <p>@lo.Name</p>
+            <p>
+                @lo.CourseInstance.Department @lo.CourseInstance.Number - 
+                <a asp-action="Course" asp-route-Dept="@lo.CourseInstance.Department" asp-route-Num="@lo.CourseInstance.Number"
+                       asp-route-Sem="@lo.CourseInstance.Semester" asp-route-Year="@lo.CourseInstance.Year">
+                    <b>@lo.CourseInstance.Name</b>
+                </a="Course">                          
+            </p>
+            <p>@lo.Description</p>
+        </div>
+
+        <div align="right">
+            <a asp-controller="LearningOutcomes" asp-action="Delete" asp-route-id="@lo.Loid">
+                <button class="btn btn-danger">Delete</button>
             </a>
-        </li>
-        <li class="page-item @if (Page != 0) {<text>active</text>}">
-            <a class="page-link" asp-controller="LearningOutcomes" asp-action="Index" asp-route-id="@if (Page == 0) {<text>2</text>} else { <text>@(Page + 1)</text> }">
-                @if (Page == 0) {<text>2</text>} else { <text>@(Page)</text>}
+            <a asp-controller="LearningOutcomes" asp-action="Edit" asp-route-id="@lo.Loid">
+                <button class="btn btn-primary">Modify</button>
             </a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" asp-controller="LearningOutcomes" asp-action="Index" asp-route-id="@if (Page == 0) {<text>3</text>} else { <text>@(Page + 2)</text> }">
-                @if (Page == 0) {<text>3</text>} else { <text>@(Page + 1)</text>}
-            </a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" asp-controller="LearningOutcomes" asp-action="Index" asp-route-id="@(Page + 1)">Next</a>
-        </li>
-    </ul>
-</nav>
+        </div>
+    </div>
+    <br />
+}
