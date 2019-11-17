@@ -137,7 +137,9 @@ namespace CS4540PS2.Controllers {
         /// <returns></returns>
         public IActionResult Create() {
             ViewData["CourseInstanceId"] = new SelectList(_context.CourseInstance, "CourseInstanceId", "Department");
-            return View();
+            ViewData["Departments"] = _context.Departments;
+            ViewData["Statuses"] = _context.CourseStatus;
+            return View(new Tuple<DbSet<Departments>, DbSet<CourseStatus>>(_context.Departments, _context.CourseStatus));
         }
 
         /// <summary>
@@ -147,7 +149,7 @@ namespace CS4540PS2.Controllers {
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,Department,Number,Semester,Year")] CourseInstance courseInstance) {
+        public async Task<IActionResult> Create([Bind("Name,Description,Department,Number,Semester,Year,StatusId,DueDate")] CourseInstance courseInstance) {
             if (ModelState.IsValid) {
                 _context.Add(courseInstance);
                 await _context.SaveChangesAsync();
@@ -183,7 +185,7 @@ namespace CS4540PS2.Controllers {
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CourseInstanceId,Name,Description,Department,Number,Semester,Year")] CourseInstance courseInstance) {
+        public async Task<IActionResult> Edit(int id, [Bind("CourseInstanceId,Name,Description,Department,Number,Semester,Year,Status,DueDate")] CourseInstance courseInstance) {
             if (id != courseInstance.CourseInstanceId) {
                 return NotFound();
             }
