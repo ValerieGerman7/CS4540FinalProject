@@ -1,5 +1,6 @@
 ﻿using CS4540PS2.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,12 +21,18 @@ namespace CS4540PS2.Controllers {
     [Authorize(Roles="Admin")]
     public class CourseController : Controller {
         private readonly LOTDBContext _context;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserContext _userContext;
+        private UserManager<IdentityUser> _userManager;
         /// <summary>
         /// Construct a course controller with a database context.
         /// </summary>
         /// <param name="context"></param>
-        public CourseController(LOTDBContext context) {
+        public CourseController(LOTDBContext context, RoleManager<IdentityRole> role, UserContext user, UserManager<IdentityUser> manage) {
             _context = context;
+            _roleManager = role;
+            _userContext = user;
+            _userManager = manage;
         }
 
         /// <summary>
@@ -139,7 +146,26 @@ namespace CS4540PS2.Controllers {
             ViewData["CourseInstanceId"] = new SelectList(_context.CourseInstance, "CourseInstanceId", "Department");
             ViewData["Departments"] = _context.Departments;
             ViewData["Statuses"] = _context.CourseStatus;
-            return View(new Tuple<DbSet<Departments>, DbSet<CourseStatus>>(_context.Departments, _context.CourseStatus));
+            return View(new CourseEditData() {
+                Departments = _context.Departments,
+                CourseStatus = _context.CourseStatus,
+                Professors = GetInstructors()
+            });
+        }
+
+        /// <summary>
+        /// Get a list of all instructor users.
+        /// </summary>
+        /// <returns></returns>
+        public List<UserLocator> GetInstructors() {
+            List<IdentityUser> instructors = new List<IdentityUser>();
+            foreach(IdentityUser user in _userContext.Users) {
+                if(_userManager.IsInRoleAsync(user, "Instructor").Result) {
+                    instructors.Add(user);
+                }
+            }
+            return _context.UserLocator.Where(u => instructors.Where(i => i.Email == u.UserLoginEmail).Any()).ToList();
+
         }
 
         /// <summary>
@@ -149,9 +175,15 @@ namespace CS4540PS2.Controllers {
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,Department,Number,Semester,Year,StatusId,DueDate")] CourseInstance courseInstance) {
+        public async Task<IActionResult> Create([Bind("Name,Description,Department,Number,Semester,Year,StatusId,DueDate")] CourseInstance courseInstance, string instructor) {
             if (ModelState.IsValid) {
                 _context.Add(courseInstance);
+                if (instructor != null) {
+                    UserLocator instr = _context.UserLocator.Where(u => u.UserLoginEmail == instructor).FirstOrDefault();
+                    if (instr != null) {
+                        _context.Instructors.Add(new Instructors() { CourseInstance = courseInstance, User = instr });
+                    }
+                }
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -252,5 +284,9 @@ namespace CS4540PS2.Controllers {
 
     }
 
-
+    public class CourseEditData {
+        public DbSet<Departments> Departments { get; set; }
+        public DbSet<CourseStatus> CourseStatus { get; set; }
+        public List<UserLocator> Professors { get; set; }
+    }
 }

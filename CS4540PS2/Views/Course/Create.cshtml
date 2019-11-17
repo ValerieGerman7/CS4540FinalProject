@@ -1,4 +1,4 @@
-﻿@model Tuple<DbSet<CS4540PS2.Models.Departments>, DbSet<CS4540PS2.Models.CourseStatus>>
+﻿@model CS4540PS2.Controllers.CourseEditData
 @*
     Author: Valerie German
     Date: 16 Nov 2019
@@ -28,7 +28,7 @@
             <div class="form-group">
                 <label class="control-label">Department</label>
                 <select name="Department">
-                    @foreach(Departments dept in Model.Item1) {
+                    @foreach(Departments dept in Model.Departments) {
                          <option value="@dept.Code">@dept.Name</option>   
                     }
                 </select>
@@ -52,7 +52,7 @@
             <div class="form-group">
                 <label class="control-label">Status</label>
                 <select name="StatusId">
-                    @foreach (CourseStatus st in Model.Item2) {
+                    @foreach (CourseStatus st in Model.CourseStatus) {
                         <option value="@st.StatusId">@st.Status</option>
 
                     }
@@ -61,6 +61,14 @@
             <div class="form-group">
                 <label class="control-label">Due Date</label>
                 <input class="form-control" name="DueDate" type="date" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Instructor <i>(optional)</i></label>
+                <select name="instructor">
+                    @foreach(UserLocator user in Model.Professors) {
+                        <option value="@user.UserLoginEmail">@user.UserTitle</option>
+                    }
+                </select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
