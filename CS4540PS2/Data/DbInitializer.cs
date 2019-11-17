@@ -129,19 +129,34 @@ namespace CS4540PS2.Data {
                 context.UserLocator.Add(user);
             }
             context.SaveChanges();
+            //CourseStatus
+            var completeStatus = new CourseStatus() { Status = "Complete" };
+            context.CourseStatus.Add(completeStatus);
+            var inProg = new CourseStatus() { Status = "In-progress" };
+            context.CourseStatus.Add(inProg);
+            var waitingApp = new CourseStatus() { Status = "Awaiting Approval" };
+            context.CourseStatus.Add(waitingApp);
+            context.SaveChanges();
+            //Departments
+            var csDept = new Departments() { Name = "Computer Science", Code = "CS" };
+            context.Departments.Add(csDept);
+            var mathdept = new Departments() { Name = "Mathematics", Code = "MATH" };
+            context.Departments.Add(mathdept);
+            context.SaveChanges();
+            //Course Notes
             var cnote = new CourseNotes() {
                 Note = "Sample note on course",
                 NoteModified = DateTime.Now
             };
+            //Course Instances
             var ci0 = new CourseInstance { Name = "Web Software Architecture",
                 Description = "Software architectures, programming models, and programming environments pertinent to developing web " +
                 "applications.  Topics include client-server model, multi-tier software architecture, client-side scripting (JavaScript), " +
                 "server-side programming (Servlets and JavaServer Pages), component reuse (JavaBeans), database connectivity (JDBC), and " +
                 "web servers.",
-                Department = "CS", Number = 4540, Semester = "Fall", Year = 2019,
-                CourseNotes = new List<CourseNotes>() {
-                    cnote
-                }
+                DepartmentNavigation=csDept, Number = 4540, Semester = "Fall", Year = 2019,
+                Status=waitingApp, DueDate=new DateTime(2019, 12, 10),
+                CourseNotes = new List<CourseNotes>() { cnote }
             };
             cnote.CourseInstance = ci0;
             var ci1 = new CourseInstance { Name = "Introduction To Algorithms and Data Structures",
@@ -150,7 +165,8 @@ namespace CS4540PS2.Data {
                 "(including stacks, queues, linked lists, trees, hash tables, and graphs), and analysis of program space and time " +
                 "requirements. Students will complete extensive programming exercises that require the application of elementary techniques " +
                 "from software engineering.",
-                Department = "CS", Number = 2420, Semester = "Fall", Year = 2019
+                DepartmentNavigation = csDept, Number = 2420, Semester = "Fall", Year = 2019,
+                Status = waitingApp, DueDate = new DateTime(2019, 12, 10)
             };
             var ci2 = new CourseInstance { Name = "Software Practice",
                 Description = "Practical exposure to the process of creating large software systems, including requirements specifications, " +
@@ -158,7 +174,9 @@ namespace CS4540PS2.Data {
                 "code repositories, test harnesses), software engineering techniques (time management, code, and documentation standards, " +
                 "source code management, object-oriented analysis and design), and team development practice. Much of the work will be in " +
                 "groups and will involve modifying preexisting software systems.",
-                Department = "CS", Number = 3500, Semester = "Fall", Year = 2019 };
+                DepartmentNavigation = csDept, Number = 3500, Semester = "Fall", Year = 2019,
+                Status = waitingApp, DueDate = new DateTime(2019, 12, 10)
+            };
             CourseNotes cnote1 = new CourseNotes() {
                 Note = "Sample note on course",
                 NoteModified = DateTime.Now
@@ -166,7 +184,8 @@ namespace CS4540PS2.Data {
             var ci3 = new CourseInstance { Name = "Discrete Structures",
                 Description = "Introduction to propositional logic, predicate logic, formal logical arguments, finite sets, functions, relations," +
                 " inductive proofs, recurrence relations, graphs, probability, and their applications to Computer Science.",
-                Department = "CS", Number = 2100, Semester = "Fall", Year = 2019,
+                DepartmentNavigation = csDept, Number = 2100, Semester = "Fall", Year = 2019,
+                Status = waitingApp, DueDate = new DateTime(2019, 12, 10),
                 CourseNotes = new List<CourseNotes>() {
                     cnote1      
                 }
@@ -176,7 +195,9 @@ namespace CS4540PS2.Data {
                 Description = "Introduction to computer systems from a programmer's point of view.  Machine level representations of programs, " +
                 "optimizing program performance, memory hierarchy, linking, exceptional control flow, measuring program performance, virtual memory, " +
                 "concurrent programming with threads, network programming.",
-                Department = "CS", Number = 4400, Semester = "Spring", Year = 2019 };
+                DepartmentNavigation = csDept, Number = 4400, Semester = "Spring", Year = 2019,
+                Status = waitingApp, DueDate = new DateTime(2019, 12, 10)
+            };
             var ci5 = new CourseInstance {
                 Name = "Software Practice",
                 Description = "Practical exposure to the process of creating large software systems, including requirements specifications, " +
@@ -184,12 +205,14 @@ namespace CS4540PS2.Data {
                 "code repositories, test harnesses), software engineering techniques (time management, code, and documentation standards, " +
                 "source code management, object-oriented analysis and design), and team development practice. Much of the work will be in " +
                 "groups and will involve modifying preexisting software systems.",
-                Department = "CS", Number = 3500, Semester = "Spring", Year = 2019
+                DepartmentNavigation = csDept, Number = 3500, Semester = "Spring", Year = 2019,
+                Status = waitingApp, DueDate = new DateTime(2019, 12, 10)
             };
             var courses = new CourseInstance[] { ci0, ci1, ci2, ci3, ci4, ci5 };
             foreach(CourseInstance co in courses) {
                 context.CourseInstance.Add(co);
             }
+            //context.SaveChanges();
             context.CourseNotes.Add(cnote);
             context.CourseNotes.Add(cnote1);
             context.SaveChanges();
