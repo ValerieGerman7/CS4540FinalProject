@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 /// <summary>
 /// Author: Valerie German
-/// Date: 25 Sept 2019
+/// Date: 16 Nov 2019
 /// Course: CS 4540, University of Utah
 /// Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
 /// I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
@@ -111,7 +111,7 @@ namespace CS4540PS2.Data {
                 //await context.SaveChangesAsync();
             }
         }
-        public static void Initialize(LearningOutcomeDBContext context) {
+        public static void Initialize(LOTDBContext context) {
             if (context.Database.EnsureCreated()) {
                 //context.Database.Migrate();
             }
@@ -119,19 +119,44 @@ namespace CS4540PS2.Data {
             if (context.CourseInstance.Any()) {
                 return;
             }
+            var user0 = new UserLocator() { UserLoginEmail = "professor_jim@cs.utah.edu", UserTitle = "Jim de St. Germain" };
+            var user1 = new UserLocator() { UserLoginEmail = "admin_erin@cs.utah.edu", UserTitle = "Erin Parker" };
+            var user2 = new UserLocator() { UserLoginEmail = "chair_whitaker@cs.utah.edu", UserTitle = "Ross Whitaker" };
+            var user3 = new UserLocator() { UserLoginEmail = "professor_mary@cs.utah.edu", UserTitle = "Mary Hall" };
+            var user4 = new UserLocator() { UserLoginEmail = "professor_danny@cs.utah.edu", UserTitle = "Danny Kopta" };
+            var users = new UserLocator[] { user0, user1, user2, user3, user4 };
+            foreach(UserLocator user in users) {
+                context.UserLocator.Add(user);
+            }
+            context.SaveChanges();
+            //CourseStatus
+            var completeStatus = new CourseStatus() { Status = "Complete" };
+            context.CourseStatus.Add(completeStatus);
+            var inProg = new CourseStatus() { Status = "In-progress" };
+            context.CourseStatus.Add(inProg);
+            var waitingApp = new CourseStatus() { Status = "Awaiting Approval" };
+            context.CourseStatus.Add(waitingApp);
+            context.SaveChanges();
+            //Departments
+            var csDept = new Departments() { Name = "Computer Science", Code = "CS" };
+            context.Departments.Add(csDept);
+            var mathdept = new Departments() { Name = "Mathematics", Code = "MATH" };
+            context.Departments.Add(mathdept);
+            context.SaveChanges();
+            //Course Notes
             var cnote = new CourseNotes() {
                 Note = "Sample note on course",
                 NoteModified = DateTime.Now
             };
+            //Course Instances
             var ci0 = new CourseInstance { Name = "Web Software Architecture",
                 Description = "Software architectures, programming models, and programming environments pertinent to developing web " +
                 "applications.  Topics include client-server model, multi-tier software architecture, client-side scripting (JavaScript), " +
                 "server-side programming (Servlets and JavaServer Pages), component reuse (JavaBeans), database connectivity (JDBC), and " +
                 "web servers.",
-                Department = "CS", Number = 4540, Semester = "Fall", Year = 2019,
-                CourseNotes = new List<CourseNotes>() {
-                    cnote
-                }
+                DepartmentNavigation=csDept, Number = 4540, Semester = "Fall", Year = 2019,
+                Status=waitingApp, DueDate=new DateTime(2019, 12, 10),
+                CourseNotes = new List<CourseNotes>() { cnote }
             };
             cnote.CourseInstance = ci0;
             var ci1 = new CourseInstance { Name = "Introduction To Algorithms and Data Structures",
@@ -140,7 +165,8 @@ namespace CS4540PS2.Data {
                 "(including stacks, queues, linked lists, trees, hash tables, and graphs), and analysis of program space and time " +
                 "requirements. Students will complete extensive programming exercises that require the application of elementary techniques " +
                 "from software engineering.",
-                Department = "CS", Number = 2420, Semester = "Fall", Year = 2019
+                DepartmentNavigation = csDept, Number = 2420, Semester = "Fall", Year = 2019,
+                Status = waitingApp, DueDate = new DateTime(2019, 12, 10)
             };
             var ci2 = new CourseInstance { Name = "Software Practice",
                 Description = "Practical exposure to the process of creating large software systems, including requirements specifications, " +
@@ -148,7 +174,9 @@ namespace CS4540PS2.Data {
                 "code repositories, test harnesses), software engineering techniques (time management, code, and documentation standards, " +
                 "source code management, object-oriented analysis and design), and team development practice. Much of the work will be in " +
                 "groups and will involve modifying preexisting software systems.",
-                Department = "CS", Number = 3500, Semester = "Fall", Year = 2019 };
+                DepartmentNavigation = csDept, Number = 3500, Semester = "Fall", Year = 2019,
+                Status = waitingApp, DueDate = new DateTime(2019, 12, 10)
+            };
             CourseNotes cnote1 = new CourseNotes() {
                 Note = "Sample note on course",
                 NoteModified = DateTime.Now
@@ -156,7 +184,8 @@ namespace CS4540PS2.Data {
             var ci3 = new CourseInstance { Name = "Discrete Structures",
                 Description = "Introduction to propositional logic, predicate logic, formal logical arguments, finite sets, functions, relations," +
                 " inductive proofs, recurrence relations, graphs, probability, and their applications to Computer Science.",
-                Department = "CS", Number = 2100, Semester = "Fall", Year = 2019,
+                DepartmentNavigation = csDept, Number = 2100, Semester = "Fall", Year = 2019,
+                Status = waitingApp, DueDate = new DateTime(2019, 12, 10),
                 CourseNotes = new List<CourseNotes>() {
                     cnote1      
                 }
@@ -166,7 +195,9 @@ namespace CS4540PS2.Data {
                 Description = "Introduction to computer systems from a programmer's point of view.  Machine level representations of programs, " +
                 "optimizing program performance, memory hierarchy, linking, exceptional control flow, measuring program performance, virtual memory, " +
                 "concurrent programming with threads, network programming.",
-                Department = "CS", Number = 4400, Semester = "Spring", Year = 2019 };
+                DepartmentNavigation = csDept, Number = 4400, Semester = "Spring", Year = 2019,
+                Status = waitingApp, DueDate = new DateTime(2019, 12, 10)
+            };
             var ci5 = new CourseInstance {
                 Name = "Software Practice",
                 Description = "Practical exposure to the process of creating large software systems, including requirements specifications, " +
@@ -174,12 +205,14 @@ namespace CS4540PS2.Data {
                 "code repositories, test harnesses), software engineering techniques (time management, code, and documentation standards, " +
                 "source code management, object-oriented analysis and design), and team development practice. Much of the work will be in " +
                 "groups and will involve modifying preexisting software systems.",
-                Department = "CS", Number = 3500, Semester = "Spring", Year = 2019
+                DepartmentNavigation = csDept, Number = 3500, Semester = "Spring", Year = 2019,
+                Status = waitingApp, DueDate = new DateTime(2019, 12, 10)
             };
             var courses = new CourseInstance[] { ci0, ci1, ci2, ci3, ci4, ci5 };
             foreach(CourseInstance co in courses) {
                 context.CourseInstance.Add(co);
             }
+            //context.SaveChanges();
             context.CourseNotes.Add(cnote);
             context.CourseNotes.Add(cnote1);
             context.SaveChanges();
@@ -188,7 +221,7 @@ namespace CS4540PS2.Data {
             var lonote = new LONotes() {
                 Note = "Sample note on HTML learning outcome",
                 NoteModified = DateTime.Now,
-                NoteUserModifed = "professor_jim@cs.utah.edu"
+                NoteUserModified = "professor_jim@cs.utah.edu"
             };
             var lo0 = new LearningOutcomes { CourseInstance = ci0, Name = "HTML and CSS",
                 Description = "Construct web pages using modern HTML and CSS practices, including modern frameworks.",
@@ -288,7 +321,7 @@ namespace CS4540PS2.Data {
             var lonote1 = new LONotes() {
                 Note = "Sample note on real world application learning outcome",
                 NoteModified = DateTime.Now,
-                NoteUserModifed = "chair_whitaker@cs.utah.edu"
+                NoteUserModified = "chair_whitaker@cs.utah.edu"
             };
             var lo21 = new LearningOutcomes {
                 CourseInstance = ci3, Name = "Real-World Application",
@@ -463,12 +496,12 @@ namespace CS4540PS2.Data {
             }
             context.SaveChanges();
             var instructorAssignments = new Instructors[] {
-                new Instructors { CourseInstance=ci0, InstructorLoginEmail="professor_jim@cs.utah.edu", InstructorTitle="Professor Jim de St. Germain" },
-                new Instructors { CourseInstance=ci1, InstructorLoginEmail="professor_jim@cs.utah.edu", InstructorTitle="Professor Jim de St. Germain" },
-                new Instructors { CourseInstance=ci2, InstructorLoginEmail="professor_jim@cs.utah.edu", InstructorTitle="Professor Jim de St. Germain" },
-                new Instructors { CourseInstance=ci3, InstructorLoginEmail="professor_mary@cs.utah.edu", InstructorTitle="Professor Mary Hall" },
-                new Instructors { CourseInstance=ci4, InstructorLoginEmail="professor_mary@cs.utah.edu", InstructorTitle="Professor Mary Hall" },
-                new Instructors { CourseInstance=ci4, InstructorLoginEmail="professor_danny@cs.utah.edu", InstructorTitle="Professor Danny Kopta" }
+                new Instructors { CourseInstance=ci0, User=user0 },
+                new Instructors { CourseInstance=ci1, User=user0 },
+                new Instructors { CourseInstance=ci2, User=user0 },
+                new Instructors { CourseInstance=ci3, User=user3 },
+                new Instructors { CourseInstance=ci4, User=user3 },
+                new Instructors { CourseInstance=ci4, User=user4 }
             };
             foreach(Instructors inst in instructorAssignments) {
                 context.Instructors.Add(inst);

@@ -19,9 +19,9 @@ using Microsoft.EntityFrameworkCore;
 namespace CS4540PS2.Controllers {
     [Authorize(Roles = "Chair")]
     public class DepartmentController : Controller {
-        private readonly LearningOutcomeDBContext _context;
+        private readonly LOTDBContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
-        public DepartmentController(LearningOutcomeDBContext context, RoleManager<IdentityRole> role) {
+        public DepartmentController(LOTDBContext context, RoleManager<IdentityRole> role) {
             _context = context;
             _roleManager = role;
         }
@@ -76,7 +76,7 @@ namespace CS4540PS2.Controllers {
             }
             lo.LONotes.First().Note = NewNote;
             lo.LONotes.First().NoteModified = DateTime.Now;
-            lo.LONotes.First().NoteUserModifed = User.Identity.Name;
+            lo.LONotes.First().NoteUserModified = User.Identity.Name;
             _context.SaveChanges();
             return Json(new { success = true, noteContent = NewNote, modified = lo.LONotes.First().NoteModified, user = User.Identity.Name });
         }

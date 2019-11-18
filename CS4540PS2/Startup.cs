@@ -42,7 +42,7 @@ namespace CS4540PS2 {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             var connection = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<LearningOutcomeDBContext>(options => options.UseSqlServer(connection));
+            services.AddDbContext<LOTDBContext>(options => options.UseSqlServer(connection));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

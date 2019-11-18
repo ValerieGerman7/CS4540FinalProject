@@ -20,13 +20,13 @@ using System.Threading.Tasks;
 namespace CS4540PS2.Controllers {
     [Authorize(Roles = "Instructor")]
     public class InstructorController : Controller {
-        private readonly LearningOutcomeDBContext _context;
+        private readonly LOTDBContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
         /// <summary>
         /// Construct a course controller with a database context.
         /// </summary>
         /// <param name="context"></param>
-        public InstructorController(LearningOutcomeDBContext context, RoleManager<IdentityRole> role) {
+        public InstructorController(LOTDBContext context, RoleManager<IdentityRole> role) {
             _context = context;
             _roleManager = role;
         }
@@ -37,7 +37,7 @@ namespace CS4540PS2.Controllers {
         /// <returns></returns>
         public async Task<IActionResult> Index() {
             var instances = _context.CourseInstance.Where(i => 
-                i.Instructors.Where(ins => ins.InstructorLoginEmail == User.Identity.Name).Any());
+                i.Instructors.Where(ins => ins.User.UserLoginEmail == User.Identity.Name).Any());
             return View(await instances.ToListAsync());
         }
 
@@ -49,7 +49,7 @@ namespace CS4540PS2.Controllers {
         /// <returns></returns>
         public JsonResult ChangeNote(int CourseInstanceId, string NewNote) {
             CourseInstance course = _context.CourseInstance.Include(c => c.CourseNotes)
-                .Where(c => c.CourseInstanceId == CourseInstanceId && c.Instructors.Where(ins => ins.InstructorLoginEmail == User.Identity.Name).Any())
+                .Where(c => c.CourseInstanceId == CourseInstanceId && c.Instructors.Where(ins => ins.User.UserLoginEmail == User.Identity.Name).Any())
                 .FirstOrDefault();
             if (course == null) return Json(new { success = false });
             if(course.CourseNotes.Count == 0) {
@@ -70,7 +70,7 @@ namespace CS4540PS2.Controllers {
         /// <returns></returns>
         public JsonResult ChangeLONote(int LearningOutcomeId, string NewNote) {
             LearningOutcomes lo = _context.LearningOutcomes.Where(l => l.Loid == LearningOutcomeId).Include(l => l.LONotes)
-                .Where(l => l.CourseInstance.Instructors.Where(ins => ins.InstructorLoginEmail == User.Identity.Name).Any())
+                .Where(l => l.CourseInstance.Instructors.Where(ins => ins.User.UserLoginEmail == User.Identity.Name).Any())
                 .FirstOrDefault();
             if (lo == null) return Json(new { success = false });
             if(lo.LONotes.Count == 0) {
@@ -78,7 +78,7 @@ namespace CS4540PS2.Controllers {
             }
             lo.LONotes.First().Note = NewNote;
             lo.LONotes.First().NoteModified = DateTime.Now;
-            lo.LONotes.First().NoteUserModifed = User.Identity.Name;
+            lo.LONotes.First().NoteUserModified = User.Identity.Name;
             _context.SaveChanges();
             return Json(new { success = true, noteContent = NewNote, modified = lo.LONotes.First().NoteModified, user = User.Identity.Name });
         }

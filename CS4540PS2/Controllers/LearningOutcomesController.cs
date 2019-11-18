@@ -19,8 +19,8 @@ using Microsoft.AspNetCore.Authorization;
 namespace CS4540PS2.Controllers {
     [Authorize(Roles = "Admin")]
     public class LearningOutcomesController : Controller {
-        private readonly LearningOutcomeDBContext _context;
-        public LearningOutcomesController(LearningOutcomeDBContext context) {
+        private readonly LOTDBContext _context;
+        public LearningOutcomesController(LOTDBContext context) {
             _context = context;
         }
 
