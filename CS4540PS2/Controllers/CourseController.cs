@@ -57,7 +57,7 @@ namespace CS4540PS2.Controllers {
             ViewData["CurrentFilter"] = searchString;
 
             // get course instances
-            var instances = from c in _context.CourseInstance
+            var instances = from c in _context.CourseInstance.Include(c => c.Status).Include(c => c.Instructors).ThenInclude(c => c.User)
                             select c;
 
             /* TODO: test if this is necessary*/
