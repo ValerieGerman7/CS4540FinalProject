@@ -1,12 +1,15 @@
 ﻿using CS4540PS2.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 /// <summary>
@@ -19,7 +22,7 @@ using System.Threading.Tasks;
 /// </summary>
 namespace CS4540PS2.Controllers {
     [Authorize(Roles = "Instructor")]
-    public class InstructorController : Controller {
+    public partial class InstructorController : Controller {
         private readonly LOTDBContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
         /// <summary>
@@ -30,6 +33,7 @@ namespace CS4540PS2.Controllers {
             _context = context;
             _roleManager = role;
         }
+
 
         /// <summary>
         /// Return the index page listing all course instances belonging to the current professor.

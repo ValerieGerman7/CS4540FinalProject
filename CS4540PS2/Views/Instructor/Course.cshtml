@@ -71,20 +71,24 @@
                     </div>
                     <div class="modal-body">
                         <!--Referenced https://getbootstrap.com/docs/4.1/components/forms/ for form layout-->
-                        <form>
+                        <form action="/Instructor/CreateSampleFile" method="post" id="sampleForm"
+                              enctype="multipart/form-data">
+                            <input type="number" value="@Model.CourseInstanceId" name="courseId" hidden="hidden" />
+                            <input type="number" name="emId" hidden="hidden" id="emIdInput" value="-1" />
                             <div class="form-group">
                                 <label>Insert Score</label>
-                                <input type="number" class="form-control-range" min="0" max="100">
+                                <input type="number" class="form-control-range" min="0" max="100" name="score" />
                             </div>
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input">
-                                <label class="custom-file-label" for="customFile">Choose file</label>
-                            </div>
+                            <!--<div class="custom-file">
+        <input type="file" class="custom-file-input" name="sample">
+        <label class="custom-file-label" for="customFile">Choose file</label>
+    </div>-->
+                            <input type="submit" value="Submit" />
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">Create</button>
+                        <button type="button" class="btn btn-primary" onclick="SubmitForm('sampleForm')">Create</button>
                     </div>
                 </div>
             </div>
@@ -160,7 +164,7 @@
                                         <!--Change link to sample filename.-->
                                         <button value="@sample.Score" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()"></button>
                                     }
-                                    <button type="button" class="btn btn-rounded btn-dark btn-sm" data-toggle="modal" data-target="#sModal">
+                                    <button type="button" class="btn btn-rounded btn-dark btn-sm" data-toggle="modal" data-target="#sModal" data-em-id="@em.Emid">
                                         <i>+</i>
                                     </button>
                                 </p>
@@ -177,3 +181,4 @@
         <hr />
         <br />
     </div>
+
