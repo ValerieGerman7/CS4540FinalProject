@@ -14,7 +14,7 @@
 <form asp-action="Index" method="get">
     <div class="form-actions no-color">
         <p>
-            Search: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+            Search: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
         </p>
     </div>
 </form>
@@ -61,51 +61,132 @@
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 }
 
-<ul class="pagination">
-    <li>
-        <a asp-action="Index"
-           asp-route-sortOrder="@ViewData["CurrentSort"]"
-           asp-route-pageNumber="1"
-           asp-route-currentFilter="@ViewData["CurrentFilter"]"
-           class="btn btn-default @prevDisabled">
-            <<
-        </a>
-    </li>
-    <li>
-        <a asp-action="Index"
-           asp-route-sortOrder="@ViewData["CurrentSort"]"
-           asp-route-pageNumber="@(Model.PageIndex - 1)"
-           asp-route-currentFilter="@ViewData["CurrentFilter"]"
-           class="btn btn-default @prevDisabled">
-            <
-        </a>
-    </li>
-    <li>
-        <form asp-action="Index"
-              asp-route-sortOrder="@ViewData["CurrentSort"]"
-              asp-route-pageNumber=pageNumTextBox.text
-              asp-route-currentFilter="@ViewData["CurrentFilter"]">
-            <input type="text" name="pageNumTextBox" id="pageNumTextBox" value="@Model.PageIndex"
-                   style="width:35px;text-align:center;" disabled/>
-        </form>
-    </li>
-    <li>
-        <a asp-action="Index"
-           asp-route-sortOrder="@ViewData["CurrentSort"]"
-           asp-route-pageNumber="@(Model.PageIndex + 1)"
-           asp-route-currentFilter="@ViewData["CurrentFilter"]"
-           class="btn btn-default @nextDisabled">
-            >
-        </a>
-    </li>
-    <li>
-        <a asp-action="Index"
-           asp-route-sortOrder="@ViewData["CurrentSort"]"
-           asp-route-pageNumber="@(Model.TotalPages)"
-           asp-route-currentFilter="@ViewData["CurrentFilter"]"
-           class="btn btn-default @nextDisabled">
-            >>
-        </a>
-    </li>
-</ul>
-<a asp-action="Index">Back to Full List</a>
+<!-- Page navigation within the index. -->
+<div>
+    <!-- The folowing links allow the user to navigate between pages of course items in the index view-->
+    <nav id="CourseIndexPageNavigation" aria-label="Page navigation">
+        <ul id="CourseIndexPageNavigationList" class="pagination" style="float:left">
+            <li id="CourseIndexFirstPageButtonListItem" class="page-item @prevDisabled">
+                <a id="CourseIndexFirstPageButton" class="page-link" aria-label="First"
+                   asp-action="Index"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                   asp-route-pageNumber="1"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                    <span aria-hidden="true"><<</span>
+                    <span class="sr-only">First Page</span>
+                </a>
+            </li>
+            <li id="CourseIndexPreviousPageButtonListItem" class="page-item @prevDisabled">
+                <a id="CourseIndexPreviousPageButton" class="page-link"
+                   asp-action="Index"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                   asp-route-pageNumber="@(Model.PageIndex - 1)"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                    <span aria-hidden="true"><</span>
+                    <span class="sr-only">Previous Page</span>
+                </a>
+            </li>
+            <li id="CourseIndexCurrentPageListItem" class="page-item disabled">
+                <a id="CourseIndexCurrentPage" class="page-link"
+                   asp-action="Index"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                   asp-route-pageNumber=pageNumTextBox.text
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                    <span aria-hidden="true"><b>@Model.PageIndex </b></span>
+                    <span class="sr-only">Current Page: @Model.PageIndex</span>
+                </a>
+            </li>
+            <li id="CourseIndexNextPageButtonListItem" class="page-item @nextDisabled">
+                <a id="CourseIndexNextPageButton" class="page-link"
+                   asp-action="Index"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                   asp-route-pageNumber="@(Model.PageIndex + 1)"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                    <span aria-hidden="true">></span>
+                    <span class="sr-only">Next Page</span>
+                </a>
+            </li>
+            <li id="CourseIndexLastPageButtonListItem" class="page-item @nextDisabled">
+                <a id="CourseIndexLastPageButton" class="page-link"
+                   asp-action="Index"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                   asp-route-pageNumber="@(Model.TotalPages)"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                    <span aria-hidden="true">>></span>
+                    <span class="sr-only">Last Page</span>
+                </a>
+            </li>
+        </ul>
+
+        <!-- The folowing links allow the user to set the number of courses to view per page-->
+        <ul id="CourseIndexPageNavigationList" class="pagination" style="float:right">
+            <li id="CourseIndexLastPageButtonListItem" class="page-item disabled">
+                <a id="CourseIndexLastPageButton" class="page-link"
+                    <span aria-hidden="true">Elements per page:</span>
+                    <span class="sr-only">Last Page</span>
+                </a>
+            </li>
+            <li id="CourseIndexFirstPageButtonListItem" class="page-item">
+                <a id="CourseIndexFirstPageButton" class="page-link" aria-label="First"
+                   asp-action="Index"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                   asp-route-pageNumber="1"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                    <span aria-hidden="true">2</span>
+                    <span class="sr-only">First Page</span>
+                </a>
+            </li>
+            <li id="CourseIndexPreviousPageButtonListItem" class="page-item">
+                <a id="CourseIndexPreviousPageButton" class="page-link"
+                   asp-action="Index"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                   asp-route-pageNumber="@(Model.PageIndex - 1)"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                    <span aria-hidden="true">5</span>
+                    <span class="sr-only">Previous Page</span>
+                </a>
+            </li>
+            <li id="CourseIndexCurrentPageListItem" class="page-item">
+                <a id="CourseIndexCurrentPage" class="page-link"
+                   asp-action="Index"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                   asp-route-pageNumber=pageNumTextBox.text
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                    <span aria-hidden="true">10</span>
+                    <span class="sr-only">Current Page: @Model.PageIndex</span>
+                </a>
+            </li>
+            <li id="CourseIndexNextPageButtonListItem" class="page-item">
+                <a id="CourseIndexNextPageButton" class="page-link"
+                   asp-action="Index"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                   asp-route-pageNumber="@(Model.PageIndex + 1)"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                    <span aria-hidden="true">25</span>
+                    <span class="sr-only">Next Page</span>
+                </a>
+            </li>
+            <li id="CourseIndexLastPageButtonListItem" class="page-item">
+                <a id="CourseIndexLastPageButton" class="page-link"
+                   asp-action="Index"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                   asp-route-pageNumber="@(Model.TotalPages)"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                    <span aria-hidden="true">All</span>
+                    <span class="sr-only">Last Page</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+
+
+
+
+
+
+@section Scripts
+{
+    <script src="~/js/selectPage.js"></script>
+}
