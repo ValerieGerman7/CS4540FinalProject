@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,33 +24,38 @@ namespace CS4540PS2.Controllers {
 
 
         [HttpPost]
-        public async Task<JsonResult> CreateSampleFile(int courseId, int emId, int score, IFormFile sample) {
-            if(sample != null) {
+        public async Task<JsonResult> CreateSampleFile(int? courseId, int? emId, int score, IFormFile sample) {
+            if(courseId == null || emId == null || sample == null) {
+                return Json(new { success = false });
+            }
+            //Verify instructor
+            CourseInstance course = _context.CourseInstance.Include(c => c.Instructors).ThenInclude(i => i.User)
+                .Where(c => c.CourseInstanceId == courseId).FirstOrDefault();
+            if(course == null) return Json(new { success = false });
+            Instructors inst = course.Instructors.Where(i => i.User.UserLoginEmail == User.Identity.Name).FirstOrDefault();
+            if(inst == null) return Json(new { success = false });
+
+            EvaluationMetrics emObj = _context.EvaluationMetrics.Where(e => e.Emid == emId).FirstOrDefault();
+            if (emObj == null) {
+                return Json(new { success = false });
+            }
+            if (sample != null) {
                 string filename = sample.FileName;
                 if(sample.Length > 0) {
                     using(var stream = new MemoryStream()) {
                         await sample.CopyToAsync(stream);
-
+                        SampleFiles sf = new SampleFiles() {
+                            Score = score,
+                            FileName = sample.FileName,
+                            ContentType = sample.ContentType,
+                            FileContent = stream.ToArray(),
+                            Em = emObj
+                        };
+                        _context.SampleFiles.Add(sf);
+                        _context.SaveChanges();
                     }
                 }
             }
-            //Verify professor
-            /*using (MemoryStream memStream = new MemoryStream()) {
-                sample.CopyToAsync(memStream).Wait();
-                //File must be < 2MB
-                if (memStream.Length < 2097152) {
-                    var files = new { Content = memStream.ToArray() };
-                    SampleFiles sf = new SampleFiles() {
-                        Score = score,
-                        FileName = Encoding.UTF8.GetString(memStream.ToArray())
-                    };
-                    _context.SampleFiles.Add(sf);
-                    _context.SaveChanges();
-                    return Json(new { success = true });
-                } else {
-                    return Json(new { success = false, reason = "File too large. Must be less than 2MB." });
-                }
-            }*/
             return Json(new { success = true });
 
         }
