@@ -23,7 +23,16 @@ namespace CS4540PS2.Controllers {
 
 
         [HttpPost]
-        public JsonResult CreateSampleFile(int courseId, int emId, int score){//, IFormFile sample) {
+        public async Task<JsonResult> CreateSampleFile(int courseId, int emId, int score, IFormFile sample) {
+            if(sample != null) {
+                string filename = sample.FileName;
+                if(sample.Length > 0) {
+                    using(var stream = new MemoryStream()) {
+                        await sample.CopyToAsync(stream);
+
+                    }
+                }
+            }
             //Verify professor
             /*using (MemoryStream memStream = new MemoryStream()) {
                 sample.CopyToAsync(memStream).Wait();
