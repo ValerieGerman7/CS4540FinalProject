@@ -22,9 +22,17 @@ namespace CS4540PS2.Controllers {
    [Authorize(Roles = "Instructor")]
     public partial class InstructorController : Controller {
 
-
+        /// <summary>
+        /// Creates a new sample file entry for the given course and evaluation metric, given a score and file.
+        /// Verfies the current user is an instructor for the course.
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <param name="emId"></param>
+        /// <param name="score"></param>
+        /// <param name="sample"></param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<JsonResult> CreateSampleFile(int? courseId, int? emId, int score, IFormFile sample) {
+        public async Task<IActionResult> CreateSampleFile(int? courseId, int? emId, int score, IFormFile sample) {
             if(courseId == null || emId == null || sample == null) {
                 return Json(new { success = false });
             }
@@ -35,10 +43,12 @@ namespace CS4540PS2.Controllers {
             Instructors inst = course.Instructors.Where(i => i.User.UserLoginEmail == User.Identity.Name).FirstOrDefault();
             if(inst == null) return Json(new { success = false });
 
-            EvaluationMetrics emObj = _context.EvaluationMetrics.Where(e => e.Emid == emId).FirstOrDefault();
+            EvaluationMetrics emObj = _context.EvaluationMetrics.Include(e => e.Lo).ThenInclude(l => l.CourseInstance)
+                .Where(e => e.Emid == emId && e.Lo.CourseInstance.Instructors.Contains(inst)).FirstOrDefault();
             if (emObj == null) {
                 return Json(new { success = false });
             }
+            int? sfid = null;
             if (sample != null) {
                 string filename = sample.FileName;
                 if(sample.Length > 0) {
@@ -53,12 +63,35 @@ namespace CS4540PS2.Controllers {
                         };
                         _context.SampleFiles.Add(sf);
                         _context.SaveChanges();
+                        sfid = sf.Sid;
                     }
                 }
             }
-            return Json(new { success = true });
+            return RedirectToAction("SampleFile", new { sfId = sfid });
         }
 
+        /// <summary>
+        /// Overview of the sample file - displays information about course, learning outcome and
+        /// evaluation metric.
+        /// </summary>
+        /// <param name="sfId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult SampleFile(int? sfId) {
+            if (sfId == null) return NotFound();
+            SampleFiles sf = _context.SampleFiles.Include(s => s.Em).ThenInclude(e => e.Lo).ThenInclude(l => l.CourseInstance)
+                .Where(s => s.Sid == sfId).FirstOrDefault();
+            if (sf == null) return NotFound();
+            return View(sf);
+        }
+
+        /// <summary>
+        /// Retries the file associated with the sample file. Returns NotFound if the file is null, the user has invalid permissions
+        /// or the record doesn't exist.
+        /// </summary>
+        /// <param name="sfId"></param>
+        /// <returns></returns>
+        [HttpGet]
         public ActionResult GetSampleFile(int? sfId) {
             SampleFiles sfObj = _context.SampleFiles.Include(s => s.Em).ThenInclude(e => e.Lo).ThenInclude(l => l.CourseInstance)
                                             .ThenInclude(c => c.Instructors).ThenInclude(i => i.User)
@@ -70,6 +103,25 @@ namespace CS4540PS2.Controllers {
                 return NotFound();
             }
             return File(sfObj.FileContent, sfObj.ContentType, sfObj.FileName);
+        }
+
+        /// <summary>
+        /// Delete the sample file. Returns a json object with a success boolean.
+        /// </summary>
+        /// <param name="sfId"></param>
+        /// <returns></returns>
+        [HttpPost]  
+        public ActionResult DeleteSampleFile(int? sfId) {
+            SampleFiles sfObj = _context.SampleFiles.Include(s => s.Em).ThenInclude(e => e.Lo).ThenInclude(l => l.CourseInstance)
+                                            .ThenInclude(c => c.Instructors).ThenInclude(i => i.User)
+                                            .Where(s => s.Sid == sfId).FirstOrDefault();
+            if (sfObj == null || !sfObj.Em.Lo.CourseInstance.Instructors.Where(i => i.User.UserLoginEmail == User.Identity.Name).Any()) {
+                return Json(new { success = false });
+            }
+            _context.SampleFiles.Remove(sfObj);
+            _context.SaveChanges();
+            CourseInstance course = sfObj.Em.Lo.CourseInstance;
+            return Json(new { success = true });
         }
 
     }

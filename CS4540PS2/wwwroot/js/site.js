@@ -232,7 +232,64 @@ function DeleteDept(e, deptCode) {
     })
 }
 //Submit the Sample Files form
-function SubmitSFForm(form, sid) {
-    form.elements["sfId"].value = sid;
+function GotoSF(sid) {
+    var form = $("<form>", {
+        action: '/Instructor/SampleFile',
+        method: 'GET'
+    });
+    form.append($("<input>", {
+        type: 'number',
+        name: 'sfId', value: sid
+    }));
+    $('body').append(form);
     form.submit();
+}
+//Sends a request to delete a sample file
+function DeleteSample(e, sid, ret) {
+    //window.alert("here");
+    e.preventDefault();
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to delete this sample.",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: "Delete Sample"
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: "/Instructor/DeleteSampleFile",
+                method: "POST",
+                data: {
+                    sfId: sid
+                }
+            }).fail(function () {
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!'
+                })
+            }).done(function (data) {
+                var box = e.target;
+                if (data.success) {
+                    ret.click();
+                    /*box.checked = !box.checked;
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'success',
+                        title: 'The department was deleted.',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })*/
+                } else {
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'error',
+                        title: 'The sample could not be deleted.',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                }
+            });
+        }
+    })
 }
