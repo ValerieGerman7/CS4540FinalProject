@@ -57,10 +57,20 @@ namespace CS4540PS2.Controllers {
                 }
             }
             return Json(new { success = true });
-
         }
 
-
+        public ActionResult GetSampleFile(int? sfId) {
+            SampleFiles sfObj = _context.SampleFiles.Include(s => s.Em).ThenInclude(e => e.Lo).ThenInclude(l => l.CourseInstance)
+                                            .ThenInclude(c => c.Instructors).ThenInclude(i => i.User)
+                                            .Where(s => s.Sid == sfId).FirstOrDefault();
+            if (sfObj == null || !sfObj.Em.Lo.CourseInstance.Instructors.Where(i => i.User.UserLoginEmail == User.Identity.Name).Any()) {
+                return NotFound();
+            }
+            if(sfObj.FileContent == null || sfObj.ContentType == null || sfObj.FileName == null) {
+                return NotFound();
+            }
+            return File(sfObj.FileContent, sfObj.ContentType, sfObj.FileName);
+        }
 
     }
 }

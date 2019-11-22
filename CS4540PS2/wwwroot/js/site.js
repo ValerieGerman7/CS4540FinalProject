@@ -230,5 +230,9 @@ function DeleteDept(e, deptCode) {
             });
         }
     })
-
+}
+//Submit the Sample Files form
+function SubmitSFForm(form, sid) {
+    form.elements["sfId"].value = sid;
+    form.submit();
 }

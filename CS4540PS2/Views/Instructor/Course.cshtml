@@ -155,14 +155,18 @@
                             <!-- Referenced https://stackoverflow.com/questions/11620698/how-to-trigger-a-file-download-when-clicking-an-html-button-or-javascript for opening files.
                             See file forms as well.-->
                             <p>
+                                <form id="getSampleForm" class="form-inline" method="get" action="/Instructor/GetSampleFile" target="_blank" hidden="hidden">
+                                    <input type="number" name="sfId" hidden="hidden" />
+                                </form>
                                 <label class="sampleLabelText">
                                     Sample Files: @if (!em.SampleFiles.Any()) {
                                         <text><i>There are no sample files. <b>Upload at least one sample.</b></i></text>
                                     }
                                 </label>
-                                @foreach (SampleFiles sample in em.SampleFiles) {
+                                @foreach (SampleFiles sample in em.SampleFiles.OrderByDescending(s => s.Score)) {
                                     <!--Change link to sample filename.-->
-                                    <button value="@sample.Score" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()"></button>
+                                    <button value="@sample.Score" class="sampleButton" onclick="SubmitSFForm(document.getElementById('getSampleForm'), @sample.Sid)"></button>
+                                    <!--<button value="@sample.Score" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()"></button>-->
                                 }
                                 <button type="button" class="btn btn-rounded btn-dark btn-sm" data-toggle="modal" data-target="#sModal" data-em-id="@em.Emid">
                                     <i>+</i>
