@@ -1,0 +1,37 @@
+﻿@model CS4540PS2.Models.Departments
+@*
+    Author: Valerie German
+    Date: 21 Nov 2019
+    Course: CS 4540, University of Utah
+    Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
+    I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
+    File Contents: Create webpage for departments
+*@
+@{
+    ViewData["Title"] = "Edit Department";
+    @using Microsoft.EntityFrameworkCore;
+}
+
+<h2>Edit</h2>
+<h4>@Model.Code - @Model.Name</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <input type="text" hidden="hidden" name="code" value="@Model.Code" />
+            <div class="form-group">
+                <label class="control-label">Department Name</label>
+                <input type="text" min="1" required name="name" value="@Model.Name" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Edit" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<button class="btn btn-danger" onclick="DeleteDept(event, '@Model.Code')">Delete</button>
+<br />
+<br />
+<a asp-controller="DeptManager" asp-action="Index">
+    <button class="primary">Back To All Departments</button>
+</a>

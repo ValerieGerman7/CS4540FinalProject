@@ -11,10 +11,10 @@
 }
 <h2>Departments</h2>
 @foreach (string dept in Model) {
-    <div class="card shadowBox">
-        <div class="card-body" onclick="RedirectToDept('@dept');">
-            <p><b>@dept</b></p>
-        </div>
+<div class="card shadowBox">
+    <div class="card-body">
+        <p><b>@dept</b></p>
     </div>
+</div>
     <br />
 }

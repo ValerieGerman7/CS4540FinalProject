@@ -182,3 +182,53 @@ function ChangeUserRole(e, username, role) {
     })
     
 }
+//Sends a request to delete a department
+function DeleteDept(e, deptCode) {
+    //window.alert("here");
+    e.preventDefault();
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to delete the " + deptCode + " department.",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: "Delete Department"
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: "/DeptManager/Delete",
+                method: "POST",
+                data: {
+                    code: deptCode
+                }
+            }).fail(function () {
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!'
+                })
+            }).done(function (data) {
+                var box = e.target;
+                if (data.success) {
+                    window.location.href = '/DeptManager/Index';
+                    /*box.checked = !box.checked;
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'success',
+                        title: 'The department was deleted.',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })*/
+                } else {
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'error',
+                        title: 'The department could not be deleted. There may be courses for this department.',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                }
+            });
+        }
+    })
+
+}
