@@ -231,6 +231,21 @@ function DeleteDept(e, deptCode) {
         }
     })
 }
+//Submits SampleFile form after appending sid
+function SubmitSFForm(sid) {
+    var form = $("<form>", {
+        action: '/Department/GetSampleFile',
+        method: 'GET',
+        target: '_blank',
+        hidden: 'hidden'
+    });
+    form.append($("<input>", {
+        type: 'number',
+        name: 'sfId', value: sid
+    }));
+    $('body').append(form);
+    form.submit();
+}
 //Submit the Sample Files form
 function GotoSF(sid) {
     var form = $("<form>", {

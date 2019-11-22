@@ -76,6 +76,21 @@ namespace CS4540PS2.Controllers {
         }
 
         /// <summary>
+        /// Retries the file associated with the sample file. Returns NotFound if the file is null, the user has invalid permissions
+        /// or the record doesn't exist.
+        /// </summary>
+        /// <param name="sfId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult GetSampleFile(int? sfId) {
+            SampleFiles sfObj = _context.SampleFiles.Where(s => s.Sid == sfId).FirstOrDefault();
+            if (sfObj == null || sfObj.FileContent == null || sfObj.ContentType == null || sfObj.FileName == null) {
+                return NotFound();
+            }
+            return File(sfObj.FileContent, sfObj.ContentType, sfObj.FileName);
+        }
+
+        /// <summary>
         /// Returns a department page, listing classes with the given department
         /// code.
         /// </summary>
