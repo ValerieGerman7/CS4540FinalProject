@@ -96,7 +96,7 @@ function RedirectToCourseDept(CID) {
 function RedirectToDept(Dept) {
     var form = document.createElement("form");
     var dept = document.createElement("input");
-    dept.name = "Dept"; dept.value = Dept;
+    dept.name = "DeptCode"; dept.value = Dept;
     form.appendChild(dept);
     form.action = "/Department/Department";
     form.hidden = 'hidden';

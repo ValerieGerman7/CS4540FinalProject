@@ -1,7 +1,7 @@
-﻿@model IEnumerable<CS4540PS2.Models.CourseInstance>
+﻿@model CS4540PS2.Models.Departments
 @*
     Author: Valerie German
-    Date: 18 Oct 2019
+    Date: 21 Nov 2019
     Course: CS 4540, University of Utah
     Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
     I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
@@ -10,17 +10,20 @@
 @{
     @using Newtonsoft.Json.Linq;
     @using CS4540PS2.Controllers;
-    ViewData["Title"] = Model.Any() ? Model.First().Department : "Unknown Department";
+    ViewData["Title"] = Model.Name;
 }
 <div id="ContentDiv">
-    <h1>@Model.First().Department Department</h1>
+    <h1>@Model.Code - @Model.Name Department</h1>
     <div align="right">
         <a asp-controller="Department" asp-action="Index">All Departments</a>
     </div>
     <hr />
     <!--Options to search the classes by progress, class name, professor ... may be added here (future work) -->
     <!--Information about each class's progress is separated by divs, each with the same structure.-->
-    @{ foreach (CourseInstance course in Model) {
+    @if (!Model.CourseInstance.Any()) {
+        <p><i>This department has no courses.</i></p>
+    }
+    @{ foreach (CourseInstance course in Model.CourseInstance) {
             var LOProgress = 100 * (course.LearningOutcomes.Where(lo => lo.EvaluationMetrics.Any()).Count());
             var loCount = course.LearningOutcomes.Count();
             if (loCount > 0) {

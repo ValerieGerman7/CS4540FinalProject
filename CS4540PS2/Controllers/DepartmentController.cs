@@ -31,13 +31,7 @@ namespace CS4540PS2.Controllers {
         /// </summary>
         /// <returns></returns>
         public IActionResult Index() {
-            using (_context) {
-                var getDepts = from courses in _context.CourseInstance
-                               group courses by courses.Department into deptGroup
-                               orderby deptGroup.Key
-                               select deptGroup.Key;
-                return View("Index", getDepts.ToList<string>());
-            }
+            return View("Index", _context.Departments.OrderBy(d => d.Code));
         }
 
         /// <summary>
@@ -89,9 +83,13 @@ namespace CS4540PS2.Controllers {
         /// <returns></returns>
         public async Task<IActionResult> Department(string DeptCode) {
             if (DeptCode == null) { DeptCode = "CS"; } //Temp for viewing
-            return View("Department", _context.CourseInstance.Include(c => c.LearningOutcomes)
-                .ThenInclude(lo => lo.EvaluationMetrics).ThenInclude(em => em.SampleFiles)
-                .Where(c => c.Department == DeptCode));
+            Departments deptDB = _context.Departments.Where(d => d.Code == DeptCode).Include(d => d.CourseInstance).ThenInclude(c => c.LearningOutcomes)
+                .ThenInclude(l => l.EvaluationMetrics).ThenInclude(e => e.SampleFiles)
+                .FirstOrDefault();
+            if(deptDB == null) {
+                return NotFound();
+            }
+            return View("Department", deptDB);
         }
     }
 }
