@@ -182,6 +182,53 @@ function ChangeUserRole(e, username, role) {
     })
     
 }
+//Sends a request to delete the specified user.
+function DeleteUser(e, username) {
+    e.preventDefault();
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to delete " + username + "'s account.",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: "Delete User"
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: "/User/RemoveUser",
+                method: "POST",
+                data: {
+                    username: username
+                }
+            }).fail(function () {
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!'
+                })
+            }).done(function (data) {
+                if (data.success) {
+                    var row = document.getElementById(username + " Row");
+                    row.parentNode.removeChild(row);
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'success',
+                        title: 'The user was deleted.',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                } else {
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'error',
+                        title: 'User delete failed.',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                }
+            });
+        }
+    })
+}
 //Sends a request to delete a department
 function DeleteDept(e, deptCode) {
     //window.alert("here");
@@ -207,17 +254,8 @@ function DeleteDept(e, deptCode) {
                     text: 'Something went wrong!'
                 })
             }).done(function (data) {
-                var box = e.target;
                 if (data.success) {
                     window.location.href = '/DeptManager/Index';
-                    /*box.checked = !box.checked;
-                    Swal.fire({
-                        position: 'top-end',
-                        type: 'success',
-                        title: 'The department was deleted.',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })*/
                 } else {
                     Swal.fire({
                         position: 'top-end',

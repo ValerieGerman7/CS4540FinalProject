@@ -1,6 +1,6 @@
 ﻿@*
     /// Author: Valerie German
-    /// Date: 18 Oct 2019
+    /// Date: 22 Nov 2019
     /// Course: CS 4540, University of Utah
     /// Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
     /// I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
@@ -24,11 +24,12 @@
             <th scope="col">Administrator</th>
             <th scope="col">Chair</th>
             <th scope="col">Instructor</th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
         @foreach (IdentityUser user in UserManager.Users.OrderBy(u => u.UserName).ToList<IdentityUser>()) {
-        <tr>
+        <tr id="@user.UserName Row">
             <th scope="row">@user.UserName</th>
             <td>@user.Email</td>
             <td>@user.EmailConfirmed</td>
@@ -69,6 +70,11 @@
                     }
                     <label class="custom-control-label" for="@{<text>instSwitch @user.UserName</text>}"></label>
 
+                </div>
+            </td>
+            <td>
+                <div class="custom-control custom-switch">
+                    <button class="btn-danger btn-sm" onclick="DeleteUser(event, '@user.UserName')">Remove User</button>
                 </div>
             </td>
         </tr>

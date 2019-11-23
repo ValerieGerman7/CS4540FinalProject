@@ -75,7 +75,7 @@ namespace CS4540PS2.Areas.Identity.Pages.Account {
                 var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 //Add user to LOT database
-                _lotContext.UserLocator.Add(new UserLocator() { UserLoginEmail = user.Email, UserTitle = Input.Title });
+                _lotContext.UserLocator.Add(new UserLocator() { UserLoginEmail = user.UserName, UserTitle = Input.Title });
                 _lotContext.SaveChanges();
                 if (result.Succeeded) {
                     _logger.LogInformation("User created a new account with password.");
