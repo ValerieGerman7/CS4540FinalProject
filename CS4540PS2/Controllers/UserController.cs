@@ -35,7 +35,7 @@ namespace CS4540PS2.Controllers {
         /// </summary>
         /// <returns></returns>
         public IActionResult Index() {
-            return View();
+            return View(_context.UserLocator);
         }
 
         /// <summary>
