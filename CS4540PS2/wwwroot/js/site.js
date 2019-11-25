@@ -6,11 +6,44 @@
 //File Contents: This file contains the JavaScript for the PS1 webpages, modified for PS2-5 wepages.
 
 //--Initializing--
-//Set Sample file button colors and text.
+//Set Sample file button colors and text
+var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 var sample = document.getElementsByClassName("sampleButton");
 for (index = 0; index < sample.length; index++) {
     SetColor(sample[index], sample[index].value);
 }
+
+//SignalR
+
+connection.on("ReceiveMessage", function (sender, receiver, message) {
+    var el = document.getElementById("userID");
+    var userID = el.innerText;
+    if (receiver == userID) {
+        let div = document.createElement("div");
+        div.className = "single_message";
+        let i = document.createElement("i");
+        i.className = "fas fa-circle";
+        let p = document.createElement("p");
+        p.textContent = message;
+        div.appendChild(i);
+        div.appendChild(p);
+        let messageBoxID = sender + "addMessage";
+        let box = document.getElementById(messageBoxID);
+        box.appendChild(div);
+        box.scrollTop = box.scrollHeight;
+    }
+   
+    
+    console.log(`Hey baby ;) sender: ${sender}, receiver: ${receiver} message: ${message}`);
+});
+
+connection.start().then(function () {
+    console.log("Connection Established Successfully");
+}).catch(function (err) {
+    console.log("Connection Failed");
+    return console.error(err.toString());
+});
+
 
 //--Functions--
 //Set the color and description for sample file buttons
@@ -42,23 +75,7 @@ function RedirectToAction(action) {
 }
 
 //functions for sliding down contact list and making messagebox appear or disappear
-$(document).ready(function () {
-    $(".chat_header").click(function () {
-        $(".user_list").slideToggle();
-    });
 
-    $(".message_header").click(function () {
-        var id = $(this).attr('id');
-        id = "#" + id + "ox";
-        $(id).hide();
-    });
-
-    $(".user").click(function () {
-        var id = $(this).attr('id');
-        id = '#' + id + 'box';
-        $(id).show();
-    })
-});
 
 
 
@@ -149,6 +166,63 @@ function AddUserToRole(e, username) {
         window.alert(data.success);
     });
 }
+
+//Send a request to create a message in the MessagesController
+function SendMessage(e, text, sender, receiver) {
+    e.preventDefault();
+    if (e.keyCode == 13) {
+
+
+        var message = text;
+        connection.invoke("SendMessage", sender, receiver, message).catch(function (err) {
+            return console.error(err.toString());
+        });
+
+
+        $.ajax(
+            {
+                url: "/Messages/SendMessage",
+                method: "POST",
+                data: { text: text, sender: sender, receiver: receiver }
+
+            })
+            .done(function (result) { //if post request succeeds
+                console.log("action taken: " + result);
+
+                let div = document.createElement("div");
+                div.className = "single_message2";
+                let i = document.createElement("i");
+                i.className = "fas fa-circle";
+                let p = document.createElement("p");
+                p.textContent = message;
+                div.appendChild(p);
+                div.appendChild(i);
+                let messageBoxID = receiver + "addMessage";
+                let box = document.getElementById(messageBoxID);
+                box.appendChild(div);
+                box.scrollTop = box.scrollHeight;
+
+                let textAreaID = receiver + "text";
+                document.getElementById(textAreaID).value = "";
+                //$('#' + element).hide();
+                console.log(e);
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.log("failed: ");
+                console.log(jqXHR); console.log(textStatus); console.log(errorThrown);
+            }).always(function () {
+                console.log("but I will always do this")
+
+            });
+
+    } else {
+        let textAreaID = receiver + "text";
+        document.getElementById(textAreaID).value += e.key;
+    }
+
+}
+
+
+
 //Sends a request to change the given user's current status for the
 //given role.
 function ChangeUserRole(e, username, role) {
@@ -203,3 +277,19 @@ function ChangeUserRole(e, username, role) {
     })
     
 }
+
+$(".chat_header").click(function () {
+    $(".user_list").slideToggle();
+});
+
+$(".message_header").click(function () {
+    var id = $(this).attr('id');
+    id = "#" + id + "ox";
+    $(id).hide();
+});
+
+$(".user").click(function () {
+    var id = $(this).attr('id');
+    id = '#' + id + 'box';
+    $(id).show();
+})

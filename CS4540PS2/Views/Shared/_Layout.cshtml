@@ -9,7 +9,8 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
-@inject LearningOutcomeDBContext context
+@inject LOTDBContext context
+
 
 <!DOCTYPE html>
 <html>
@@ -109,11 +110,6 @@
             </div>
         </nav>
     </header>
-    @{ 
-
-        var email = UserManager.GetUserName(User);
-
-    }
 
     <div class="container">
         <partial name="_CookieConsentPartial" />
@@ -121,61 +117,110 @@
             @RenderBody()
         </main>
     </div>
-    <!--Message box-->
-    @foreach (IdentityUser user in UserManager.Users)
+
+
+    <!--Make sure user is signed in before displaying messaging boxes-->
+    @if (SignInManager.IsSignedIn(User))
     {
-        var strId = user.Id + "box";
-        var buttonId = user.Id + "b";
-        <div class="message_box" id=@strId>
-            <div class="message_header" id=@buttonId>
-                <p class="username">@user.Email</p>
-                <i class="fas fa-times"></i>
-            </div>
+        
 
-            <hr />
+        <!--Find email of logged in user-->
+        var email = UserManager.GetUserName(User);
+        <!--Find the userID from UserLocator-->
+        var userLocator = context.UserLocator.Where(o => o.UserLoginEmail == email);
+        var userID = userLocator.FirstOrDefault().Id;
+        <!--Save the userLocator ID in this p so .js file can access-->
+        <p id="userID" display="hidden">@userID</p>
 
-            <div class="messages">
-                <div class="single_message">
-                    <i class="fas fa-circle"></i>
-                    <p>
-                        This is a message.
-                    </p>
-                </div>
-                <div class="single_message2">
-                    <p>
-                        A message from me!
-                    </p>
-                    <i class="fas fa-circle"></i>
-                </div>
-            </div>
-
-            <div class="input_box">
-                <textarea class="message_input" placeholder="Type a message...">
-
-            </textarea>
-                <i class="fas fa-location-arrow"></i>
-            </div>
-
-        </div>
-    }
-
-    <!--Contact box-->
-    <div class="chat_box">
-        <div class="chat_header">
-            <h2 class="chat_heading">Users</h2>
-        </div>
-        <hr />
-        <div class="user_list">
-            @foreach (IdentityUser id in UserManager.Users)
+        <!--Message box-->
+        @foreach (IdentityUser user in UserManager.Users)
+        {
+            //Don't let user send messages to themself. 
+            if(user.Email == email)
             {
-                <div class="user" id=@id.Id>
-                    <p class="username">@id.UserName</p>
-                    <i class="fas fa-circle"></i>
-                </div>
+                continue;
             }
+            <!--Find the userLocator ID of the user receiving the message-->
+            var receiver = context.UserLocator.Where(o => o.UserLoginEmail == user.Email);
+            var receiverID = receiver.FirstOrDefault().Id;
+            <!--Make the id's-->
+            var strId = user.Id + "box";
+            var buttonId = user.Id + "b";
+            var textAreaId = receiverID + "text";
+            var messageFormId = user.Id + "form";
+            var forAddingMessage = receiverID + "addMessage";
+            <!--Tiny window for messages-->
+            <div class="message_box" id=@strId>
+                <div class="message_header" id=@buttonId>
+                    <p class="username">@user.Email</p>
+                    <i class="fas fa-times"></i>
+                </div>
 
+                <hr />
+                <!--Find messages from given user to logged in user and vice versa. then sort by date and display-->
+                <div>
+                    <div class="messages" id=@forAddingMessage>
+                        @foreach (Messages m in context.Messages.Where(o => ((o.SenderNavigation.UserLoginEmail == email) && (o.ReceiverNavigation.UserLoginEmail == user.Email)) || ((o.ReceiverNavigation.UserLoginEmail == email) && (o.SenderNavigation.UserLoginEmail == user.Email))).OrderBy(o => o.Date))
+                        {
+                            if (context.UserLocator.Find(m.Sender).UserLoginEmail == email)
+                            {
+                                <div class="single_message2">
+                                    <p>
+                                        @m.Text
+                                    </p>
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="single_message">
+                                    <i class="fas fa-circle"></i>
+                                    <p>
+                                        @m.Text
+                                    </p>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <!--Little form that sends the messages-->
+                <div class="input_box">
+                    <form id=@messageFormId onsubmit="SendMessage(event, document.getElementById('@textAreaId').value, '@userID', '@receiverID');">
+                        <textarea id=@textAreaId class="message_input" onkeypress="SendMessage(event, document.getElementById('@textAreaId').value, '@userID', '@receiverID');" placeholder="Type a message..."></textarea>
+                        <button class="btn sendButton">
+                            <i class="fas fa-location-arrow"></i>
+                        </button>
+                    </form>
+
+                </div>
+
+            </div>
+        }
+
+        <!--Contact box-->
+        <div class="chat_box">
+            <div class="chat_header">
+                <h2 class="chat_heading">Users</h2>
+            </div>
+            <hr />
+            <div class="user_list">
+                @foreach (IdentityUser id in UserManager.Users)
+                {
+                    //Don't let users send emails to themself
+                    if(id.Email == email)
+                    {
+                        continue;
+                    }
+                    <div class="user" id=@id.Id>
+                        <p class="username">@id.UserName</p>
+                        <i class="fas fa-circle"></i>
+                    </div>
+                }
+
+            </div>
         </div>
-    </div>
+
+    }
 
     <footer class="border-top footer text-muted">
         <div class="container">
@@ -201,8 +246,10 @@
                 integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o">
         </script>
     </environment>
+    <script src="~/lib/@@aspnet/signalr/dist/browser/signalr.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/note.js" asp-append-version="true"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.all.min.js"></script>
 
     @RenderSection("Scripts", required: false)

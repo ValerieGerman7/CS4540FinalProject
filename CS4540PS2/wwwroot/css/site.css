@@ -119,7 +119,7 @@ body {
 }
 .messages {
     height: 12rem;
-    overflow: auto;
+    overflow: hidden auto;
 }
 
 .single_message2 {
@@ -162,6 +162,10 @@ body {
 .fa-location-arrow {
     font-size: 1rem;
     cursor: pointer;
+}
+
+.sendButton {
+    display: inline;
 }
 
 
