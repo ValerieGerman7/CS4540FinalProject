@@ -39,8 +39,9 @@ namespace CS4540PS2.Controllers {
         /// Return the index page listing all course instances.
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber) {
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber, int resultsPerPage = 2) {
             ViewData["PageNumber"] = pageNumber;
+            ViewData["resultsPerPage"] = resultsPerPage;
             // Set up the possible ordering schemes of the table.
             ViewData["CurrentSort"] = sortOrder;
             ViewData["CourseNumSortParam"] = String.IsNullOrEmpty(sortOrder) ? "course_num_desc" : "";
@@ -71,9 +72,7 @@ namespace CS4540PS2.Controllers {
             // reorder the results based on the selected filter
             instances = OrderBySelection(sortOrder, instances);
 
-            //return View(await instances.ToListAsync());
-            int pageSize = 2;
-            return View(await PaginatedList<CourseInstance>.CreateAsync(instances.AsNoTracking(), pageNumber ?? 1, pageSize));
+            return View(await PaginatedList<CourseInstance>.CreateAsync(instances.AsNoTracking(), pageNumber ?? 1, resultsPerPage));
         }
 
         /// <summary>
