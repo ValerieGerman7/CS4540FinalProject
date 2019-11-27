@@ -28,12 +28,87 @@ namespace CS4540PS2.Controllers {
         /// Returns index page listing all learning outcomes.
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> Index(int id = 0) {
-            if (id < 0) id = 0;
-            ViewData["page"] = id;
-            ViewData["tableSize"] = 5; //TODO: dynamic
-            var learningOutcomeDBContext = _context.LearningOutcomes.Include(l => l.CourseInstance);
-            return View(await learningOutcomeDBContext.ToListAsync());
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber, int resultsPerPage = 10)
+        {
+            ViewData["PageNumber"] = pageNumber;
+            ViewData["resultsPerPage"] = resultsPerPage;
+            // Set up the possible ordering schemes of the table.
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["TitleSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["CourseNumSortParam"] = sortOrder == "courseNum_asc" ? "courseNum_desc" : "courseNum_asc";
+            
+            // If there is a search string, filter by that, otherwise use the default
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+
+            // get learning outcomes
+            var learningOutcomes = _context.LearningOutcomes
+                .Include(l => l.CourseInstance)
+                .OrderBy(l => l.Name)
+                .AsNoTracking();    
+            
+            if (learningOutcomes.Count() == 0)
+                return View();
+
+            // allow the user to search the learning outcomes
+            learningOutcomes = FilterBySearch(searchString, learningOutcomes);
+
+            // reorder the results based on the selected filter
+            learningOutcomes = OrderBySelection(sortOrder, learningOutcomes);
+
+            return View(await PaginatedList<LearningOutcomes>.CreateAsync(learningOutcomes.AsNoTracking(), pageNumber ?? 1, resultsPerPage));
+        }
+
+        /// <summary>
+        /// Filters the learning outcomes returned by the database by a user supplied search string.
+        /// </summary>
+        private IQueryable<LearningOutcomes> FilterBySearch(string searchString, IQueryable<LearningOutcomes> learningOutcomes)
+        {
+            // allow the user to search
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                string[] searchWords = searchString.Split(' ');
+                foreach (string s in searchWords)
+                {
+                    if (!string.IsNullOrEmpty(s))
+                    {
+                        learningOutcomes = learningOutcomes.Where(l => l.Name.Contains(s)
+                            || l.Description.Contains(s));
+                    }
+                }
+            }
+            return learningOutcomes;
+        }
+
+        /// <summary>
+        /// Reorders the learning outcomees in the view based on user selection
+        /// </summary>
+        private IQueryable<LearningOutcomes> OrderBySelection(string sortOrder, IQueryable<LearningOutcomes> learningOutcomes)
+        {
+            // reorder the results based on the selected filter           
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    learningOutcomes = learningOutcomes.OrderByDescending(l => l.Name);
+                    break;
+                case "courseNum_asc":
+                    learningOutcomes = learningOutcomes.OrderBy(l => l.CourseInstance.Number);
+                    break;
+                case "courseNum_desc":
+                    learningOutcomes = learningOutcomes.OrderByDescending(l => l.CourseInstance.Number);
+                    break;               
+                default:
+                    learningOutcomes = learningOutcomes.OrderBy(l => l.Name);
+                    break;
+            }
+            return learningOutcomes;
         }
 
         /// <summary>
