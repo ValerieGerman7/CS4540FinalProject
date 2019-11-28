@@ -14,6 +14,9 @@ using CS4540PS2.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 
+using SignalRChat.Hubs;
+using Microsoft.AspNetCore.Internal;
+
 /// <summary>
 /// Author: Valerie German
 /// Date: 22 Sept 2019
@@ -42,7 +45,8 @@ namespace CS4540PS2 {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             var connection = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<LearningOutcomeDBContext>(options => options.UseSqlServer(connection));
+            services.AddSignalR();
+            services.AddDbContext<LOTDBContext>(options => options.UseSqlServer(connection));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,11 +64,17 @@ namespace CS4540PS2 {
             app.UseCookiePolicy();
             app.UseAuthentication();
 
+            app.UseSignalR(endpoints =>
+            {
+                endpoints.MapHub<ChatHub>("/chatHub");
+            });
+
             app.UseMvc(routes => {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
         }
     }
 }

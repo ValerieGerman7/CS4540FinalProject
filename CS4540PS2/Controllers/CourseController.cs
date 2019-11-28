@@ -1,5 +1,6 @@
 ﻿using CS4540PS2.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -19,13 +20,19 @@ using System.Threading.Tasks;
 namespace CS4540PS2.Controllers {
     [Authorize(Roles="Admin")]
     public class CourseController : Controller {
-        private readonly LearningOutcomeDBContext _context;
+        private readonly LOTDBContext _context;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserContext _userContext;
+        private UserManager<IdentityUser> _userManager;
         /// <summary>
         /// Construct a course controller with a database context.
         /// </summary>
         /// <param name="context"></param>
-        public CourseController(LearningOutcomeDBContext context) {
+        public CourseController(LOTDBContext context, RoleManager<IdentityRole> role, UserContext user, UserManager<IdentityUser> manage) {
             _context = context;
+            _roleManager = role;
+            _userContext = user;
+            _userManager = manage;
         }
 
         /// <summary>
@@ -52,7 +59,7 @@ namespace CS4540PS2.Controllers {
             ViewData["CurrentFilter"] = searchString;
 
             // get course instances
-            var instances = from c in _context.CourseInstance
+            var instances = from c in _context.CourseInstance.Include(c => c.Status).Include(c => c.Instructors).ThenInclude(c => c.User)
                             select c;
 
             /* TODO: test if this is necessary*/
@@ -137,19 +144,47 @@ namespace CS4540PS2.Controllers {
         /// <returns></returns>
         public IActionResult Create() {
             ViewData["CourseInstanceId"] = new SelectList(_context.CourseInstance, "CourseInstanceId", "Department");
-            return View();
+            ViewData["Departments"] = _context.Departments;
+            ViewData["Statuses"] = _context.CourseStatus;
+            return View(new CourseEditData() {
+                Departments = _context.Departments,
+                CourseStatus = _context.CourseStatus,
+                Professors = GetInstructors()
+            });
+        }
+
+        /// <summary>
+        /// Get a list of all instructor users.
+        /// </summary>
+        /// <returns></returns>
+        public List<UserLocator> GetInstructors() {
+            List<IdentityUser> instructors = new List<IdentityUser>();
+            foreach(IdentityUser user in _userContext.Users) {
+                if(_userManager.IsInRoleAsync(user, "Instructor").Result) {
+                    instructors.Add(user);
+                }
+            }
+            return _context.UserLocator.Where(u => instructors.Where(i => i.Email == u.UserLoginEmail).Any()).ToList();
+
         }
 
         /// <summary>
         /// POST for creating a new course.
+        /// Courses may be assigned an instructor.
         /// </summary>
         /// <param name="courseInstance"></param>
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,Department,Number,Semester,Year")] CourseInstance courseInstance) {
+        public async Task<IActionResult> Create([Bind("Name,Description,Department,Number,Semester,Year,StatusId,DueDate")] CourseInstance courseInstance, string instructor) {
             if (ModelState.IsValid) {
                 _context.Add(courseInstance);
+                if (instructor != null) {
+                    UserLocator instr = _context.UserLocator.Where(u => u.UserLoginEmail == instructor).FirstOrDefault();
+                    if (instr != null) {
+                        _context.Instructors.Add(new Instructors() { CourseInstance = courseInstance, User = instr });
+                    }
+                }
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -171,8 +206,14 @@ namespace CS4540PS2.Controllers {
             if (courseInstance == null) {
                 return NotFound();
             }
-            ViewData["CourseInstanceId"] = new SelectList(_context.CourseInstance, "CourseInstanceId", "Department", courseInstance.CourseInstanceId);
-            return View(courseInstance);
+            //ViewData["CourseInstanceId"] = new SelectList(_context.CourseInstance, "CourseInstanceId", "Department", courseInstance.CourseInstanceId);
+            //return View(courseInstance);
+            return View(new CourseEditData() {
+                Course = _context.CourseInstance.Where(c => c.CourseInstanceId == id).Include(c => c.Instructors).ThenInclude(i => i.User).FirstOrDefault(),
+                Departments = _context.Departments,
+                CourseStatus = _context.CourseStatus,
+                Professors = GetInstructors()
+            });
         }
 
         /// <summary>
@@ -183,13 +224,29 @@ namespace CS4540PS2.Controllers {
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CourseInstanceId,Name,Description,Department,Number,Semester,Year")] CourseInstance courseInstance) {
+        public async Task<IActionResult> Edit(int id, [Bind("CourseInstanceId,Name,Description,Department,Number,Semester,Year,StatusId,DueDate")] CourseInstance courseInstance, string newInstructor) {
             if (id != courseInstance.CourseInstanceId) {
                 return NotFound();
             }
-
             if (ModelState.IsValid) {
                 try {
+                    if (newInstructor != null) {
+                        UserLocator instructorUserLoc = _context.UserLocator.Where(u => u.UserLoginEmail == newInstructor).FirstOrDefault();
+                        if (instructorUserLoc != null) {
+                            //Current instructor (TODO: change to multiple)
+                            Instructors currentCourseInstructor = _context.Instructors.Where(i => i.CourseInstanceId == courseInstance.CourseInstanceId).FirstOrDefault();
+                            if(currentCourseInstructor == null) { //No current instructor
+                                Instructors newInst = new Instructors() {
+                                    CourseInstanceId = courseInstance.CourseInstanceId,
+                                    UserId = instructorUserLoc.Id
+                                };
+                                _context.Instructors.Add(newInst);
+                            } else { //Change current
+                                currentCourseInstructor.User = instructorUserLoc;
+                                _context.Update(currentCourseInstructor);
+                            }
+                        }
+                    }
                     _context.Update(courseInstance);
                     await _context.SaveChangesAsync();
                 } catch (DbUpdateConcurrencyException) {
@@ -201,8 +258,14 @@ namespace CS4540PS2.Controllers {
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CourseInstanceId"] = new SelectList(_context.CourseInstance, "CourseInstanceId", "Department", courseInstance.CourseInstanceId);
-            return View(courseInstance);
+            //ViewData["CourseInstanceId"] = new SelectList(_context.CourseInstance, "CourseInstanceId", "Department", courseInstance.CourseInstanceId);
+            //return View(courseInstance);
+            return View(new CourseEditData() {
+                Course = _context.CourseInstance.Where(c => c.CourseInstanceId == id).Include(c => c.Instructors).ThenInclude(i => i.User).FirstOrDefault(),
+                Departments = _context.Departments,
+                CourseStatus = _context.CourseStatus,
+                Professors = GetInstructors()
+            });
         }
 
         /// <summary>
@@ -250,5 +313,10 @@ namespace CS4540PS2.Controllers {
 
     }
 
-
+    public class CourseEditData {
+        public CourseInstance Course { get; set; } = null;
+        public DbSet<Departments> Departments { get; set; }
+        public DbSet<CourseStatus> CourseStatus { get; set; }
+        public List<UserLocator> Professors { get; set; }
+    }
 }

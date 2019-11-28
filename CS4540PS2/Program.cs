@@ -18,7 +18,7 @@ namespace CS4540PS2 {
             using (var scope = host.Services.CreateScope()) {
                 var services = scope.ServiceProvider;
                 try {
-                    var context = services.GetRequiredService<LearningOutcomeDBContext>();
+                    var context = services.GetRequiredService<LOTDBContext>();
                     DbInitializer.Initialize(context);
                     var userContext = services.GetRequiredService<UserContext>();
                     DbInitializer.InitializeUser(userContext, services).Wait();

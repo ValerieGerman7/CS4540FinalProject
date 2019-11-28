@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CS4540PS2.Migrations
 {
-    [DbContext(typeof(LearningOutcomeDBContext))]
+    [DbContext(typeof(LOTDBContext))]
     [Migration("20191019021749_NotesInSeparateTable")]
     partial class NotesInSeparateTable
     {

@@ -1,7 +1,7 @@
-﻿@model CS4540PS2.Models.CourseInstance
+﻿@model CS4540PS2.Controllers.CourseEditData
 @*
     Author: Valerie German
-    Date: 10 Sept 2019
+    Date: 16 Nov 2019
     Course: CS 4540, University of Utah
     Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
     I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
@@ -9,6 +9,7 @@
 *@
 @{
     ViewData["Title"] = "Create";
+    @using Microsoft.EntityFrameworkCore;
 }
 
 <h2>Create Course Instance</h2>
@@ -16,41 +17,59 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label class="control-label">Name</label>
+                <input type="text" name="Name" class="form-control" />
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <label class="control-label">Description</label>
+                <input type="text" name="Description" class="form-control" />
             </div>
             <div class="form-group">
-                <label asp-for="Department" class="control-label"></label>
-                <input asp-for="Department" maxlength="5" class="form-control" />
-                <span asp-validation-for="Department" class="text-danger"></span>
+                <label class="control-label">Department</label>
+                <select name="Department">
+                    @foreach(Departments dept in Model.Departments) {
+                         <option value="@dept.Code">@dept.Name</option>   
+                    }
+                </select>
             </div>
             <div class="form-group">
-                <label asp-for="Number" class="control-label"></label>
-                <input asp-for="Number" class="form-control" />
-                <span asp-validation-for="Number" class="text-danger"></span>
+                <label class="control-label">Number</label>
+                <input type="number" name="Number" class="form-control" />
             </div>
             <div class="form-group">
-                <label asp-for="Semester" class="control-label"></label>
-                <input asp-for="Semester" maxlength="6" class="form-control" />
-                <span asp-validation-for="Semester" class="text-danger"></span>
+                <label class="control-label">Semester</label>
+                <select name="Semester">
+                    <option value="Spring">Spring</option>
+                    <option value="Summer">Summer</option>
+                    <option value="Fall">Fall</option>
+                </select>
             </div>
             <div class="form-group">
-                <label asp-for="Year" class="control-label"></label>
-                <input asp-for="Year" class="form-control" />
-                <span asp-validation-for="Year" class="text-danger"></span>
+                <label>Year</label>
+                <input type="number" name="Year" min="1900" max="3000" class="form-control" />
             </div>
-            <!--<div class="form-group">
-                <label asp-for="CourseInstanceId" class="control-label"></label>
-                <select asp-for="CourseInstanceId" class="form-control" asp-items="ViewBag.CourseInstanceId"></select>
-            </div>-->
+            <div class="form-group">
+                <label class="control-label">Status</label>
+                <select name="StatusId">
+                    @foreach (CourseStatus st in Model.CourseStatus) {
+                        <option value="@st.StatusId">@st.Status</option>
+
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Due Date</label>
+                <input class="form-control" name="DueDate" type="date" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Instructor <i>(optional)</i></label>
+                <select name="instructor">
+                    @foreach(UserLocator user in Model.Professors) {
+                        <option value="@user.UserLoginEmail">@user.UserTitle</option>
+                    }
+                </select>
+            </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

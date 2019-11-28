@@ -47,7 +47,7 @@
                     }
                     <textarea name="note" id="@noteId" class="form-control" rows="3" placeholder="Enter learning outcome note"
                               onchange="UpdateLONoteDept(event, @lo.Loid, '@noteId', '@noteLabelId')">@if (note != null) { <text>@note.Note</text> }</textarea>
-                    <i><label class="text-sm-right" id="@noteLabelId">@if (note != null) {<text>Last modified: @note.NoteModified by @note.NoteUserModifed</text>}</label></i>
+                    <i><label class="text-sm-right" id="@noteLabelId">@if (note != null) {<text>Last modified: @note.NoteModified by @note.NoteUserModified</text>}</label></i>
                 </div>
                 <br />
                 <!--Evaluation metrics - each assignment/exam is split into a card-->
@@ -71,6 +71,9 @@
                             <!-- Referenced https://stackoverflow.com/questions/11620698/how-to-trigger-a-file-download-when-clicking-an-html-button-or-javascript for opening files.
                 See file forms as well.-->
                             <p>
+                                <form id="getSampleForm" class="form-inline" method="get" action="/Department/GetSampleFile" target="_blank" hidden="hidden">
+                                    <input type="number" name="sfId" hidden="hidden" />
+                                </form>
                                 <label class="sampleLabelText">
                                     Sample Files: @if (em.SampleFiles.Count == 0) {
                                         <text><i>There are no sample files.</i></text>
@@ -78,8 +81,9 @@
                                 </label>
                                 @for (int samIndex = 0; samIndex < em.SampleFiles.Count; samIndex++) {
                                     SampleFiles sample = em.SampleFiles.ElementAt(samIndex);
-                                    <!--Change link to sample filename.-->
-                                    <button value="@sample.Score" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()"></button>
+                                    <!--Change link to sample filename.<button value="@sample.Score" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()"></button>-->
+                                    <button value="@sample.Score" class="sampleButton" onclick="SubmitSFForm(@sample.Sid)"></button>
+
                                 }
                             </p>
                         </div>

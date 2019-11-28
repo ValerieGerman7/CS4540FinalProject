@@ -1,4 +1,4 @@
-﻿@model CS4540PS2.Models.CourseInstance
+﻿@model CS4540PS2.Controllers.CourseEditData
 @*
     Author: Valerie German
     Date: 10 Sept 2019
@@ -8,53 +8,92 @@
     File Contents: Create webpage for courses
 *@
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit Course";
+    @using Microsoft.EntityFrameworkCore;
 }
 
 <h2>Edit</h2>
-<h4>@Model.Department  @Model.Number  - @Model.Name</h4>
+<h4>@Model.Course.Department  @Model.Course.Number  - @Model.Course.Name</h4>
+@if (Model.Course.Instructors.Any()) {
+    <p>Instructor: @Model.Course.Instructors.First().User.UserTitle</p>
+}
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="CourseInstanceId" />
+            <input type="hidden" name="CourseInstanceId" value="@Model.Course.CourseInstanceId" />
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label class="control-label">Name</label>
+                <input type="text" name="Name" class="form-control" value="@Model.Course.Name" />
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <label class="control-label">Description</label>
+                <input type="text" name="Description" class="form-control" value="@Model.Course.Description" />
             </div>
             <div class="form-group">
-                <label asp-for="Department" class="control-label"></label>
-                <input asp-for="Department" class="form-control" />
-                <span asp-validation-for="Department" class="text-danger"></span>
+                <label class="control-label">Department</label>
+                <select name="Department">
+                    @foreach (Departments dept in Model.Departments) {
+                        @if (Model.Course.Department == dept.Code) {
+                            <option value="@dept.Code" selected>@dept.Name</option>
+                        } else {
+                            <option value="@dept.Code">@dept.Name</option>
+                        }
+                    }
+                </select>
             </div>
             <div class="form-group">
-                <label asp-for="Number" class="control-label"></label>
-                <input asp-for="Number" class="form-control" />
-                <span asp-validation-for="Number" class="text-danger"></span>
+                <label class="control-label">Number</label>
+                <input type="number" name="Number" class="form-control" value="@Model.Course.Number" />
             </div>
             <div class="form-group">
-                <label asp-for="Semester" class="control-label"></label>
-                <input asp-for="Semester" class="form-control" />
-                <span asp-validation-for="Semester" class="text-danger"></span>
+                <label class="control-label">Semester</label>
+                <select name="Semester">
+                    <option value="@Model.Course.Semester" selected>@Model.Course.Semester</option>
+                    <option value="Spring">Spring</option>
+                    <option value="Summer">Summer</option>
+                    <option value="Fall">Fall</option>
+                </select>
             </div>
             <div class="form-group">
-                <label asp-for="Year" class="control-label"></label>
-                <input asp-for="Year" class="form-control" />
-                <span asp-validation-for="Year" class="text-danger"></span>
+                <label>Year</label>
+                <input type="number" name="Year" min="1900" max="3000" class="form-control" value="@Model.Course.Year" />
             </div>
-            <!--<div class="form-group">
-                <label asp-for="CourseInstanceId" class="control-label"></label>
-                <select asp-for="CourseInstanceId" class="form-control" asp-items="ViewBag.CourseInstanceId"></select>
-            </div>-->
             <div class="form-group">
-                <input type="submit" value="Update" class="btn btn-primary" />
+                <label class="control-label">Status</label>
+                <select name="StatusId">
+                    @foreach (CourseStatus st in Model.CourseStatus) {
+                        @if (st.StatusId == Model.Course.StatusId) {
+                            <option value="@st.StatusId" selected>@st.Status</option>
+                        } else {
+                            <option value="@st.StatusId">@st.Status</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Due Date</label>
+                @{ 
+                    DateTime due = Model.Course.DueDate;
+                    string formatted = due.ToString("yyy-MM-dd");
+                }
+                <input class="form-control" name="DueDate" type="date" value="@formatted" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Instructor <i>(optional)</i></label>
+                <select name="newInstructor">
+                    @foreach (UserLocator user in Model.Professors) {
+                        @if (Model.Course.Instructors.Any()
+                          && Model.Course.Instructors.First().User.UserLoginEmail == user.UserLoginEmail) {
+                            <option value="@user.UserLoginEmail" selected>@user.UserTitle</option>
+                        } else {
+                            <option value="@user.UserLoginEmail">@user.UserTitle</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Edit" class="btn btn-primary" />
             </div>
         </form>
     </div>

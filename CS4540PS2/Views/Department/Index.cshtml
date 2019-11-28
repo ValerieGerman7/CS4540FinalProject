@@ -1,4 +1,4 @@
-﻿@model List<string>
+﻿@model IEnumerable<CS4540PS2.Models.Departments>
 @*
     Author: Valerie German
     Date: 10 Sept 2019
@@ -10,10 +10,11 @@
 @{
 }
 <h2>Departments</h2>
-@foreach (string dept in Model) {
-    <div class="card shadowBox">
-        <div class="card-body" onclick="RedirectToDept('@dept');">
-            <p><b>@dept</b></p>
+<hr />
+@foreach (Departments dept in Model) {
+    <div class="card shadowBox" onclick="RedirectToDept('@dept.Code');">
+        <div class="card-body">
+            <p><b>@dept.Code - @dept.Name</b></p>
         </div>
     </div>
     <br />

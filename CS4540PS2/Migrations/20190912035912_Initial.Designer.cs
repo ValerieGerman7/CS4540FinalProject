@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CS4540PS2.Migrations
 {
-    [DbContext(typeof(LearningOutcomeDBContext))]
+    [DbContext(typeof(LOTDBContext))]
     [Migration("20190912035912_Initial")]
     partial class Initial
     {

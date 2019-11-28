@@ -16,12 +16,12 @@ using CS4540PS2.Models;
 /// </summary>
 namespace CS4540PS2.Controllers {
     public class HomeController : Controller {
-        private readonly LearningOutcomeDBContext _context;
+        private readonly LOTDBContext _context;
         /// <summary>
         /// Creates home controller with given database context.
         /// </summary>
         /// <param name="context"></param>
-        public HomeController(LearningOutcomeDBContext context) {
+        public HomeController(LOTDBContext context) {
             _context = context;
         }
         /// <summary>

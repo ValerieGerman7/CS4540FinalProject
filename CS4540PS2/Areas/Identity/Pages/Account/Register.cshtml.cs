@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using CS4540PS2.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -25,16 +26,15 @@ namespace CS4540PS2.Areas.Identity.Pages.Account {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly LOTDBContext _lotContext;
 
-        public RegisterModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
-            ILogger<RegisterModel> logger,
-            IEmailSender emailSender) {
+        public RegisterModel(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager,
+            ILogger<RegisterModel> logger, IEmailSender emailSender, LOTDBContext lot) {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _lotContext = lot;
         }
 
         [BindProperty]
@@ -58,6 +58,10 @@ namespace CS4540PS2.Areas.Identity.Pages.Account {
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Display(Name="Full Name")]
+            [Required]
+            public string Title { get; set; }
         }
 
         public void OnGet(string returnUrl = null) {
@@ -67,8 +71,12 @@ namespace CS4540PS2.Areas.Identity.Pages.Account {
         public async Task<IActionResult> OnPostAsync(string returnUrl = null) {
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid) {
+                //Add user to database
                 var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
+                //Add user to LOT database
+                _lotContext.UserLocator.Add(new UserLocator() { UserLoginEmail = user.Email, UserTitle = Input.Title });
+                _lotContext.SaveChanges();
                 if (result.Succeeded) {
                     _logger.LogInformation("User created a new account with password.");
 

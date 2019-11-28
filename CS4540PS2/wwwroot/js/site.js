@@ -6,11 +6,44 @@
 //File Contents: This file contains the JavaScript for the PS1 webpages, modified for PS2-5 wepages.
 
 //--Initializing--
-//Set Sample file button colors and text.
+//Set Sample file button colors and text
+var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 var sample = document.getElementsByClassName("sampleButton");
 for (index = 0; index < sample.length; index++) {
     SetColor(sample[index], sample[index].value);
 }
+
+//SignalR
+
+connection.on("ReceiveMessage", function (sender, receiver, message) {
+    var el = document.getElementById("userID");
+    var userID = el.innerText;
+    if (receiver == userID) {
+        let div = document.createElement("div");
+        div.className = "single_message";
+        let i = document.createElement("i");
+        i.className = "fas fa-circle";
+        let p = document.createElement("p");
+        p.textContent = message;
+        div.appendChild(i);
+        div.appendChild(p);
+        let messageBoxID = sender + "addMessage";
+        let box = document.getElementById(messageBoxID);
+        box.appendChild(div);
+        box.scrollTop = box.scrollHeight;
+    }
+   
+    
+    console.log(`Hey baby ;) sender: ${sender}, receiver: ${receiver} message: ${message}`);
+});
+
+connection.start().then(function () {
+    console.log("Connection Established Successfully");
+}).catch(function (err) {
+    console.log("Connection Failed");
+    return console.error(err.toString());
+});
+
 
 //--Functions--
 //Set the color and description for sample file buttons
@@ -40,6 +73,11 @@ function SetColor(button, scale) {
 function RedirectToAction(action) {
     window.location.href = "/Home/" + action;
 }
+
+//functions for sliding down contact list and making messagebox appear or disappear
+
+
+
 
 //Redirects to the Course overview page (obsolete)
 function RedirectToCourse(Dept, Num, Sem, Year) {
@@ -96,7 +134,7 @@ function RedirectToCourseDept(CID) {
 function RedirectToDept(Dept) {
     var form = document.createElement("form");
     var dept = document.createElement("input");
-    dept.name = "Dept"; dept.value = Dept;
+    dept.name = "DeptCode"; dept.value = Dept;
     form.appendChild(dept);
     form.action = "/Department/Department";
     form.hidden = 'hidden';
@@ -128,6 +166,63 @@ function AddUserToRole(e, username) {
         window.alert(data.success);
     });
 }
+
+//Send a request to create a message in the MessagesController
+function SendMessage(e, text, sender, receiver) {
+    e.preventDefault();
+    if (e.keyCode == 13) {
+
+
+        var message = text;
+        connection.invoke("SendMessage", sender, receiver, message).catch(function (err) {
+            return console.error(err.toString());
+        });
+
+
+        $.ajax(
+            {
+                url: "/Messages/SendMessage",
+                method: "POST",
+                data: { text: text, sender: sender, receiver: receiver }
+
+            })
+            .done(function (result) { //if post request succeeds
+                console.log("action taken: " + result);
+
+                let div = document.createElement("div");
+                div.className = "single_message2";
+                let i = document.createElement("i");
+                i.className = "fas fa-circle";
+                let p = document.createElement("p");
+                p.textContent = message;
+                div.appendChild(p);
+                div.appendChild(i);
+                let messageBoxID = receiver + "addMessage";
+                let box = document.getElementById(messageBoxID);
+                box.appendChild(div);
+                box.scrollTop = box.scrollHeight;
+
+                let textAreaID = receiver + "text";
+                document.getElementById(textAreaID).value = "";
+                //$('#' + element).hide();
+                console.log(e);
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.log("failed: ");
+                console.log(jqXHR); console.log(textStatus); console.log(errorThrown);
+            }).always(function () {
+                console.log("but I will always do this")
+
+            });
+
+    } else {
+        let textAreaID = receiver + "text";
+        document.getElementById(textAreaID).value += e.key;
+    }
+
+}
+
+
+
 //Sends a request to change the given user's current status for the
 //given role.
 function ChangeUserRole(e, username, role) {
@@ -181,4 +276,130 @@ function ChangeUserRole(e, username, role) {
         }
     })
     
+}
+//Sends a request to delete a department
+function DeleteDept(e, deptCode) {
+    //window.alert("here");
+    e.preventDefault();
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to delete the " + deptCode + " department.",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: "Delete Department"
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: "/DeptManager/Delete",
+                method: "POST",
+                data: {
+                    code: deptCode
+                }
+            }).fail(function () {
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!'
+                })
+            }).done(function (data) {
+                var box = e.target;
+                if (data.success) {
+                    window.location.href = '/DeptManager/Index';
+                    /*box.checked = !box.checked;
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'success',
+                        title: 'The department was deleted.',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })*/
+                } else {
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'error',
+                        title: 'The department could not be deleted. There may be courses for this department.',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                }
+            });
+        }
+    })
+}
+//Submits SampleFile form after appending sid
+function SubmitSFForm(sid) {
+    var form = $("<form>", {
+        action: '/Department/GetSampleFile',
+        method: 'GET',
+        target: '_blank',
+        hidden: 'hidden'
+    });
+    form.append($("<input>", {
+        type: 'number',
+        name: 'sfId', value: sid
+    }));
+    $('body').append(form);
+    form.submit();
+}
+//Submit the Sample Files form
+function GotoSF(sid) {
+    var form = $("<form>", {
+        action: '/Instructor/SampleFile',
+        method: 'GET'
+    });
+    form.append($("<input>", {
+        type: 'number',
+        name: 'sfId', value: sid
+    }));
+    $('body').append(form);
+    form.submit();
+}
+//Sends a request to delete a sample file
+function DeleteSample(e, sid, ret) {
+    //window.alert("here");
+    e.preventDefault();
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to delete this sample.",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: "Delete Sample"
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: "/Instructor/DeleteSampleFile",
+                method: "POST",
+                data: {
+                    sfId: sid
+                }
+            }).fail(function () {
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!'
+                })
+            }).done(function (data) {
+                var box = e.target;
+                if (data.success) {
+                    ret.click();
+                    /*box.checked = !box.checked;
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'success',
+                        title: 'The department was deleted.',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })*/
+                } else {
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'error',
+                        title: 'The sample could not be deleted.',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                }
+            });
+        }
+    })
 }

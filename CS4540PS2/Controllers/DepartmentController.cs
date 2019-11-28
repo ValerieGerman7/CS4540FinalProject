@@ -19,9 +19,9 @@ using Microsoft.EntityFrameworkCore;
 namespace CS4540PS2.Controllers {
     [Authorize(Roles = "Chair")]
     public class DepartmentController : Controller {
-        private readonly LearningOutcomeDBContext _context;
+        private readonly LOTDBContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
-        public DepartmentController(LearningOutcomeDBContext context, RoleManager<IdentityRole> role) {
+        public DepartmentController(LOTDBContext context, RoleManager<IdentityRole> role) {
             _context = context;
             _roleManager = role;
         }
@@ -31,13 +31,7 @@ namespace CS4540PS2.Controllers {
         /// </summary>
         /// <returns></returns>
         public IActionResult Index() {
-            using (_context) {
-                var getDepts = from courses in _context.CourseInstance
-                               group courses by courses.Department into deptGroup
-                               orderby deptGroup.Key
-                               select deptGroup.Key;
-                return View("Index", getDepts.ToList<string>());
-            }
+            return View("Index", _context.Departments.OrderBy(d => d.Code));
         }
 
         /// <summary>
@@ -76,9 +70,24 @@ namespace CS4540PS2.Controllers {
             }
             lo.LONotes.First().Note = NewNote;
             lo.LONotes.First().NoteModified = DateTime.Now;
-            lo.LONotes.First().NoteUserModifed = User.Identity.Name;
+            lo.LONotes.First().NoteUserModified = User.Identity.Name;
             _context.SaveChanges();
             return Json(new { success = true, noteContent = NewNote, modified = lo.LONotes.First().NoteModified, user = User.Identity.Name });
+        }
+
+        /// <summary>
+        /// Retries the file associated with the sample file. Returns NotFound if the file is null, the user has invalid permissions
+        /// or the record doesn't exist.
+        /// </summary>
+        /// <param name="sfId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult GetSampleFile(int? sfId) {
+            SampleFiles sfObj = _context.SampleFiles.Where(s => s.Sid == sfId).FirstOrDefault();
+            if (sfObj == null || sfObj.FileContent == null || sfObj.ContentType == null || sfObj.FileName == null) {
+                return NotFound();
+            }
+            return File(sfObj.FileContent, sfObj.ContentType, sfObj.FileName);
         }
 
         /// <summary>
@@ -89,9 +98,13 @@ namespace CS4540PS2.Controllers {
         /// <returns></returns>
         public async Task<IActionResult> Department(string DeptCode) {
             if (DeptCode == null) { DeptCode = "CS"; } //Temp for viewing
-            return View("Department", _context.CourseInstance.Include(c => c.LearningOutcomes)
-                .ThenInclude(lo => lo.EvaluationMetrics).ThenInclude(em => em.SampleFiles)
-                .Where(c => c.Department == DeptCode));
+            Departments deptDB = _context.Departments.Where(d => d.Code == DeptCode).Include(d => d.CourseInstance).ThenInclude(c => c.LearningOutcomes)
+                .ThenInclude(l => l.EvaluationMetrics).ThenInclude(e => e.SampleFiles)
+                .FirstOrDefault();
+            if(deptDB == null) {
+                return NotFound();
+            }
+            return View("Department", deptDB);
         }
     }
 }
