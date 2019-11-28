@@ -32,9 +32,9 @@ namespace CS4540PS2.Controllers {
         /// Return the index page listing all course instances.
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber, int resultsPerPage = 2) {
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber, int resultsPerPage = 5) {
             ViewData["PageNumber"] = pageNumber;
-            ViewData["resultsPerPage"] = resultsPerPage;
+            ViewData["ResultsPerPage"] = resultsPerPage;
             // Set up the possible ordering schemes of the table.
             ViewData["CurrentSort"] = sortOrder;
             ViewData["CourseNumSortParam"] = String.IsNullOrEmpty(sortOrder) ? "course_num_desc" : "";

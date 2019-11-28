@@ -30,7 +30,7 @@ namespace CS4540PS2.Controllers {
         /// <returns></returns>
         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber, int resultsPerPage = 10) {
             ViewData["PageNumber"] = pageNumber;
-            ViewData["resultsPerPage"] = resultsPerPage;
+            ViewData["ResultsPerPage"] = resultsPerPage;
             // Set up the possible ordering schemes of the table.
             ViewData["CurrentSort"] = sortOrder;
             ViewData["TitleSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -74,17 +74,10 @@ namespace CS4540PS2.Controllers {
             if (!string.IsNullOrEmpty(searchString)) {
                 string[] searchWords = searchString.Split(' ');
                 foreach (string s in searchWords) {
-                    if (!string.IsNullOrEmpty(s)) {
-                        try {
-                            int searchNum = Convert.ToInt32(s);
+                    if (!string.IsNullOrEmpty(s)) {                       
                             learningOutcomes = learningOutcomes.Where(l => l.Name.Contains(s)
                             || l.Description.Contains(s)
-                            || l.CourseInstance.Number.Equals(searchNum));
-                        }
-                        catch {
-                            learningOutcomes = learningOutcomes.Where(l => l.Name.Contains(s)
-                           || l.Description.Contains(s));
-                        }
+                            || l.CourseInstance.Number.ToString().Equals(s));                        
                     }
                 }
             }
