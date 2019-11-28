@@ -138,6 +138,38 @@ namespace CS4540PS2.Controllers {
             return courseInstances;
         }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+        /// <summary>
+        /// Course department view page.
+        /// </summary>
+        /// <param name="Dept"></param>
+        /// <param name="Num"></param>
+        /// <param name="Sem"></param>
+        /// <param name="Year"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> Course(string Dept, int? Num, string Sem, int? Year)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+        {
+            if (Dept.Equals(null) || Num == null || Sem.Equals(null) || Year == null)
+                return View("Error", new ErrorViewModel()
+                {
+                    ErrorMessage = "Insufficient information to locate course."
+                });
+            CourseInstance course = _context.CourseInstance.Where(c => c.Department == Dept && c.Number == Num
+                && c.Semester == Sem && c.Year == Year)
+                .Include(c => c.CourseNotes)
+                .Include(c => c.LearningOutcomes)
+                .ThenInclude(lo => lo.EvaluationMetrics)
+                .ThenInclude(em => em.SampleFiles)
+                .Include(c => c.LearningOutcomes)
+                .ThenInclude(lo => lo.LONotes)
+                .FirstOrDefault();
+            if (course == null) {
+                return Forbid();
+            }
+            return View("Course", course);
+        }
+
         /// <summary>
         /// GET for course create page.
         /// </summary>
