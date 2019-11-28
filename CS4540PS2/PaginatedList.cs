@@ -52,6 +52,8 @@ namespace CS4540PS2
         public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageIndex, int pageSize)
         {    
             var count = await source.CountAsync();
+            if (count < 1)
+                return null;
             int totalPages = (int)Math.Ceiling(count / (double)pageSize);
             if (pageIndex > totalPages)
                 pageIndex = totalPages;
