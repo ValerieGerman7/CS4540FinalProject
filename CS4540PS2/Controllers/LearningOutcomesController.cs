@@ -128,6 +128,8 @@ namespace CS4540PS2.Controllers {
                 return await Course(getid.Department, getid.Number, getid.Semester, getid.Year);
             }
         }
+
+#pragma warning disable CS1998  // Async method lacks 'await' operators and will run synchronously
         /// <summary>
         /// Course department view page.
         /// </summary>
@@ -136,7 +138,9 @@ namespace CS4540PS2.Controllers {
         /// <param name="Sem"></param>
         /// <param name="Year"></param>
         /// <returns></returns>
-        public async Task<IActionResult> Course(string Dept, int? Num, string Sem, int? Year) {
+        public async Task<IActionResult> Course(string Dept, int? Num, string Sem, int? Year)
+        {
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
             if (Dept.Equals(null) || Num == null || Sem.Equals(null) || Year == null)
                 return View("Error", new ErrorViewModel() {
                     ErrorMessage = "Insufficient information to locate course."
