@@ -76,6 +76,21 @@ function RedirectToAction(action) {
 
 //functions for sliding down contact list and making messagebox appear or disappear
 
+$(".chat_header").click(function () {
+    $(".user_list").slideToggle();
+});
+
+$(".message_header").click(function () {
+    var id = $(this).attr('id');
+    id = "#" + id + "ox";
+    $(id).hide();
+});
+
+$(".user").click(function () {
+    var id = $(this).attr('id');
+    id = '#' + id + 'box';
+    $(id).show();
+})
 
 
 
