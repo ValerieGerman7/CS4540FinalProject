@@ -28,8 +28,7 @@ namespace CS4540PS2.Controllers {
         /// Returns index page listing all learning outcomes.
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber, int resultsPerPage = 10)
-        {
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber, int resultsPerPage = 10) {
             ViewData["PageNumber"] = pageNumber;
             ViewData["resultsPerPage"] = resultsPerPage;
             // Set up the possible ordering schemes of the table.
@@ -38,12 +37,10 @@ namespace CS4540PS2.Controllers {
             ViewData["CourseNumSortParam"] = sortOrder == "courseNum_asc" ? "courseNum_desc" : "courseNum_asc";
             
             // If there is a search string, filter by that, otherwise use the default
-            if (searchString != null)
-            {
+            if (searchString != null) {
                 pageNumber = 1;
             }
-            else
-            {
+            else {
                 searchString = currentFilter;
             }
             ViewData["CurrentFilter"] = searchString;
@@ -63,24 +60,31 @@ namespace CS4540PS2.Controllers {
             // reorder the results based on the selected filter
             learningOutcomes = OrderBySelection(sortOrder, learningOutcomes);
 
+            //if (learningOutcomes.Count() == 0)
+            //    return View();
+
             return View(await PaginatedList<LearningOutcomes>.CreateAsync(learningOutcomes.AsNoTracking(), pageNumber ?? 1, resultsPerPage));
         }
 
         /// <summary>
         /// Filters the learning outcomes returned by the database by a user supplied search string.
         /// </summary>
-        private IQueryable<LearningOutcomes> FilterBySearch(string searchString, IQueryable<LearningOutcomes> learningOutcomes)
-        {
+        private IQueryable<LearningOutcomes> FilterBySearch(string searchString, IQueryable<LearningOutcomes> learningOutcomes) {
             // allow the user to search
-            if (!string.IsNullOrEmpty(searchString))
-            {
+            if (!string.IsNullOrEmpty(searchString)) {
                 string[] searchWords = searchString.Split(' ');
-                foreach (string s in searchWords)
-                {
-                    if (!string.IsNullOrEmpty(s))
-                    {
-                        learningOutcomes = learningOutcomes.Where(l => l.Name.Contains(s)
-                            || l.Description.Contains(s));
+                foreach (string s in searchWords) {
+                    if (!string.IsNullOrEmpty(s)) {
+                        try {
+                            int searchNum = Convert.ToInt32(s);
+                            learningOutcomes = learningOutcomes.Where(l => l.Name.Contains(s)
+                            || l.Description.Contains(s)
+                            || l.CourseInstance.Number.Equals(searchNum));
+                        }
+                        catch {
+                            learningOutcomes = learningOutcomes.Where(l => l.Name.Contains(s)
+                           || l.Description.Contains(s));
+                        }
                     }
                 }
             }
@@ -93,8 +97,7 @@ namespace CS4540PS2.Controllers {
         private IQueryable<LearningOutcomes> OrderBySelection(string sortOrder, IQueryable<LearningOutcomes> learningOutcomes)
         {
             // reorder the results based on the selected filter           
-            switch (sortOrder)
-            {
+            switch (sortOrder) {
                 case "name_desc":
                     learningOutcomes = learningOutcomes.OrderByDescending(l => l.Name);
                     break;
