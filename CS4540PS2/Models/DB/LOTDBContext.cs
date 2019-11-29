@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using CS4540PS2.Models.DB;
 
 namespace CS4540PS2.Models
 {
