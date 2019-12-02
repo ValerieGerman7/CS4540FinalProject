@@ -4,14 +4,16 @@ using CS4540PS2.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CS4540PS2.Migrations
 {
     [DbContext(typeof(LOTDBContext))]
-    partial class LearningOutcomeDBContextModelSnapshot : ModelSnapshot
+    [Migration("20191202215414_UpdateNotificationsKeyMult")]
+    partial class UpdateNotificationsKeyMult
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

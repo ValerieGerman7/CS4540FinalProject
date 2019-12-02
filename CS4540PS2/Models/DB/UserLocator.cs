@@ -16,7 +16,7 @@ namespace CS4540PS2.Models
         public string UserLoginEmail { get; set; }
         public string UserTitle { get; set; }
 
-        public virtual Notifications Notifications { get; set; }
+        public virtual ICollection<Notifications> Notifications { get; set; }
         public virtual ICollection<Instructors> Instructors { get; set; }
         public virtual ICollection<Messages> MessagesReceiverNavigation { get; set; }
         public virtual ICollection<Messages> MessagesSenderNavigation { get; set; }

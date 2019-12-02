@@ -627,6 +627,7 @@ function RequestApproveCourse(e, cid) {
             }).done(function (data) {
                 if (data.success) {
                     $("#statusI").value = "Awaiting Approval";
+                    window.alert($("#statusI").value);
                     Swal.fire({
                         position: 'top-end',
                         type: 'success',
