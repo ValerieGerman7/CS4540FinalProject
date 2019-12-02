@@ -25,13 +25,17 @@ namespace CS4540PS2.Controllers {
     public partial class InstructorController : Controller {
         private readonly LOTDBContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserContext _userContext;
+        private UserManager<IdentityUser> _userManager;
         /// <summary>
         /// Construct a course controller with a database context.
         /// </summary>
         /// <param name="context"></param>
-        public InstructorController(LOTDBContext context, RoleManager<IdentityRole> role) {
+        public InstructorController(LOTDBContext context, RoleManager<IdentityRole> role, UserContext users, UserManager<IdentityUser> manager) {
             _context = context;
             _roleManager = role;
+            _userContext = users;
+            _userManager = manager;
         }
 
 
@@ -108,10 +112,46 @@ namespace CS4540PS2.Controllers {
                 .ThenInclude(em => em.SampleFiles)
                 .Include(c => c.LearningOutcomes)
                 .ThenInclude(lo => lo.LONotes)
+                .Include(c => c.Status)
                 .FirstOrDefault();
             if (course == null)
                 return Forbid();
             return View("Course", course);
+        }
+
+        /// <summary>
+        /// Instructor changes the course's status to 'Awaiting Approval'
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> RequestApproval(int? courseId) {
+            if (courseId == null) return new JsonResult(new { success = false });
+            CourseInstance course = _context.CourseInstance.Include(c => c.Status)
+                .Where(c => c.CourseInstanceId == courseId).FirstOrDefault();
+            if(course == null) return new JsonResult(new { success = false });
+            if(course.Status.Status.Equals("In-progress") || course.Status.Status.Equals("In-Review")) {
+                //Change status
+                CourseStatus app = _context.CourseStatus.Where(s => s.Status == "Awaiting Approval").FirstOrDefault();
+                if(app == null) return new JsonResult(new { success = false });
+                course.Status = app;
+                //Notify Chairs
+                foreach(IdentityUser user in _userManager.GetUsersInRoleAsync("Chair").Result) {
+                    UserLocator userLoc = _context.UserLocator.Where(u => u.UserLoginEmail == user.Email).FirstOrDefault();
+                    if(userLoc != null) {
+                        Notifications notify = new Notifications() {
+                            CourseInstance = course,
+                            Text = "Course approval requested.",
+                            DateNotified = DateTime.Now,
+                            User = userLoc
+                        };
+                        _context.Notifications.Add(notify);
+                    }
+                }
+                _context.SaveChanges();
+                return new JsonResult(new { success = true });
+            } else {
+                return new JsonResult(new { success = false });
+            }
         }
 
     }

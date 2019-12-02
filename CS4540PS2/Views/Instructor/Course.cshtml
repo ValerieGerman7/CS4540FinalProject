@@ -1,7 +1,7 @@
 ﻿@model CS4540PS2.Models.CourseInstance
 @*
     Author: Valerie German
-    Date: 22 Nov 2019
+    Date: 2 Dec 2019
     Course: CS 4540, University of Utah
     Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
     I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
@@ -15,6 +15,10 @@
 
 <div id="ContentDiv">
     <h1>@Model.Department @Model.Number @Model.Name</h1>
+    <p><i>@Model.Semester @Model.Year</i></p>
+    <p>Course Status: <i id="statusI">@Model.Status.Status</i>       <button class="btn-primary btn-sm" onclick="RequestApproveCourse(event, @Model.CourseInstanceId)">Submit For Approval</button></p>
+    
+    <hr />
     <h4>@Model.Description<!--Professor name--></h4>
     <hr />
     <textarea name="note" id="CourseNote" class="form-control" rows="3" placeholder="Enter course note"
