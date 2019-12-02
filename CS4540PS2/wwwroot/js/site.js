@@ -648,3 +648,27 @@ function RequestApproveCourse(e, cid) {
         }
     })
 }
+//Marks a notification as read
+function ReadNotify(e, nid, row, col) {
+    e.preventDefault();
+    $.ajax({
+        url: "/Home/ReadNotification",
+        method: "POST",
+        data: {
+            notificationId: nid
+        }
+    }).fail(function () {
+        Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong!'
+        })
+    }).done(function (data) {
+        if (data.success) {
+            $('#' + col).empty();
+            $('#' + row).removeClass();
+            $('#' + row).addClass('bg-light text-dark');
+
+        } 
+    });
+}

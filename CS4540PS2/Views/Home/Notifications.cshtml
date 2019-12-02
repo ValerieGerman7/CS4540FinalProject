@@ -1,0 +1,50 @@
+﻿@model CS4540PS2.Models.UserLocator
+@*
+    Author: Valerie German
+    Date: 2 Dec 2019
+    Course: CS 4540, University of Utah
+    Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
+    I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
+    File Contents: View for user notifications.
+*@
+@{
+    ViewData["Title"] = "Notifications";
+}
+<br />
+<h3>Notifications</h3>
+<hr />
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col">Date Received</th>
+            <th scope="col">Message</th>
+            <th scope="col" colspan="2">Course</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Notifications notify in Model.Notifications) {
+            var read = !notify.Read ? "bg-dark text-light" : "bg-light text-dark";
+            var rowId = "row" + notify.NotificationId;
+            var readId = "readCol" + notify.NotificationId;
+            <tr id="@rowId" class="@read">
+                <td id="@readId">
+                    @if (!notify.Read) { <button class="btn-light btn-sm" onclick="ReadNotify(event, @notify.NotificationId, '@rowId', '@readId')">Mark as Read</button> }
+                </td>
+                <td>@notify.DateNotified.ToString("dddd, dd MMMM yyyy")</td>
+                <td>@notify.Text</td>
+                @{
+                    CourseInstance course = notify.CourseInstance;
+                    var courseInfo = course.Department + course.Number + " " + course.Name;
+                }
+                <td>@courseInfo</td>
+                <td>
+                    <a asp-controller="Department" asp-action="Course" asp-route-courseId="@course.CourseInstanceId">
+                        <button class="btn-primary btn-sm">Go To Course</button>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

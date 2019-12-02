@@ -133,7 +133,7 @@
         var userLocator = context.UserLocator.Where(o => o.UserLoginEmail == email);
         var userID = userLocator.FirstOrDefault().Id;
         <!--Save the userLocator ID in this p so .js file can access-->
-        <p id="userID" display="hidden">@userID</p>
+        <p id="userID" display="hidden" hidden="hidden">@userID</p>
 
         <!--Message box-->
         @foreach (IdentityUser user in UserManager.Users)
