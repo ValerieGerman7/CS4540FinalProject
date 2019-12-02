@@ -28,12 +28,83 @@ namespace CS4540PS2.Controllers {
         /// Returns index page listing all learning outcomes.
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> Index(int id = 0) {
-            if (id < 0) id = 0;
-            ViewData["page"] = id;
-            ViewData["tableSize"] = 5; //TODO: dynamic
-            var learningOutcomeDBContext = _context.LearningOutcomes.Include(l => l.CourseInstance);
-            return View(await learningOutcomeDBContext.ToListAsync());
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber, int resultsPerPage = 10) {
+            ViewData["PageNumber"] = pageNumber;
+            ViewData["ResultsPerPage"] = resultsPerPage;
+            // Set up the possible ordering schemes of the table.
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["TitleSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["CourseNumSortParam"] = sortOrder == "courseNum_asc" ? "courseNum_desc" : "courseNum_asc";
+            
+            // If there is a search string, filter by that, otherwise use the default
+            if (searchString != null) {
+                pageNumber = 1;
+            }
+            else {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+
+            // get learning outcomes
+            var learningOutcomes = _context.LearningOutcomes
+                .Include(l => l.CourseInstance)
+                .OrderBy(l => l.Name)
+                .AsNoTracking();    
+            
+            if (learningOutcomes.Count() == 0)
+                return View();
+
+            // allow the user to search the learning outcomes
+            learningOutcomes = FilterBySearch(searchString, learningOutcomes);
+
+            // reorder the results based on the selected filter
+            learningOutcomes = OrderBySelection(sortOrder, learningOutcomes);
+
+            //if (learningOutcomes.Count() == 0)
+            //    return View();
+
+            return View(await PaginatedList<LearningOutcomes>.CreateAsync(learningOutcomes.AsNoTracking(), pageNumber ?? 1, resultsPerPage));
+        }
+
+        /// <summary>
+        /// Filters the learning outcomes returned by the database by a user supplied search string.
+        /// </summary>
+        private IQueryable<LearningOutcomes> FilterBySearch(string searchString, IQueryable<LearningOutcomes> learningOutcomes) {
+            // allow the user to search
+            if (!string.IsNullOrEmpty(searchString)) {
+                string[] searchWords = searchString.Split(' ');
+                foreach (string s in searchWords) {
+                    if (!string.IsNullOrEmpty(s)) {                       
+                            learningOutcomes = learningOutcomes.Where(l => l.Name.Contains(s)
+                            || l.Description.Contains(s)
+                            || l.CourseInstance.Number.ToString().Equals(s));                        
+                    }
+                }
+            }
+            return learningOutcomes;
+        }
+
+        /// <summary>
+        /// Reorders the learning outcomees in the view based on user selection
+        /// </summary>
+        private IQueryable<LearningOutcomes> OrderBySelection(string sortOrder, IQueryable<LearningOutcomes> learningOutcomes)
+        {
+            // reorder the results based on the selected filter           
+            switch (sortOrder) {
+                case "name_desc":
+                    learningOutcomes = learningOutcomes.OrderByDescending(l => l.Name);
+                    break;
+                case "courseNum_asc":
+                    learningOutcomes = learningOutcomes.OrderBy(l => l.CourseInstance.Number);
+                    break;
+                case "courseNum_desc":
+                    learningOutcomes = learningOutcomes.OrderByDescending(l => l.CourseInstance.Number);
+                    break;               
+                default:
+                    learningOutcomes = learningOutcomes.OrderBy(l => l.Name);
+                    break;
+            }
+            return learningOutcomes;
         }
 
         /// <summary>
@@ -57,6 +128,8 @@ namespace CS4540PS2.Controllers {
                 return await Course(getid.Department, getid.Number, getid.Semester, getid.Year);
             }
         }
+
+#pragma warning disable CS1998  // Async method lacks 'await' operators and will run synchronously
         /// <summary>
         /// Course department view page.
         /// </summary>
@@ -65,7 +138,9 @@ namespace CS4540PS2.Controllers {
         /// <param name="Sem"></param>
         /// <param name="Year"></param>
         /// <returns></returns>
-        public async Task<IActionResult> Course(string Dept, int? Num, string Sem, int? Year) {
+        public async Task<IActionResult> Course(string Dept, int? Num, string Sem, int? Year)
+        {
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
             if (Dept.Equals(null) || Num == null || Sem.Equals(null) || Year == null)
                 return View("Error", new ErrorViewModel() {
                     ErrorMessage = "Insufficient information to locate course."

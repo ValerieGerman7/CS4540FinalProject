@@ -507,6 +507,16 @@ namespace CS4540PS2.Data {
                 context.Instructors.Add(inst);
             }
             context.SaveChanges();
+
+            var messages = new Messages[]
+            {
+                new Messages {Id=1, Text="This is a message from Jim.", Date=DateTime.Now, Receiver=user1.Id, Sender=user0.Id }
+            };
+            foreach(Messages m in messages)
+            {
+                context.Messages.Add(m);
+            }
+            context.SaveChanges();
         }
     }
 }

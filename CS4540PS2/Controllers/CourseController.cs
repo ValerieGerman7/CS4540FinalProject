@@ -39,7 +39,9 @@ namespace CS4540PS2.Controllers {
         /// Return the index page listing all course instances.
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber) {
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber, int resultsPerPage = 5) {
+            ViewData["PageNumber"] = pageNumber;
+            ViewData["ResultsPerPage"] = resultsPerPage;
             // Set up the possible ordering schemes of the table.
             ViewData["CurrentSort"] = sortOrder;
             ViewData["CourseNumSortParam"] = String.IsNullOrEmpty(sortOrder) ? "course_num_desc" : "";
@@ -70,9 +72,7 @@ namespace CS4540PS2.Controllers {
             // reorder the results based on the selected filter
             instances = OrderBySelection(sortOrder, instances);
 
-            //return View(await instances.ToListAsync());
-            int pageSize = 5;
-            return View(await PaginatedList<CourseInstance>.CreateAsync(instances.AsNoTracking(), pageNumber ?? 1, pageSize));
+            return View(await PaginatedList<CourseInstance>.CreateAsync(instances.AsNoTracking(), pageNumber ?? 1, resultsPerPage));
         }
 
         /// <summary>
@@ -136,6 +136,38 @@ namespace CS4540PS2.Controllers {
                     break;
             }
             return courseInstances;
+        }
+
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+        /// <summary>
+        /// Course department view page.
+        /// </summary>
+        /// <param name="Dept"></param>
+        /// <param name="Num"></param>
+        /// <param name="Sem"></param>
+        /// <param name="Year"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> Course(string Dept, int? Num, string Sem, int? Year)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+        {
+            if (Dept.Equals(null) || Num == null || Sem.Equals(null) || Year == null)
+                return View("Error", new ErrorViewModel()
+                {
+                    ErrorMessage = "Insufficient information to locate course."
+                });
+            CourseInstance course = _context.CourseInstance.Where(c => c.Department == Dept && c.Number == Num
+                && c.Semester == Sem && c.Year == Year)
+                .Include(c => c.CourseNotes)
+                .Include(c => c.LearningOutcomes)
+                .ThenInclude(lo => lo.EvaluationMetrics)
+                .ThenInclude(em => em.SampleFiles)
+                .Include(c => c.LearningOutcomes)
+                .ThenInclude(lo => lo.LONotes)
+                .FirstOrDefault();
+            if (course == null) {
+                return Forbid();
+            }
+            return View("Course", course);
         }
 
         /// <summary>
