@@ -159,7 +159,7 @@ namespace CS4540PS2.Data {
                 "server-side programming (Servlets and JavaServer Pages), component reuse (JavaBeans), database connectivity (JDBC), and " +
                 "web servers.",
                 DepartmentNavigation=csDept, Number = 4540, Semester = "Fall", Year = 2019,
-                Status=waitingApp, DueDate=new DateTime(2019, 12, 10),
+                Status= inProg, DueDate=new DateTime(2019, 12, 10),
                 CourseNotes = new List<CourseNotes>() { cnote }
             };
             cnote.CourseInstance = ci0;
@@ -170,7 +170,7 @@ namespace CS4540PS2.Data {
                 "requirements. Students will complete extensive programming exercises that require the application of elementary techniques " +
                 "from software engineering.",
                 DepartmentNavigation = csDept, Number = 2420, Semester = "Fall", Year = 2019,
-                Status = waitingApp, DueDate = new DateTime(2019, 12, 10)
+                Status = inProg, DueDate = new DateTime(2019, 12, 10)
             };
             var ci2 = new CourseInstance { Name = "Software Practice",
                 Description = "Practical exposure to the process of creating large software systems, including requirements specifications, " +
@@ -179,7 +179,7 @@ namespace CS4540PS2.Data {
                 "source code management, object-oriented analysis and design), and team development practice. Much of the work will be in " +
                 "groups and will involve modifying preexisting software systems.",
                 DepartmentNavigation = csDept, Number = 3500, Semester = "Fall", Year = 2019,
-                Status = waitingApp, DueDate = new DateTime(2019, 12, 10)
+                Status = inProg, DueDate = new DateTime(2019, 12, 10)
             };
             CourseNotes cnote1 = new CourseNotes() {
                 Note = "Sample note on course",
@@ -189,7 +189,7 @@ namespace CS4540PS2.Data {
                 Description = "Introduction to propositional logic, predicate logic, formal logical arguments, finite sets, functions, relations," +
                 " inductive proofs, recurrence relations, graphs, probability, and their applications to Computer Science.",
                 DepartmentNavigation = csDept, Number = 2100, Semester = "Fall", Year = 2019,
-                Status = waitingApp, DueDate = new DateTime(2019, 12, 10),
+                Status = inProg, DueDate = new DateTime(2019, 12, 10),
                 CourseNotes = new List<CourseNotes>() {
                     cnote1      
                 }
@@ -200,7 +200,7 @@ namespace CS4540PS2.Data {
                 "optimizing program performance, memory hierarchy, linking, exceptional control flow, measuring program performance, virtual memory, " +
                 "concurrent programming with threads, network programming.",
                 DepartmentNavigation = csDept, Number = 4400, Semester = "Spring", Year = 2019,
-                Status = waitingApp, DueDate = new DateTime(2019, 12, 10)
+                Status = inProg, DueDate = new DateTime(2019, 12, 10)
             };
             var ci5 = new CourseInstance {
                 Name = "Software Practice",
@@ -210,9 +210,18 @@ namespace CS4540PS2.Data {
                 "source code management, object-oriented analysis and design), and team development practice. Much of the work will be in " +
                 "groups and will involve modifying preexisting software systems.",
                 DepartmentNavigation = csDept, Number = 3500, Semester = "Spring", Year = 2019,
-                Status = waitingApp, DueDate = new DateTime(2019, 12, 10)
+                Status = inRev, DueDate = new DateTime(2019, 12, 10)
             };
-            var courses = new CourseInstance[] { ci0, ci1, ci2, ci3, ci4, ci5 };
+            var ci6 = new CourseInstance {
+                Name = "Foundations of Analysis",
+                Description = "Advanced multivariable calculus. Topics include  continuity, compactness, differentiation and affine approximation, " +
+                "chain rule, Taylor series, extremization, error estimation, inverse and implicit function theorems, Riemann integration, Fubini's " +
+                "Theorem, change of variables formula. The emphasis is on further developing the student's ability to understand more abstract concepts " +
+                "and to write an effective and rigorous mathematical argument.",
+                DepartmentNavigation = mathdept, Number = 3220, Semester = "Fall", Year = 2018,
+                Status = arch, DueDate = new DateTime(2018, 12, 10)
+            };
+            var courses = new CourseInstance[] { ci0, ci1, ci2, ci3, ci4, ci5, ci6 };
             foreach(CourseInstance co in courses) {
                 context.CourseInstance.Add(co);
             }
@@ -505,7 +514,8 @@ namespace CS4540PS2.Data {
                 new Instructors { CourseInstance=ci2, User=user0 },
                 new Instructors { CourseInstance=ci3, User=user3 },
                 new Instructors { CourseInstance=ci4, User=user3 },
-                new Instructors { CourseInstance=ci4, User=user4 }
+                new Instructors { CourseInstance=ci4, User=user4 },
+                new Instructors { CourseInstance=ci6, User=user4 }
             };
             foreach(Instructors inst in instructorAssignments) {
                 context.Instructors.Add(inst);
@@ -514,7 +524,7 @@ namespace CS4540PS2.Data {
 
             var messages = new Messages[]
             {
-                new Messages {Id=1, Text="This is a message from Jim.", Date=DateTime.Now, Receiver=user1.Id, Sender=user0.Id }
+                new Messages { Text="This is a message from Jim.", Date=DateTime.Now, Receiver=user1.Id, Sender=user0.Id }
             };
             foreach(Messages m in messages)
             {
