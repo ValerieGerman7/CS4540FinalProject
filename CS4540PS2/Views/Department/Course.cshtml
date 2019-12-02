@@ -12,6 +12,20 @@
 }
 <div id="ContentDiv">
     <h1>@Model.Department @Model.Number @Model.Name</h1>
+    @{ 
+        var instructors = "";
+        if (Model.Instructors.Any()) {
+            foreach (Instructors inst in Model.Instructors) {
+                instructors += inst.User.UserTitle + ", ";
+            }
+            instructors = instructors.Substring(0, instructors.Length - 2);
+        } else {
+            instructors = "No assigned instructors";
+        }
+    }
+    <p><b>Assigned Instructors:</b> @instructors</p>
+    <p>Course completion due @Model.DueDate.ToString("MM/dd/yyyy"), status is <b>@Model.Status.Status</b></p>
+    <hr />
     <h4>@Model.Description<!--Professor name--></h4>
     <hr />
     <h2>Learning Outcomes</h2>

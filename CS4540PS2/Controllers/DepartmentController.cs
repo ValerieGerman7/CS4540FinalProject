@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 /// Course: CS 4540, University of Utah
 /// Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
 /// I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
-/// File Contents: This file contains controller for department webpages. Chair pages for viewing departments and courses.
+/// File Contents: This file contains controller for department webpages. Chair pages for viewing departments and courses. Chairs may also manage course notifications.
 /// </summary>
 namespace CS4540PS2.Controllers {
     [Authorize(Roles = "Chair")]
@@ -47,6 +47,9 @@ namespace CS4540PS2.Controllers {
                 .ThenInclude(sa => sa.SampleFiles)
                 .Include(lo => lo.LearningOutcomes)
                 .ThenInclude(no => no.LONotes)
+                .Include(c => c.Status)
+                .Include(c => c.Instructors)
+                .ThenInclude(i => i.User)
                 .Where(c => c.CourseInstanceId == CourseId).FirstOrDefaultAsync();
             if (course == null) {
                 return NotFound();
@@ -98,8 +101,11 @@ namespace CS4540PS2.Controllers {
         /// <returns></returns>
         public async Task<IActionResult> Department(string DeptCode) {
             if (DeptCode == null) { DeptCode = "CS"; } //Temp for viewing
-            Departments deptDB = _context.Departments.Where(d => d.Code == DeptCode).Include(d => d.CourseInstance).ThenInclude(c => c.LearningOutcomes)
+            Departments deptDB = _context.Departments.Where(d => d.Code == DeptCode)
+                .Include(d => d.CourseInstance).ThenInclude(c => c.LearningOutcomes)
                 .ThenInclude(l => l.EvaluationMetrics).ThenInclude(e => e.SampleFiles)
+                .Include(d => d.CourseInstance).ThenInclude(c => c.Instructors).ThenInclude(i => i.User)
+                .Include(d => d.CourseInstance).ThenInclude(c => c.Status)
                 .FirstOrDefault();
             if(deptDB == null) {
                 return NotFound();

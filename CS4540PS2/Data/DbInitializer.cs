@@ -136,6 +136,10 @@ namespace CS4540PS2.Data {
             context.CourseStatus.Add(inProg);
             var waitingApp = new CourseStatus() { Status = "Awaiting Approval" };
             context.CourseStatus.Add(waitingApp);
+            var arch = new CourseStatus() { Status = "Archieved" };
+            context.CourseStatus.Add(arch);
+            var inRev = new CourseStatus() { Status = "In-Review" };
+            context.CourseStatus.Add(inRev);
             context.SaveChanges();
             //Departments
             var csDept = new Departments() { Name = "Computer Science", Code = "CS" };
