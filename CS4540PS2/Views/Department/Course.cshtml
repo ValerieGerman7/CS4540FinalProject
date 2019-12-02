@@ -12,7 +12,8 @@
 }
 <div id="ContentDiv">
     <h1>@Model.Department @Model.Number @Model.Name</h1>
-    @{ 
+    <p>@Model.Semester @Model.Year</p>
+    @{
         var instructors = "";
         if (Model.Instructors.Any()) {
             foreach (Instructors inst in Model.Instructors) {
@@ -24,7 +25,27 @@
         }
     }
     <p><b>Assigned Instructors:</b> @instructors</p>
-    <p>Course completion due @Model.DueDate.ToString("MM/dd/yyyy"), status is <b>@Model.Status.Status</b></p>
+    <div class="row">
+        <div class="col">
+            <form onchange="ChangeDueDate(event, @Model.CourseInstanceId)">
+                <label class="control-label"><b>Due Date</b></label>
+                @{
+                    DateTime due = Model.DueDate;
+                    string formatted = due.ToString("yyy-MM-dd");
+                }
+                <input class="form-control" id="dateInput" name="DueDate" type="date" value="@formatted" />
+            </form>
+        </div>
+        <div class="col">
+            <p><b>Status:</b> <i id="statusI">@Model.Status.Status</i></p>
+            @if (Model.Status.Status.Equals("Awaiting Approval")) {
+                <button class="btn-primary btn-sm" onclick="ApproveCourse(event, @Model.CourseInstanceId)">Approve</button>
+            } else if (Model.Status.Status.Equals("Complete")) {
+                <button class="btn-primary btn-sm">Archieve</button>
+            }
+            <button class="btn-danger btn-sm" onclick="ReviewCourse(event, @Model.CourseInstanceId)">Set Review</button>
+        </div>
+    </div>
     <hr />
     <h4>@Model.Description<!--Professor name--></h4>
     <hr />
@@ -83,7 +104,7 @@
                         <div class="card-body">
                             <p class="card-text indented">@em.Description</p>
                             <!-- Referenced https://stackoverflow.com/questions/11620698/how-to-trigger-a-file-download-when-clicking-an-html-button-or-javascript for opening files.
-                See file forms as well.-->
+                            See file forms as well.-->
                             <p>
                                 <form id="getSampleForm" class="form-inline" method="get" action="/Department/GetSampleFile" target="_blank" hidden="hidden">
                                     <input type="number" name="sfId" hidden="hidden" />

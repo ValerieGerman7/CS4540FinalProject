@@ -1,5 +1,5 @@
 ﻿//Author: Valerie German
-//Date: 18 Oct 2019
+//Date: 2 Dec 2019
 //Course: CS 4540, University of Utah
 //Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
 //I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
@@ -448,6 +448,150 @@ function DeleteSample(e, sid, ret) {
                         position: 'top-end',
                         type: 'error',
                         title: 'The sample could not be deleted.',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                }
+            });
+        }
+    })
+}
+//Sends a request to change a course's due date
+function ChangeDueDate(e, cid) {
+    //window.alert("here");
+    e.preventDefault();
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to change this course's due date.",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: "Change Due Date"
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: "/Department/UpdateCourseDueDate",
+                method: "POST",
+                data: {
+                    courseId: cid,
+                    newDueDate: $("#dateInput").val()
+                }
+            }).fail(function () {
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!'
+                })
+            }).done(function (data) {
+                if (data.success) {
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'success',
+                        title: 'The due date was updated.',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                } else {
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'error',
+                        title: 'The date could not be updated.',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                }
+            });
+        }
+    })
+}
+//Sends request to approve a course
+function ApproveCourse(e, cid) {
+    //window.alert("here");
+    e.preventDefault();
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to change this course's status to approved.",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: "Approve"
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: "/Department/ApproveCourse",
+                method: "POST",
+                data: {
+                    courseId: cid
+                }
+            }).fail(function () {
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!'
+                })
+            }).done(function (data) {
+                if (data.success) {
+                    $("#statusI").value = "Complete";
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'success',
+                        title: 'The course was approved.',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                } else {
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'error',
+                        title: 'The course could not be approved.',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                }
+            });
+        }
+    })
+}
+//Sends request to set a course to in-review
+function ReviewCourse(e, cid) {
+    //window.alert("here");
+    e.preventDefault();
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to change this course's status to in-review.",
+        input: 'text',
+        inputPlaceholder: "Message for Instructors",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: "In-Review"
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: "/Department/SetReviewCourse",
+                method: "POST",
+                data: {
+                    courseId: cid,
+                    message: result.value
+                }
+            }).fail(function () {
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!'
+                })
+            }).done(function (data) {
+                if (data.success) {
+                    $("#statusI").value = "In-Review";
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'success',
+                        title: 'The course was set to in-review.',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                } else {
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'error',
+                        title: 'The course could not be set to in-review.',
                         showConfirmButton: false,
                         timer: 1000
                     })

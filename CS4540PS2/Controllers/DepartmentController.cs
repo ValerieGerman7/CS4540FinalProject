@@ -58,6 +58,82 @@ namespace CS4540PS2.Controllers {
         }
 
         /// <summary>
+        /// Update the course's due date. Returns success boolean in JsonResult.
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <param name="newDueDate"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> UpdateCourseDueDate(int? courseId, DateTime newDueDate) {
+            if(courseId == null || newDueDate == null) {
+                return new JsonResult(new { success = false });
+            }
+            CourseInstance course = await _context.CourseInstance.Where(c => c.CourseInstanceId == courseId).FirstOrDefaultAsync();
+            if (course == null) new JsonResult(new { success = false });
+            course.DueDate = newDueDate;
+            _context.SaveChanges();
+            return new JsonResult(new { success = true });
+        }
+
+        /// <summary>
+        /// Sets the course status to approved for the given course.
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> ApproveCourse(int? courseId) {
+            if (courseId == null) {
+                return new JsonResult(new { success = false });
+            }
+            CourseInstance course = await _context.CourseInstance.Include(c => c.Status)
+                .Where(c => c.CourseInstanceId == courseId).FirstOrDefaultAsync();
+            CourseStatus complete = _context.CourseStatus.Where(s => s.Status == "Complete").FirstOrDefault();
+            if(complete == null) return new JsonResult(new { success = false });
+            course.Status = complete;
+            //Notify Instructors
+            foreach (Instructors inst in course.Instructors) {
+                Notifications notify = new Notifications() {
+                    CourseInstance = course,
+                    User = inst.User,
+                    Text = "This course was approved.",
+                    DateNotified = DateTime.Now,
+                    Read = false
+                };
+                _context.Notifications.Add(notify);
+            }
+            _context.SaveChanges();
+            return new JsonResult(new { success = true });
+        }
+
+        /// <summary>
+        /// Sets the course status to in-review for the given course.
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> SetReviewCourse(int? courseId, string message) {
+            if (courseId == null) {
+                return new JsonResult(new { success = false });
+            }
+            CourseInstance course = await _context.CourseInstance.Include(c => c.Status)
+                .Include(c => c.Instructors).ThenInclude(i => i.User)
+                .Where(c => c.CourseInstanceId == courseId).FirstOrDefaultAsync();
+            CourseStatus complete = _context.CourseStatus.Where(s => s.Status == "In-Review").FirstOrDefault();
+            if (complete == null) return new JsonResult(new { success = false });
+            course.Status = complete;
+            //Notify Instructors
+            foreach(Instructors inst in course.Instructors) {
+                Notifications notify = new Notifications() {
+                    CourseInstance = course,
+                    User = inst.User,
+                    Text = "The course status was set to in-review. Chair message: " + message,
+                    DateNotified = DateTime.Now,
+                    Read = false
+                };
+                _context.Notifications.Add(notify);
+            }
+            _context.SaveChanges();
+            return new JsonResult(new { success = true });
+        }
+
+        /// <summary>
         /// Updates the identified learning outcome's note along with the last modified date and last user
         /// modifying date.
         /// </summary>
