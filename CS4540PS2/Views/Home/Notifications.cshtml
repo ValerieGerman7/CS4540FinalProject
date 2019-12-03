@@ -23,7 +23,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (Notifications notify in Model.Notifications) {
+        @foreach (Notifications notify in Model.Notifications.OrderByDescending(n => n.DateNotified)) {
             var read = !notify.Read ? "bg-dark text-light" : "bg-light text-dark";
             var rowId = "row" + notify.NotificationId;
             var readId = "readCol" + notify.NotificationId;
