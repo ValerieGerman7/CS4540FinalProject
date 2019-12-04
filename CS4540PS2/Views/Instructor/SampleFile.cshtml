@@ -14,6 +14,12 @@
     EvaluationMetrics em = Model.Em;
     LearningOutcomes lo = em.Lo;
     CourseInstance course = lo.CourseInstance;
+    bool archive = course.Status.Status == CourseStatusNames.Archived;
+}
+@if (archive) {
+    <div class="card-body bg-warning mb-3 text-black archiveWarning">
+        <p>This class is archived.</p>
+    </div>
 }
 <h2>Sample File for @course.Department@course.Number @course.Name</h2>
 <hr />
@@ -30,8 +36,10 @@
     <input type="submit" class="btn-primary" value="Download File" />
 </form>
 <hr />
-<button class="btn-danger" onclick="DeleteSample(event, @Model.Sid, document.getElementById('courseLink'))">Delete Sample</button>
-<hr />
+@if (!archive) {
+    <button class="btn-danger" onclick="DeleteSample(event, @Model.Sid, document.getElementById('courseLink'))">Delete Sample</button>
+    <hr />
+}
 <br />
 <a id="courseLink" asp-controller="Instructor" asp-action="Course" asp-route-Dept="@course.Department" asp-route-Num="@course.Number"
    asp-route-Sem="@course.Semester" asp-route-Year="@course.Year"><button class="btn-dark">Back To Course</button></a>

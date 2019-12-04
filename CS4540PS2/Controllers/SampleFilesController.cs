@@ -79,7 +79,7 @@ namespace CS4540PS2.Controllers {
         [HttpGet]
         public IActionResult SampleFile(int? sfId) {
             if (sfId == null) return NotFound();
-            SampleFiles sf = _context.SampleFiles.Include(s => s.Em).ThenInclude(e => e.Lo).ThenInclude(l => l.CourseInstance)
+            SampleFiles sf = _context.SampleFiles.Include(s => s.Em).ThenInclude(e => e.Lo).ThenInclude(l => l.CourseInstance).ThenInclude(c => c.Status)
                 .Where(s => s.Sid == sfId).FirstOrDefault();
             if (sf == null) return NotFound();
             return View(sf);
