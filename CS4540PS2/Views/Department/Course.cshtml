@@ -38,12 +38,9 @@
         </div>
         <div class="col">
             <p><b>Status:</b> <i id="statusI">@Model.Status.Status</i></p>
-            @if (Model.Status.Status.Equals("Awaiting Approval")) {
-                <button class="btn-primary btn-sm" onclick="ApproveCourse(event, @Model.CourseInstanceId)">Approve</button>
-            } else if (Model.Status.Status.Equals("Complete")) {
-                <button class="btn-primary btn-sm">Archieve</button>
-            }
             <button class="btn-danger btn-sm" onclick="ReviewCourse(event, @Model.CourseInstanceId)">Set Review</button>
+            <button class="btn-primary btn-sm" onclick="ApproveCourse(event, @Model.CourseInstanceId)">Approve</button>
+            <button class="btn-warning btn-sm">Archieve</button>
         </div>
     </div>
     <hr />

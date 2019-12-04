@@ -529,7 +529,7 @@ function ApproveCourse(e, cid) {
                 })
             }).done(function (data) {
                 if (data.success) {
-                    $("#statusI").value = "Complete";
+                    $("#statusI").text("Complete");
                     Swal.fire({
                         position: 'top-end',
                         type: 'success',
@@ -579,7 +579,7 @@ function ReviewCourse(e, cid) {
                 })
             }).done(function (data) {
                 if (data.success) {
-                    $("#statusI").value = "In-Review";
+                    $("#statusI").text("In-Review");
                     Swal.fire({
                         position: 'top-end',
                         type: 'success',
@@ -626,7 +626,7 @@ function RequestApproveCourse(e, cid) {
                 })
             }).done(function (data) {
                 if (data.success) {
-                    $("#statusI").value = "Awaiting Approval";
+                    $("#statusI").text("Awaiting Approval");
                     //window.alert($("#statusI").value);
                     Swal.fire({
                         position: 'top-end',
