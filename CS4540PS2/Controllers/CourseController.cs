@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 /// File Contents: This file contains controller for admin course webpages - creating/editing/deleting instances and course overview.
 /// </summary>
 namespace CS4540PS2.Controllers {
-    [Authorize(Roles="Admin")]
+    [Authorize(Roles = "Admin")]
     public class CourseController : Controller {
         private readonly LOTDBContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -55,7 +55,7 @@ namespace CS4540PS2.Controllers {
                 pageNumber = 1;
             } else {
                 searchString = currentFilter;
-            }            
+            }
             ViewData["CurrentFilter"] = searchString;
 
             // get course instances
@@ -82,10 +82,8 @@ namespace CS4540PS2.Controllers {
             // allow the user to search the course catalogue
             if (!string.IsNullOrEmpty(searchString)) {
                 string[] searchWords = searchString.Split(' ');
-                foreach (string s in searchWords)
-                {
-                    if (!string.IsNullOrEmpty(s))
-                    {
+                foreach (string s in searchWords) {
+                    if (!string.IsNullOrEmpty(s)) {
                         courseInstances = courseInstances.Where(c => c.Name.Contains(s)
                             || c.Department.Contains(s)
                             || c.Number.ToString().Contains(s)
@@ -93,7 +91,7 @@ namespace CS4540PS2.Controllers {
                             || c.Year.ToString().Contains(s));
                     }
                 }
-            }            
+            }
             return courseInstances;
         }
 
@@ -102,8 +100,7 @@ namespace CS4540PS2.Controllers {
         /// </summary>
         private IQueryable<CourseInstance> OrderBySelection(string sortOrder, IQueryable<CourseInstance> courseInstances) {
             // reorder the results based on the selected filter           
-            switch (sortOrder)
-            {
+            switch (sortOrder) {
                 case "course_num_desc":
                     courseInstances = courseInstances.OrderByDescending(c => c.Number);
                     break;
@@ -151,8 +148,7 @@ namespace CS4540PS2.Controllers {
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             if (Dept.Equals(null) || Num == null || Sem.Equals(null) || Year == null)
-                return View("Error", new ErrorViewModel()
-                {
+                return View("Error", new ErrorViewModel() {
                     ErrorMessage = "Insufficient information to locate course."
                 });
             CourseInstance course = _context.CourseInstance.Where(c => c.Department == Dept && c.Number == Num
@@ -191,8 +187,8 @@ namespace CS4540PS2.Controllers {
         /// <returns></returns>
         public List<UserLocator> GetInstructors() {
             List<IdentityUser> instructors = new List<IdentityUser>();
-            foreach(IdentityUser user in _userContext.Users) {
-                if(_userManager.IsInRoleAsync(user, "Instructor").Result) {
+            foreach (IdentityUser user in _userContext.Users) {
+                if (_userManager.IsInRoleAsync(user, "Instructor").Result) {
                     instructors.Add(user);
                 }
             }
@@ -208,13 +204,15 @@ namespace CS4540PS2.Controllers {
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,Department,Number,Semester,Year,StatusId,DueDate")] CourseInstance courseInstance, string instructor) {
+        public async Task<IActionResult> Create([Bind("Name,Description,Department,Number,Semester,Year,StatusId,DueDate")] CourseInstance courseInstance, string[] instructors) {
             if (ModelState.IsValid) {
                 _context.Add(courseInstance);
-                if (instructor != null) {
-                    UserLocator instr = _context.UserLocator.Where(u => u.UserLoginEmail == instructor).FirstOrDefault();
-                    if (instr != null) {
-                        _context.Instructors.Add(new Instructors() { CourseInstance = courseInstance, User = instr });
+                if (instructors != null) {
+                    foreach (string instructor in instructors) {
+                        UserLocator instr = _context.UserLocator.Where(u => u.UserLoginEmail == instructor).FirstOrDefault();
+                        if (instr != null) {
+                            _context.Instructors.Add(new Instructors() { CourseInstance = courseInstance, User = instr });
+                        }
                     }
                 }
                 await _context.SaveChangesAsync();
@@ -256,26 +254,27 @@ namespace CS4540PS2.Controllers {
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CourseInstanceId,Name,Description,Department,Number,Semester,Year,StatusId,DueDate")] CourseInstance courseInstance, string newInstructor) {
+        public async Task<IActionResult> Edit(int id, [Bind("CourseInstanceId,Name,Description,Department,Number,Semester,Year,StatusId,DueDate")] CourseInstance courseInstance, string[] newInstructors) {
             if (id != courseInstance.CourseInstanceId) {
                 return NotFound();
             }
             if (ModelState.IsValid) {
                 try {
-                    if (newInstructor != null) {
-                        UserLocator instructorUserLoc = _context.UserLocator.Where(u => u.UserLoginEmail == newInstructor).FirstOrDefault();
-                        if (instructorUserLoc != null) {
-                            //Current instructor (TODO: change to multiple)
-                            Instructors currentCourseInstructor = _context.Instructors.Where(i => i.CourseInstanceId == courseInstance.CourseInstanceId).FirstOrDefault();
-                            if(currentCourseInstructor == null) { //No current instructor
+                    if (newInstructors != null) {
+                        List<Instructors> currentCourseInstructors = _context.Instructors.Include(i => i.User).Where(i => i.CourseInstanceId == courseInstance.CourseInstanceId).ToList();
+                        //Remove current instructors
+                        foreach (Instructors currentInst in currentCourseInstructors) {
+                            _context.Instructors.Remove(currentInst);
+                        }
+                        foreach (string newInstructor in newInstructors) {
+                            //Find selected instructor
+                            UserLocator instructorUserLoc = _context.UserLocator.Where(u => u.UserLoginEmail == newInstructor).FirstOrDefault();
+                            if (instructorUserLoc != null) { //User must exist
                                 Instructors newInst = new Instructors() {
                                     CourseInstanceId = courseInstance.CourseInstanceId,
                                     UserId = instructorUserLoc.Id
                                 };
                                 _context.Instructors.Add(newInst);
-                            } else { //Change current
-                                currentCourseInstructor.User = instructorUserLoc;
-                                _context.Update(currentCourseInstructor);
                             }
                         }
                     }

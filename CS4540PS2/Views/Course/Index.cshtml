@@ -51,6 +51,18 @@
                         <b>@course.Name</b>
                     </a>
                 </p>
+                @{ 
+                    var instructors = "";
+                    if (course.Instructors.Any()) {
+                        foreach (Instructors inst in course.Instructors) {
+                            instructors += inst.User.UserTitle + ", ";
+                        }
+                        instructors = instructors.Substring(0, instructors.Length - 2);
+                    } else {
+                        instructors = "No instructors assigned.";
+                    }
+                }
+                <p><b>Instructors: </b>@instructors</p>
                 <p>@course.Description</p>
             </div>
 
