@@ -672,3 +672,44 @@ function ReadNotify(e, nid, row, col) {
         } 
     });
 }
+//Delete a notification
+function DeleteNotify(e, nid, row) {
+    e.preventDefault();
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to delete this notification.",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: "Delete"
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: "/Home/DeleteNotification",
+                method: "POST",
+                data: {
+                    notificationId: nid
+                }
+            }).fail(function () {
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!'
+                })
+            }).done(function (data) {
+                if (data.success) {
+                    if (data.success) {
+                        $('#' + row).remove();
+                    }
+                } else {
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'error',
+                        title: 'The notification could not be deleted.',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                }
+            });
+        }
+    })
+}

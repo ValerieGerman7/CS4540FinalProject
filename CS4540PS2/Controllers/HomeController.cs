@@ -65,6 +65,22 @@ namespace CS4540PS2.Controllers {
         }
 
         /// <summary>
+        /// Removes the given notification entry.
+        /// </summary>
+        /// <param name="notificationId"></param>
+        /// <returns></returns>
+        [Authorize]
+        public IActionResult DeleteNotification(int? notificationId) {
+            if (notificationId == null) return new JsonResult(new { success = false });
+            Notifications notify = _context.Notifications.Include(n => n.User)
+                .Where(n => n.NotificationId == notificationId && n.User.UserLoginEmail == User.Identity.Name).FirstOrDefault();
+            if (notify == null) return new JsonResult(new { success = false });
+            _context.Notifications.Remove(notify);
+            _context.SaveChanges();
+            return new JsonResult(new { success = true });
+        }
+
+        /// <summary>
         /// Error
         /// </summary>
         /// <returns></returns>
