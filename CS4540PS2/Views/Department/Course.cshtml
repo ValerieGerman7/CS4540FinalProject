@@ -40,7 +40,7 @@
             <p><b>Status:</b> <i id="statusI">@Model.Status.Status</i></p>
             <button class="btn-danger btn-sm" onclick="ReviewCourse(event, @Model.CourseInstanceId)">Set Review</button>
             <button class="btn-primary btn-sm" onclick="ApproveCourse(event, @Model.CourseInstanceId)">Approve</button>
-            <button class="btn-warning btn-sm">Archieve</button>
+            <button class="btn-warning btn-sm" onclick="ArchiveCourse(event, @Model.CourseInstanceId)">Archieve</button>
         </div>
     </div>
     <hr />

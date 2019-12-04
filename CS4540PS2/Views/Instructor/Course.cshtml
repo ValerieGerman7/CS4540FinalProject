@@ -1,7 +1,7 @@
 ﻿@model CS4540PS2.Models.CourseInstance
 @*
     Author: Valerie German
-    Date: 2 Dec 2019
+    Date: 4 Dec 2019
     Course: CS 4540, University of Utah
     Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
     I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
@@ -13,176 +13,183 @@
     ViewData["Title"] = Model.Name;
 }
 
-<div id="ContentDiv">
-    <h1>@Model.Department @Model.Number @Model.Name</h1>
-    <p><i>@Model.Semester @Model.Year</i></p>
-    <p>Course Status: <i id="statusI">@Model.Status.Status</i>       <button class="btn-primary btn-sm" onclick="RequestApproveCourse(event, @Model.CourseInstanceId)">Submit For Approval</button></p>
-    
-    <hr />
-    <h4>@Model.Description<!--Professor name--></h4>
-    <hr />
-    <textarea name="note" id="CourseNote" class="form-control" rows="3" placeholder="Enter course note"
-              onchange="UpdateNote(event, @Model.CourseInstanceId)">@if (Model.CourseNotes.Count != 0) { <text>@Model.CourseNotes.First().Note</text>}</textarea>
-    <i><label class="text-sm-right" id="NoteLabel">@if (Model.CourseNotes.Count() != 0) {<text>Last modified: @Model.CourseNotes.First().NoteModified</text>}</label></i>
-
-    <hr />
-    <h2>Learning Outcomes</h2>
-
-    <!--Modals are used for adding evaluation metrics or sample files in a simple popup.-->
-    <!--Add modal for evaluation metrics (modals reference https://getbootstrap.com/docs/4.1/components/modal/)-->
-    <div class="modal fade" id="emModal" tabindex="-1" role="dialog" aria-labelledby="evaluationMetricModal" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="evaluationMetricModal">Add Evaluation Metric</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <!--Referenced https://getbootstrap.com/docs/4.1/components/forms/ for form layout-->
-                    <form>
-                        <div class="form-group">
-                            <label>Title</label>
-                            <input type="email" class="form-control" placeholder="Enter assignment name here">
-                        </div>
-                        <div class="form-group">
-                            <label>Insert Metric Description</label>
-                            <textarea class="form-control" rows="3" placeholder="Enter description here"></textarea>
-                        </div>
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input">
-                            <label class="custom-file-label" for="customFile">Choose file</label>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Create</button>
-                </div>
+    <div id="ContentDiv">
+        @if (Model.Status.Status == CourseStatusNames.Archived) {
+            <div class="card-body bg-warning mb-3 text-black archiveWarning">
+                <p>This class is archived.</p>
             </div>
-        </div>
-    </div>
-    <!--Add modal for sample files-->
-    <div class="modal fade" id="sModal" tabindex="-1" role="dialog" aria-labelledby="sampleFileModal" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="sampleFileModal">Add Sample</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <!--Referenced https://getbootstrap.com/docs/4.1/components/forms/ for form layout-->
-                    <form action="/Instructor/CreateSampleFile" method="post" id="sampleForm"
-                          enctype="multipart/form-data">
-                        <input type="number" value="@Model.CourseInstanceId" name="courseId" hidden="hidden" />
-                        <input type="number" name="emId" hidden="hidden" id="emIdInput" value="-1" />
-                        <div class="form-group">
-                            <label>Insert Score</label>
-                            <input type="number" class="form-control-range" min="0" max="100" name="score" />
-                        </div>
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" name="sample">
-                            <label class="custom-file-label" for="customFile">Choose file</label>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="SubmitForm('sampleForm')">Create</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Form containing sample work - will be changed for multiple examples to be dynamic later (and moved close to button). For now these are forms
-    to be link to files.-->
-    <!-- Referenced https://stackoverflow.com/questions/11620698/how-to-trigger-a-file-download-when-clicking-an-html-button-or-javascript for opening files.
-                See buttons as well.-->
-    <form id="exampleHomework" class="form-inline" method="get" action="~/files/Example_Homework.pdf" target="_blank"></form>
-    <form id="exampleStudentWork" class="form-inline" method="get" action="~/files/Example_Student_Work.pdf" target="_blank"></form>
-    @if (Model.LearningOutcomes.Count == 0) {
-        <p><b>This course has no assigned learning outcomes.</b></p>
-    }
+        }
+        <h1>@Model.Department @Model.Number @Model.Name</h1>
+        <p><i>@Model.Semester @Model.Year</i></p>
+        <p>Course Status: <i id="statusI">@Model.Status.Status</i></p>
+        @if (Model.Status.Status != CourseStatusNames.Archived) {
+            <button class="btn-primary btn-sm" onclick="RequestApproveCourse(event, @Model.CourseInstanceId)">Submit For Approval</button>
+        }
+        <hr />
+        <h4>@Model.Description<!--Professor name--></h4>
+        <hr />
+        <textarea name="note" id="CourseNote" class="form-control" rows="3" placeholder="Enter course note"
+                  onchange="UpdateNote(event, @Model.CourseInstanceId)">@if (Model.CourseNotes.Count != 0) { <text>@Model.CourseNotes.First().Note</text>}</textarea>
+        <i><label class="text-sm-right" id="NoteLabel">@if (Model.CourseNotes.Count() != 0) {<text>Last modified: @Model.CourseNotes.First().NoteModified</text>}</label></i>
 
-    @foreach (LearningOutcomes lo in Model.LearningOutcomes) {
-        <!--Collapses separated in divs-->
-        <!--Collapse with information about a learning outcome-->
-        <!--This and following collapses created with help from https://getbootstrap.com/docs/4.0/components/collapse/-->
-        <button class="btn btn-primary sectionButton text-left" type="button" data-toggle="collapse"
-                data-target="#collapseContent@{<text>@lo.Loid</text>}" aria-expanded="false"
-                aria-controls="collapseContent@{<text>@lo.Loid</text>}">
-            @lo.Name
-        </button>
-        <div class="collapse" id="collapseContent@{<text>@lo.Loid</text>}">
-            <!--Cards reference https://getbootstrap.com/docs/4.1/components/card/ (this is true of all following cards).-->
-            <div class="card card-body">
-                <div class="card">
-                    <div class="card-body">
-                        @lo.Description
+        <hr />
+        <h2>Learning Outcomes</h2>
+
+        <!--Modals are used for adding evaluation metrics or sample files in a simple popup.-->
+        <!--Add modal for evaluation metrics (modals reference https://getbootstrap.com/docs/4.1/components/modal/)-->
+        <div class="modal fade" id="emModal" tabindex="-1" role="dialog" aria-labelledby="evaluationMetricModal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="evaluationMetricModal">Add Evaluation Metric</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!--Referenced https://getbootstrap.com/docs/4.1/components/forms/ for form layout-->
+                        <form>
+                            <div class="form-group">
+                                <label>Title</label>
+                                <input type="email" class="form-control" placeholder="Enter assignment name here">
+                            </div>
+                            <div class="form-group">
+                                <label>Insert Metric Description</label>
+                                <textarea class="form-control" rows="3" placeholder="Enter description here"></textarea>
+                            </div>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input">
+                                <label class="custom-file-label" for="customFile">Choose file</label>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Create</button>
                     </div>
                 </div>
-                <div class="card">
-                    @{
-                        var noteId = "LONote" + lo.Loid;
-                        var noteLabelId = "LONoteLabel" + lo.Loid;
-                    }
-                    <textarea name="note" id="@noteId" class="form-control" rows="3" placeholder="Enter learning outcome note"
-                              onchange="UpdateLONoteInst(event, @lo.Loid, '@noteId', '@noteLabelId')">@if(lo.LONotes.Any()){<text>@lo.LONotes.First().Note</text>}</textarea>
-                    <i>
-                        <label class="text-sm-right" id="@noteLabelId">@if (lo.LONotes.Any()) {<text>Last modified: @lo.LONotes.First().NoteModified by @lo.LONotes.First().NoteUserModified</text>}</label>
-                    </i>
+            </div>
+        </div>
+        <!--Add modal for sample files-->
+        <div class="modal fade" id="sModal" tabindex="-1" role="dialog" aria-labelledby="sampleFileModal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="sampleFileModal">Add Sample</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!--Referenced https://getbootstrap.com/docs/4.1/components/forms/ for form layout-->
+                        <form action="/Instructor/CreateSampleFile" method="post" id="sampleForm"
+                              enctype="multipart/form-data">
+                            <input type="number" value="@Model.CourseInstanceId" name="courseId" hidden="hidden" />
+                            <input type="number" name="emId" hidden="hidden" id="emIdInput" value="-1" />
+                            <div class="form-group">
+                                <label>Insert Score</label>
+                                <input type="number" class="form-control-range" min="0" max="100" name="score" />
+                            </div>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="sample">
+                                <label class="custom-file-label" for="customFile">Choose file</label>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="SubmitForm('sampleForm')">Create</button>
+                    </div>
                 </div>
-                <br />
-                <!--Evaluation metrics - each assignment/exam is split into a card-->
-                <h5>
-                    Evaluation Metrics
-                    <button type="button" class="btn btn-rounded btn-dark btn-sm float-right" data-toggle="modal" data-target="#emModal">
-                        <i>+</i>
-                    </button>
-                </h5>
-                <hr />
-                @if (lo.EvaluationMetrics.Count == 0) {
-                    <p><i>This learning outcome has no evaluation metrics - <b>warning</b> metrics are required, please add at least one.</i></p>
-                }
-                @foreach (EvaluationMetrics em in lo.EvaluationMetrics) {
-                    <!-- Referenced https://getbootstrap.com/docs/4.1/components/card/-->
-                    <div class="card shadowBox">
-                        <div class="card-header">
-                            <b>@em.Name</b>
-                            <button class="btn btn-rounded btn-dark btn-sm float-right" onclick="document.getElementById('exampleHomework').submit()">Download Assignment File</button>
-                        </div>
+            </div>
+        </div>
+        <!-- Form containing sample work - will be changed for multiple examples to be dynamic later (and moved close to button). For now these are forms
+    to be link to files.-->
+        <!-- Referenced https://stackoverflow.com/questions/11620698/how-to-trigger-a-file-download-when-clicking-an-html-button-or-javascript for opening files.
+                See buttons as well.-->
+        <form id="exampleHomework" class="form-inline" method="get" action="~/files/Example_Homework.pdf" target="_blank"></form>
+        <form id="exampleStudentWork" class="form-inline" method="get" action="~/files/Example_Student_Work.pdf" target="_blank"></form>
+        @if (Model.LearningOutcomes.Count == 0) {
+            <p><b>This course has no assigned learning outcomes.</b></p>
+        }
+
+        @foreach (LearningOutcomes lo in Model.LearningOutcomes) {
+            <!--Collapses separated in divs-->
+            <!--Collapse with information about a learning outcome-->
+            <!--This and following collapses created with help from https://getbootstrap.com/docs/4.0/components/collapse/-->
+            <button class="btn btn-primary sectionButton text-left" type="button" data-toggle="collapse"
+                    data-target="#collapseContent@{<text>@lo.Loid</text>}" aria-expanded="false"
+                    aria-controls="collapseContent@{<text>@lo.Loid</text>}">
+                @lo.Name
+            </button>
+            <div class="collapse" id="collapseContent@{<text>@lo.Loid</text>}">
+                <!--Cards reference https://getbootstrap.com/docs/4.1/components/card/ (this is true of all following cards).-->
+                <div class="card card-body">
+                    <div class="card">
                         <div class="card-body">
-                            <p class="card-text indented">@em.Description</p>
-                            <!-- Referenced https://stackoverflow.com/questions/11620698/how-to-trigger-a-file-download-when-clicking-an-html-button-or-javascript for opening files.
-                            See file forms as well.-->
-                            <p>
-                                <label class="sampleLabelText">
-                                    Sample Files: @if (!em.SampleFiles.Any()) {
-                                        <text><i>There are no sample files. <b>Upload at least one sample.</b></i></text>
-                                    }
-                                </label>
-                                @foreach (SampleFiles sample in em.SampleFiles.OrderByDescending(s => s.Score)) {
-                                    <!--Change link to sample filename.-->
-                                    <button value="@sample.Score" class="sampleButton" onclick="GotoSF(@sample.Sid)"></button>
-                                    <!--<button value="@sample.Score" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()"></button>-->
-                                }
-                                <button type="button" class="btn btn-rounded btn-dark btn-sm" data-toggle="modal" data-target="#sModal" data-em-id="@em.Emid">
-                                    <i>+</i>
-                                </button>
-                            </p>
+                            @lo.Description
                         </div>
+                    </div>
+                    <div class="card">
+                        @{
+                            var noteId = "LONote" + lo.Loid;
+                            var noteLabelId = "LONoteLabel" + lo.Loid;
+                        }
+                        <textarea name="note" id="@noteId" class="form-control" rows="3" placeholder="Enter learning outcome note"
+                                  onchange="UpdateLONoteInst(event, @lo.Loid, '@noteId', '@noteLabelId')">@if(lo.LONotes.Any()){<text>@lo.LONotes.First().Note</text>}</textarea>
+                        <i>
+                            <label class="text-sm-right" id="@noteLabelId">@if (lo.LONotes.Any()) {<text>Last modified: @lo.LONotes.First().NoteModified by @lo.LONotes.First().NoteUserModified</text>}</label>
+                        </i>
                     </div>
                     <br />
-                }
+                    <!--Evaluation metrics - each assignment/exam is split into a card-->
+                    <h5>
+                        Evaluation Metrics
+                        <button type="button" class="btn btn-rounded btn-dark btn-sm float-right" data-toggle="modal" data-target="#emModal">
+                            <i>+</i>
+                        </button>
+                    </h5>
+                    <hr />
+                    @if (lo.EvaluationMetrics.Count == 0) {
+                        <p><i>This learning outcome has no evaluation metrics - <b>warning</b> metrics are required, please add at least one.</i></p>
+                    }
+                    @foreach (EvaluationMetrics em in lo.EvaluationMetrics) {
+                        <!-- Referenced https://getbootstrap.com/docs/4.1/components/card/-->
+                        <div class="card shadowBox">
+                            <div class="card-header">
+                                <b>@em.Name</b>
+                                <button class="btn btn-rounded btn-dark btn-sm float-right" onclick="document.getElementById('exampleHomework').submit()">Download Assignment File</button>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text indented">@em.Description</p>
+                                <!-- Referenced https://stackoverflow.com/questions/11620698/how-to-trigger-a-file-download-when-clicking-an-html-button-or-javascript for opening files.
+                            See file forms as well.-->
+                                <p>
+                                    <label class="sampleLabelText">
+                                        Sample Files: @if (!em.SampleFiles.Any()) {
+                                            <text><i>There are no sample files. <b>Upload at least one sample.</b></i></text>
+                                        }
+                                    </label>
+                                    @foreach (SampleFiles sample in em.SampleFiles.OrderByDescending(s => s.Score)) {
+                                        <!--Change link to sample filename.-->
+                                        <button value="@sample.Score" class="sampleButton" onclick="GotoSF(@sample.Sid)"></button>
+                                        <!--<button value="@sample.Score" class="sampleButton" onclick="document.getElementById('exampleStudentWork').submit()"></button>-->
+                                    }
+                                    <button type="button" class="btn btn-rounded btn-dark btn-sm" data-toggle="modal" data-target="#sModal" data-em-id="@em.Emid">
+                                        <i>+</i>
+                                    </button>
+                                </p>
+                            </div>
+                        </div>
+                        <br />
+                    }
 
-            </div>
-        </div><!--End Collapse Div-->
-        <br /><br />
-    }
-    <br />
-    <hr />
-    <br />
-</div>
+                </div>
+            </div><!--End Collapse Div-->
+            <br /><br />
+        }
+        <br />
+        <hr />
+        <br />
+    </div>
 

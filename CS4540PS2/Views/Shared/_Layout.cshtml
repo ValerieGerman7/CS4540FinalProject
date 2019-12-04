@@ -51,8 +51,7 @@
                     <li class="nav-item active">
                         <a class="nav-link navbar-brand" asp-controller="Home" asp-action="Index">Home <span class="sr-only">(current)</span></a>
                     </li>
-                    @if (User.IsInRole("Admin"))
-                    {
+                    @if (User.IsInRole("Admin")) {
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="LearningOutcomes" asp-action="Index">Learning Outcomes</a>
                         </li>
@@ -73,8 +72,7 @@
                             <a class="nav-link" asp-controller="User" asp-action="Index">Users</a>
                         </li>
                     }
-                    @if (User.IsInRole("Chair"))
-                    {
+                    @if (User.IsInRole("Chair")) {
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Departments
@@ -86,10 +84,12 @@
                             </div>
                         </li>
                     }
-                    @if (User.IsInRole("Instructor"))
-                    {
+                    @if (User.IsInRole("Instructor")) {
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Instructor" asp-action="Index">Courses</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Instructor" asp-action="ArchivedCourses">Course History</a>
                         </li>
                         <!-- Dropdown -->
                         <!--<li class="nav-item dropdown">

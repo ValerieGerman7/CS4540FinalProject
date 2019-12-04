@@ -134,6 +134,35 @@ namespace CS4540PS2.Controllers {
         }
 
         /// <summary>
+        /// Sets the course status to approved for the given course.
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> ArchiveCourse(int? courseId) {
+            if (courseId == null) {
+                return new JsonResult(new { success = false });
+            }
+            CourseInstance course = await _context.CourseInstance.Include(c => c.Status).Include(c => c.Instructors).ThenInclude(i => i.User)
+                .Where(c => c.CourseInstanceId == courseId).FirstOrDefaultAsync();
+            CourseStatus archive = _context.CourseStatus.Where(s => s.Status == CourseStatusNames.Archived).FirstOrDefault();
+            if (archive == null) return new JsonResult(new { success = false });
+            course.Status = archive;
+            //Notify Instructors
+            foreach (Instructors inst in course.Instructors) {
+                Notifications notify = new Notifications() {
+                    CourseInstance = course,
+                    User = inst.User,
+                    Text = "This course was archived.",
+                    DateNotified = DateTime.Now,
+                    Read = false
+                };
+                _context.Notifications.Add(notify);
+            }
+            _context.SaveChanges();
+            return new JsonResult(new { success = true });
+        }
+
+        /// <summary>
         /// Updates the identified learning outcome's note along with the last modified date and last user
         /// modifying date.
         /// </summary>

@@ -600,6 +600,53 @@ function ReviewCourse(e, cid) {
         }
     })
 }
+//Sends request to set a course to in-review
+function ArchiveCourse(e, cid) {
+    //window.alert("here");
+    e.preventDefault();
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to change this course's status to archived. This will prevent Instructors from modifying the course and allow all instructors to view this course.",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: "Archive"
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: "/Department/ArchiveCourse",
+                method: "POST",
+                data: {
+                    courseId: cid
+                }
+            }).fail(function () {
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!'
+                })
+            }).done(function (data) {
+                if (data.success) {
+                    $("#statusI").text("Archived");
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'success',
+                        title: 'The course was archived.',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                } else {
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'error',
+                        title: 'The course could not be archived.',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                }
+            });
+        }
+    })
+}
 //Sends request to get course approval
 function RequestApproveCourse(e, cid) {
     //window.alert("here");

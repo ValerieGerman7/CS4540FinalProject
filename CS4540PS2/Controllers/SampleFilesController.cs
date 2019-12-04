@@ -36,9 +36,9 @@ namespace CS4540PS2.Controllers {
             if(courseId == null || emId == null || sample == null) {
                 return Json(new { success = false });
             }
-            //Verify instructor
+            //Verify instructor (course must not be archived)
             CourseInstance course = _context.CourseInstance.Include(c => c.Instructors).ThenInclude(i => i.User)
-                .Where(c => c.CourseInstanceId == courseId).FirstOrDefault();
+                .Where(c => c.CourseInstanceId == courseId && c.Status.Status != CourseStatusNames.Archived).FirstOrDefault();
             if(course == null) return Json(new { success = false });
             Instructors inst = course.Instructors.Where(i => i.User.UserLoginEmail == User.Identity.Name).FirstOrDefault();
             if(inst == null) return Json(new { success = false });
@@ -112,9 +112,10 @@ namespace CS4540PS2.Controllers {
         /// <returns></returns>
         [HttpPost]  
         public ActionResult DeleteSampleFile(int? sfId) {
-            SampleFiles sfObj = _context.SampleFiles.Include(s => s.Em).ThenInclude(e => e.Lo).ThenInclude(l => l.CourseInstance)
-                                            .ThenInclude(c => c.Instructors).ThenInclude(i => i.User)
-                                            .Where(s => s.Sid == sfId).FirstOrDefault();
+            //Get the sample files object, the course must not be archived and the user must be an instructor of the course.
+            SampleFiles sfObj = _context.SampleFiles.Include(s => s.Em).ThenInclude(e => e.Lo).ThenInclude(l => l.CourseInstance).ThenInclude(c => c.Status)
+                                            .Include(s => s.Em).ThenInclude(e => e.Lo).ThenInclude(l => l.CourseInstance).ThenInclude(c => c.Instructors).ThenInclude(i => i.User)
+                                            .Where(s => s.Sid == sfId && s.Em.Lo.CourseInstance.Status.Status != CourseStatusNames.Archived).FirstOrDefault();
             if (sfObj == null || !sfObj.Em.Lo.CourseInstance.Instructors.Where(i => i.User.UserLoginEmail == User.Identity.Name).Any()) {
                 return Json(new { success = false });
             }

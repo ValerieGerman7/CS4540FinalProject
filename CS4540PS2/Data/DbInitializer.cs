@@ -136,7 +136,7 @@ namespace CS4540PS2.Data {
             context.CourseStatus.Add(inProg);
             var waitingApp = new CourseStatus() { Status = CourseStatusNames.AwaitingApproval }; //"Awaiting Approval"
             context.CourseStatus.Add(waitingApp);
-            var arch = new CourseStatus() { Status = CourseStatusNames.Archieved }; //"Archieved"
+            var arch = new CourseStatus() { Status = CourseStatusNames.Archived }; //"Archieved"
             context.CourseStatus.Add(arch);
             var inRev = new CourseStatus() { Status = CourseStatusNames.InReview }; //"In-Review"
             context.CourseStatus.Add(inRev);

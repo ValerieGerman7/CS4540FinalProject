@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 /// <summary>
 /// Author: Valerie German
-/// Date: 18 Oct 2019
+/// Date: 4 Dec 2019
 /// Course: CS 4540, University of Utah
 /// Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
 /// I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
@@ -50,6 +50,18 @@ namespace CS4540PS2.Controllers {
         }
 
         /// <summary>
+        /// View for all courses that have been archived.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> ArchivedCourses() {
+            var instances = _context.CourseInstance.Include(c => c.Status)
+                .Include(c => c.Instructors).ThenInclude(i => i.User)
+                .Where(c => c.Status.Status == CourseStatusNames.Archived)
+                .OrderByDescending(c => c.Department).ThenByDescending(c => c.Number).ThenByDescending(c => c.Year);
+            return View(await instances.ToListAsync());
+        }
+
+        /// <summary>
         /// Updates the course's note and the date modified.
         /// </summary>
         /// <param name="CourseInstanceId"></param>
@@ -77,8 +89,10 @@ namespace CS4540PS2.Controllers {
         /// <param name="NewNote"></param>
         /// <returns></returns>
         public JsonResult ChangeLONote(int LearningOutcomeId, string NewNote) {
+            //Finds the associated learning outcome. The user must be an instructor and the course cannot be archived.
             LearningOutcomes lo = _context.LearningOutcomes.Where(l => l.Loid == LearningOutcomeId).Include(l => l.LONotes)
-                .Where(l => l.CourseInstance.Instructors.Where(ins => ins.User.UserLoginEmail == User.Identity.Name).Any())
+                .Where(l => l.CourseInstance.Instructors.Where(ins => ins.User.UserLoginEmail == User.Identity.Name).Any()
+                        && l.CourseInstance.Status.Status != CourseStatusNames.Archived)
                 .FirstOrDefault();
             if (lo == null) return Json(new { success = false });
             if(lo.LONotes.Count == 0) {
@@ -104,15 +118,15 @@ namespace CS4540PS2.Controllers {
                 return View("Error", new ErrorViewModel() {
                     ErrorMessage = "Insufficient information to locate course."
                 });
+            //Retrieves the associated course, the user must be an instructor of the course, or the course must be archived.
             CourseInstance course = _context.CourseInstance.Where(c => c.Department == Dept && c.Number == Num
                 && c.Semester == Sem && c.Year == Year)
                 .Include(c => c.CourseNotes)
-                .Include(c => c.LearningOutcomes)
-                .ThenInclude(lo => lo.EvaluationMetrics)
-                .ThenInclude(em => em.SampleFiles)
-                .Include(c => c.LearningOutcomes)
-                .ThenInclude(lo => lo.LONotes)
+                .Include(c => c.Instructors).ThenInclude(i => i.User)
+                .Include(c => c.LearningOutcomes).ThenInclude(lo => lo.EvaluationMetrics).ThenInclude(em => em.SampleFiles)
+                .Include(c => c.LearningOutcomes).ThenInclude(lo => lo.LONotes)
                 .Include(c => c.Status)
+                .Where(c => c.Instructors.Where(i => i.User.UserLoginEmail == User.Identity.Name).Any() || c.Status.Status == CourseStatusNames.Archived)
                 .FirstOrDefault();
             if (course == null)
                 return Forbid();

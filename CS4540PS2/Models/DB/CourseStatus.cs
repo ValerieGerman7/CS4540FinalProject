@@ -19,6 +19,6 @@ namespace CS4540PS2.Models {
         public const string AwaitingApproval = "Awaiting Approval";
         public const string InReview = "In-Review";
         public const string Complete = "Complete";
-        public const string Archieved = "Archieved";
+        public const string Archived = "Archived";
     }
 }

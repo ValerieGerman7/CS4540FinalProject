@@ -175,3 +175,9 @@ body {
         border-radius: 1rem;
         margin-bottom: 0.2rem !important;
     }
+
+.archiveWarning {
+    border-radius: 5px;
+    text-align: center;
+    padding: 5px;
+}

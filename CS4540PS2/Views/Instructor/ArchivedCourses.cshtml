@@ -1,0 +1,39 @@
+﻿@model IEnumerable<CS4540PS2.Models.CourseInstance>
+@*
+    Author: Valerie German
+    Date: 4 Dec 2019
+    Course: CS 4540, University of Utah
+    Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
+    I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
+    File Contents: Professor view of archived courses.
+*@
+@{
+    ViewData["Title"] = "Course History";
+}
+
+<!--TODO: Implement-->
+
+<h2>Course Archives</h2>
+<hr />
+
+@foreach (CourseInstance course in Model) {
+    <div class="card shadowBox">
+        <div class="card-body" onclick="RedirectToInstCourse('@course.Department', @course.Number, '@course.Semester', @course.Year);">
+            <p>@course.Department @course.Number - <b>@course.Name</b> </p>
+            @{ 
+                var instructors = "";
+                if (course.Instructors.Any()) {
+                    foreach (Instructors inst in course.Instructors) {
+                        instructors += inst.User.UserTitle + ", ";
+                    }
+                    instructors = instructors.Substring(0, instructors.Length - 2);
+                } else {
+                    instructors = "No assigned instructors";
+                }
+            }
+            <p><b>Instructors: </b>@instructors</p>
+            <p>@course.Description</p>
+        </div>
+    </div>
+    <br />
+}
