@@ -43,10 +43,24 @@ namespace CS4540PS2.Controllers {
         /// Return the index page listing all course instances belonging to the current professor.
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> Index() {
-            var instances = _context.CourseInstance.Where(i => 
-                i.Instructors.Where(ins => ins.User.UserLoginEmail == User.Identity.Name).Any());
-            return View(await instances.ToListAsync());
+        public async Task<IActionResult> Index(string status) {
+            if(status == null) {
+                //All non-archived classes this user is an instructor of.
+                var instances = _context.CourseInstance
+                    .Include(c => c.Status)
+                    .Include(c => c.Instructors).ThenInclude(i => i.User)
+                    .Where(c => c.Instructors.Where(ins => ins.User.UserLoginEmail == User.Identity.Name).Any()
+                            && c.Status.Status != CourseStatusNames.Archived);
+                return View(new ValueTuple<string, IEnumerable<CourseInstance>>(null, await instances.ToListAsync()));
+            } else {
+                //All classes of the selected status this user is an instructor of.
+                var instances = _context.CourseInstance
+                    .Include(c => c.Status)
+                    .Include(c => c.Instructors).ThenInclude(i => i.User)
+                    .Where(c => c.Instructors.Where(ins => ins.User.UserLoginEmail == User.Identity.Name).Any()
+                            && c.Status.Status == status);
+                return View(new ValueTuple<string, IEnumerable<CourseInstance>>(status, await instances.ToListAsync()));
+            }
         }
 
         /// <summary>

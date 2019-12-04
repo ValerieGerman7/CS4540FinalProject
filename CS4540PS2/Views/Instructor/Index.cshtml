@@ -1,6 +1,7 @@
-﻿@*
+﻿@model ValueTuple<string, IEnumerable<CS4540PS2.Models.CourseInstance>>
+@*
     Author: Valerie German
-    Date: 22 Sept 2019
+    Date: 4 Dec 2019
     Course: CS 4540, University of Utah
     Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
     I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
@@ -9,16 +10,32 @@
 @{
     ViewData["Title"] = "Your Courses";
 }
-
-<!--TODO: Implement-->
+@inject LOTDBContext context
 
 <h2>Your Courses</h2>
+<div class="form-group col-md-5">
+    <form action="/Instructor/Index" method="get">
+        <select class="form-control" name="status">
+            @foreach (CourseStatus status in context.CourseStatus) {
+                if (status.Status == Model.Item1) {
+                    <option value="@status.Status" selected>@status.Status</option>
+                } else {
+                    <option value="@status.Status">@status.Status</option>
+                }
+            }
+            @if (Model.Item1 == null) {
+                <option selected disabled>Active Classes are displayed</option>
+            }
+        </select>
+        <input type="submit" class="btn-dark btn-sm" value="Filter" />
+    </form>
+</div>
 <hr />
 
-@foreach (CourseInstance course in Model) {
+@foreach (CourseInstance course in Model.Item2) {
     <div class="card shadowBox">
         <div class="card-body" onclick="RedirectToInstCourse('@course.Department', @course.Number, '@course.Semester', @course.Year);">
-            <p>@course.Department @course.Number - <b>@course.Name</b> </p>
+            <p>@course.Department @course.Number - <b>@course.Name</b> <span class="badge badge-pill badge-light">@course.Status.Status</span></p>
             <p>@course.Description</p>
         </div>
     </div>
