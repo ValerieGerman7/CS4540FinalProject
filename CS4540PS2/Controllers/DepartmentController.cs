@@ -83,9 +83,9 @@ namespace CS4540PS2.Controllers {
             if (courseId == null) {
                 return new JsonResult(new { success = false });
             }
-            CourseInstance course = await _context.CourseInstance.Include(c => c.Status)
+            CourseInstance course = await _context.CourseInstance.Include(c => c.Status).Include(c => c.Instructors).ThenInclude(i => i.User)
                 .Where(c => c.CourseInstanceId == courseId).FirstOrDefaultAsync();
-            CourseStatus complete = _context.CourseStatus.Where(s => s.Status == "Complete").FirstOrDefault();
+            CourseStatus complete = _context.CourseStatus.Where(s => s.Status == CourseStatusNames.Complete).FirstOrDefault();
             if(complete == null) return new JsonResult(new { success = false });
             course.Status = complete;
             //Notify Instructors
@@ -115,9 +115,9 @@ namespace CS4540PS2.Controllers {
             CourseInstance course = await _context.CourseInstance.Include(c => c.Status)
                 .Include(c => c.Instructors).ThenInclude(i => i.User)
                 .Where(c => c.CourseInstanceId == courseId).FirstOrDefaultAsync();
-            CourseStatus complete = _context.CourseStatus.Where(s => s.Status == "In-Review").FirstOrDefault();
-            if (complete == null) return new JsonResult(new { success = false });
-            course.Status = complete;
+            CourseStatus inRev = _context.CourseStatus.Where(s => s.Status == CourseStatusNames.InReview).FirstOrDefault();
+            if (inRev == null) return new JsonResult(new { success = false });
+            course.Status = inRev;
             //Notify Instructors
             foreach(Instructors inst in course.Instructors) {
                 Notifications notify = new Notifications() {

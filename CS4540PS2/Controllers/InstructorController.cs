@@ -100,7 +100,7 @@ namespace CS4540PS2.Controllers {
         /// <param name="Year"></param>
         /// <returns></returns>
         public async Task<IActionResult> Course(string Dept, int? Num, string Sem, int? Year) {
-            if (Dept.Equals(null) || Num == null || Sem.Equals(null) || Year == null)
+            if (Dept == null || Num == null || Sem.Equals(null) || Year == null)
                 return View("Error", new ErrorViewModel() {
                     ErrorMessage = "Insufficient information to locate course."
                 });
@@ -129,9 +129,9 @@ namespace CS4540PS2.Controllers {
             CourseInstance course = _context.CourseInstance.Include(c => c.Status)
                 .Where(c => c.CourseInstanceId == courseId).FirstOrDefault();
             if(course == null) return new JsonResult(new { success = false });
-            if(course.Status.Status.Equals("In-progress") || course.Status.Status.Equals("In-Review")) {
+            if(course.Status.Status.Equals(CourseStatusNames.InProgress) || course.Status.Status.Equals(CourseStatusNames.InReview)) {
                 //Change status
-                CourseStatus app = _context.CourseStatus.Where(s => s.Status == "Awaiting Approval").FirstOrDefault();
+                CourseStatus app = _context.CourseStatus.Where(s => s.Status == CourseStatusNames.AwaitingApproval).FirstOrDefault();
                 if(app == null) return new JsonResult(new { success = false });
                 course.Status = app;
                 //Notify Chairs

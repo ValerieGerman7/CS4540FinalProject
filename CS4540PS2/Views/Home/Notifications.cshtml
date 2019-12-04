@@ -1,4 +1,5 @@
 ﻿@model CS4540PS2.Models.UserLocator
+@using Microsoft.AspNetCore.Identity;
 @*
     Author: Valerie German
     Date: 2 Dec 2019
@@ -29,7 +30,7 @@
             var readId = "readCol" + notify.NotificationId;
             <tr id="@rowId" class="@read">
                 <td id="@readId">
-                    @if (!notify.Read) { <button class="btn-light btn-sm" onclick="ReadNotify(event, @notify.NotificationId, '@rowId', '@readId')">Mark as Read</button> }
+                    @if (!notify.Read) {<button class="btn-light btn-sm" onclick="ReadNotify(event, @notify.NotificationId, '@rowId', '@readId')">Mark as Read</button>}
                 </td>
                 <td>@notify.DateNotified.ToString("dddd, dd MMMM yyyy")</td>
                 <td>@notify.Text</td>
@@ -39,9 +40,14 @@
                 }
                 <td>@courseInfo</td>
                 <td>
-                    <a asp-controller="Department" asp-action="Course" asp-route-courseId="@course.CourseInstanceId">
-                        <button class="btn-primary btn-sm">Go To Course</button>
-                    </a>
+                    @if (User.IsInRole("Chair")) {
+                        <a asp-controller="Department" asp-action="Course" asp-route-courseId="@course.CourseInstanceId">
+                            <button class="btn-primary btn-sm">Go To Course</button>
+                        </a>
+                    } else if (User.IsInRole("Instructor")) {
+                        <a asp-controller="Instructor" asp-action="Course" asp-route-Dept="@notify.CourseInstance.Department" asp-route-Num="@notify.CourseInstance.Number"
+                            asp-route-Sem="@notify.CourseInstance.Semester" asp-route-Year="@notify.CourseInstance.Year"><button class="btn-primary btn-sm">Go To Course</button></a>
+                    }
                 </td>
             </tr>
         }

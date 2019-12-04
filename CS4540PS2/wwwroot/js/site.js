@@ -167,7 +167,7 @@ function Redirect(Controller, Action) {
 //Requests to add a user to a role in the User controller
 //(obsolete)
 function AddUserToRole(e, username) {
-    window.alert("here");
+    //("here");
     e.preventDefault();
     $.ajax({
         url: "/User/AddRole",
@@ -177,8 +177,8 @@ function AddUserToRole(e, username) {
             role : "Admin"
         }
     }).done(function (data) {
-        window.alert("Always");
-        window.alert(data.success);
+        //window.alert("Always");
+        //window.alert(data.success);
     });
 }
 
@@ -627,7 +627,7 @@ function RequestApproveCourse(e, cid) {
             }).done(function (data) {
                 if (data.success) {
                     $("#statusI").value = "Awaiting Approval";
-                    window.alert($("#statusI").value);
+                    //window.alert($("#statusI").value);
                     Swal.fire({
                         position: 'top-end',
                         type: 'success',

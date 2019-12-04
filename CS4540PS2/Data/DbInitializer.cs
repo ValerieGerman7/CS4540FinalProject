@@ -130,15 +130,15 @@ namespace CS4540PS2.Data {
             }
             context.SaveChanges();
             //CourseStatus
-            var completeStatus = new CourseStatus() { Status = "Complete" };
+            var completeStatus = new CourseStatus() { Status = CourseStatusNames.Complete }; //"Complete"
             context.CourseStatus.Add(completeStatus);
-            var inProg = new CourseStatus() { Status = "In-progress" };
+            var inProg = new CourseStatus() { Status = CourseStatusNames.InProgress }; //"In-progress"
             context.CourseStatus.Add(inProg);
-            var waitingApp = new CourseStatus() { Status = "Awaiting Approval" };
+            var waitingApp = new CourseStatus() { Status = CourseStatusNames.AwaitingApproval }; //"Awaiting Approval"
             context.CourseStatus.Add(waitingApp);
-            var arch = new CourseStatus() { Status = "Archieved" };
+            var arch = new CourseStatus() { Status = CourseStatusNames.Archieved }; //"Archieved"
             context.CourseStatus.Add(arch);
-            var inRev = new CourseStatus() { Status = "In-Review" };
+            var inRev = new CourseStatus() { Status = CourseStatusNames.InReview }; //"In-Review"
             context.CourseStatus.Add(inRev);
             context.SaveChanges();
             //Departments
