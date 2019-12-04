@@ -35,6 +35,14 @@ namespace CS4540PS2.Controllers {
         }
 
         /// <summary>
+        /// Project overview page
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Overview() {
+            return View();
+        }
+
+        /// <summary>
         /// Display the user's notifications
         /// </summary>
         /// <returns></returns>

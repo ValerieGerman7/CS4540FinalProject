@@ -181,3 +181,13 @@ body {
     text-align: center;
     padding: 5px;
 }
+
+/*Images*/
+.imageContainer {
+    width: 50%;
+}
+.sizeImage {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
