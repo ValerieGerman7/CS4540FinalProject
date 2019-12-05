@@ -56,6 +56,19 @@ body {
 }
 
 /*CONTACT BOX NEAR FOOTER*/
+/*Make boxes disappear if window shrinks*/
+@media all and (max-width: 950px) {
+    .chat_box {
+        display: none;
+    }
+
+}
+
+@media all and (max-width: 950px) {
+    .message_box {
+        display: none;
+    }
+}
 .chat_box {
     background: #fff;
     width: 20rem;
