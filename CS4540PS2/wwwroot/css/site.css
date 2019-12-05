@@ -59,9 +59,11 @@ body {
 .chat_box {
     background: #fff;
     width: 20rem;
-    position: absolute;
-    bottom: 60px;
+    position: fixed;
+    bottom: 0px;
     right: 1rem;
+    z-index: 1;
+    padding: 5px 5px 5px 5px;
 }
 .chat_box p {
     margin-bottom: 0 !important;
@@ -71,7 +73,7 @@ body {
 }
 .chat_heading, message_heading {
     font-weight: 500;
-    font-size: 2rem;
+    font-size: 1rem;
 }
 
 .user {
@@ -101,10 +103,12 @@ body {
 .message_box {
     background: #fff;
     width: 15rem;
-    position: absolute;
-    bottom: 60px;
+    position: fixed;
+    bottom: 0px;
     right: 22rem;
     display: none;
+    z-index: 1;
+    padding: 5px 5px 5px 5px;
 }
 .message_header p {
     margin-bottom: 0 !important;
@@ -126,7 +130,7 @@ body {
     margin: 1rem, 1rem, 0rem, 1rem;
     display: grid;
     width: 90%;
-    grid-template-columns: 90% 10%;
+    /*grid-template-columns: 90% 10%;*/
     justify-items: end;
     align-items: center;
 }
@@ -134,9 +138,10 @@ body {
 .single_message {
     display: grid;
     margin: 1rem, 1rem, 1rem, .5rem;
-    grid-template-columns: 10% 90%;
+    /*grid-template-columns: 10% 90%;*/
     width: 90%;
     align-items: center;
+    justify-items: left;
 }
 .single_message p {
      background: #e9ebee;

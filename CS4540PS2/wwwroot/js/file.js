@@ -4,6 +4,11 @@ $('#sModal').on('show.bs.modal', function (event) {
     $('#emIdInput').val(evaluationMetricId);
 })
 
+$('#emModal').on('show.bs.modal', function (event) {
+    var loid = $(event.relatedTarget).data('loid');
+    $('#loidInput').val(loid);
+})
+
 function SubmitForm(id) {
     $('#' + id).submit();
 }

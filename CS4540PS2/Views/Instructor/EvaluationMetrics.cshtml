@@ -1,0 +1,37 @@
+﻿
+@model CS4540PS2.Models.EvaluationMetrics
+@*
+    Author: Valerie German
+    Date: 22 Nov 2019
+    Course: CS 4540, University of Utah
+    Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
+    I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
+    File Contents: Professor view of a sample file.
+*@
+@{
+    @using Newtonsoft.Json.Linq;
+    @using CS4540PS2.Controllers;
+    ViewData["Title"] = "Sample File";
+    EvaluationMetrics em = Model;
+    LearningOutcomes lo = em.Lo;
+    CourseInstance course = lo.CourseInstance;
+}
+<h2>Evaluation Metric for @course.Department@course.Number @course.Name</h2>
+<hr />
+<p><b>Learning Outcome:</b> @Model.Lo</p>
+<p>@lo.Description</p>
+<p><b>Evaluation Metric:</b> @em.Name</p>
+<p>@em.Description</p>
+<hr />
+<h4>Assignment File: @Model.FileName</h4>
+<br />
+<form class="form-inline" method="get" action="/Instructor/GetEvaluationMetric" target="_blank">
+    <input type="number" name="emId" hidden="hidden" value="@Model.Emid" />
+    <input type="submit" class="btn-primary" value="Download File" />
+</form>
+<hr />
+<button class="btn-danger" onclick="DeleteEM(event, @Model.Emid, document.getElementById('courseLink'))">Delete Sample</button>
+<hr />
+<br />
+<a id="courseLink" asp-controller="Instructor" asp-action="Course" asp-route-Dept="@course.Department" asp-route-Num="@course.Number"
+   asp-route-Sem="@course.Semester" asp-route-Year="@course.Year"><button class="btn-dark">Back To Course</button></a>

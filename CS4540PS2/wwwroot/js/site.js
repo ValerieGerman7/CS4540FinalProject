@@ -21,11 +21,11 @@ connection.on("ReceiveMessage", function (sender, receiver, message) {
     if (receiver == userID) {
         let div = document.createElement("div");
         div.className = "single_message";
-        let i = document.createElement("i");
-        i.className = "fas fa-circle";
+        //let i = document.createElement("i");
+        //i.className = "fas fa-circle";
         let p = document.createElement("p");
         p.textContent = message;
-        div.appendChild(i);
+        //div.appendChild(i);
         div.appendChild(p);
         let messageBoxID = sender + "addMessage";
         let box = document.getElementById(messageBoxID);
@@ -206,12 +206,12 @@ function SendMessage(e, text, sender, receiver) {
 
                 let div = document.createElement("div");
                 div.className = "single_message2";
-                let i = document.createElement("i");
-                i.className = "fas fa-circle";
+                //let i = document.createElement("i");
+                //i.className = "fas fa-circle";
                 let p = document.createElement("p");
                 p.textContent = message;
                 div.appendChild(p);
-                div.appendChild(i);
+                //div.appendChild(i);
                 let messageBoxID = receiver + "addMessage";
                 let box = document.getElementById(messageBoxID);
                 box.appendChild(div);
@@ -356,6 +356,22 @@ function SubmitSFForm(sid) {
     $('body').append(form);
     form.submit();
 }
+
+//Click on Evaluation metric button to go to its page
+function GotoEM(emid) {
+    var form = $("<form>", {
+        action: '/Instructor/EvaluationMetrics',
+        method: 'GET'
+    });
+    form.append($("<input>", {
+        type: 'number',
+        name: 'emId', value: emid
+    }));
+    $('body').append(form);
+    form.submit();
+}
+
+
 //Submit the Sample Files form
 function GotoSF(sid) {
     var form = $("<form>", {
@@ -386,6 +402,57 @@ function DeleteSample(e, sid, ret) {
                 method: "POST",
                 data: {
                     sfId: sid
+                }
+            }).fail(function () {
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!'
+                })
+            }).done(function (data) {
+                var box = e.target;
+                if (data.success) {
+                    ret.click();
+                    /*box.checked = !box.checked;
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'success',
+                        title: 'The department was deleted.',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })*/
+                } else {
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'error',
+                        title: 'The sample could not be deleted.',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                }
+            });
+        }
+    })
+}
+
+
+//Sends a request to delete a sample file
+function DeleteEM(e, sid, ret) {
+    //window.alert("here");
+    e.preventDefault();
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to delete this sample.",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: "Delete Sample"
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: "/Instructor/DeleteEvaluationMetrics",
+                method: "POST",
+                data: {
+                    emId: sid
                 }
             }).fail(function () {
                 Swal.fire({
