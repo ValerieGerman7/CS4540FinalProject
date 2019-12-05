@@ -396,6 +396,12 @@ function SubmitSFForm(sid) {
 }
 
 //Click on Evaluation metric button to go to its page
+function getEMFile(emid) {
+    $('#emidInputEMDownload').val(emid);
+    $('#downloadEM').click();
+}
+
+//Download EM assignment file
 function GotoEM(emid) {
     var form = $("<form>", {
         action: '/Instructor/EvaluationMetrics',
@@ -408,6 +414,8 @@ function GotoEM(emid) {
     $('body').append(form);
     form.submit();
 }
+
+
 
 
 //Submit the Sample Files form
