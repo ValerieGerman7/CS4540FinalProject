@@ -4,14 +4,16 @@ using CS4540PS2.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CS4540PS2.Migrations
 {
     [DbContext(typeof(LOTDBContext))]
-    partial class LearningOutcomeDBContextModelSnapshot : ModelSnapshot
+    [Migration("20191202214604_UpdateNotificationsKey")]
+    partial class UpdateNotificationsKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,14 +122,8 @@ namespace CS4540PS2.Migrations
                         .HasColumnName("EMID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ContentType");
-
                     b.Property<string>("Description")
                         .IsRequired();
-
-                    b.Property<byte[]>("FileContent");
-
-                    b.Property<string>("FileName");
 
                     b.Property<int>("Loid")
                         .HasColumnName("LOID");
@@ -243,29 +239,27 @@ namespace CS4540PS2.Migrations
 
             modelBuilder.Entity("CS4540PS2.Models.Notifications", b =>
                 {
-                    b.Property<int>("NotificationId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("UserId")
+                        .HasColumnName("UserID");
 
                     b.Property<int?>("CourseInstanceId");
 
                     b.Property<DateTime>("DateNotified")
                         .HasColumnType("date");
 
+                    b.Property<int>("NotificationId");
+
                     b.Property<bool>("Read");
 
                     b.Property<string>("Text")
                         .IsRequired();
 
-                    b.Property<int>("UserId")
-                        .HasColumnName("UserID");
-
-                    b.HasKey("NotificationId")
+                    b.HasKey("UserId")
                         .HasName("PK__Notifica__1788CCAC810E6D4F");
 
-                    b.HasIndex("CourseInstanceId");
+                    b.HasAlternateKey("NotificationId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("CourseInstanceId");
 
                     b.ToTable("Notifications");
                 });
@@ -399,8 +393,8 @@ namespace CS4540PS2.Migrations
                         .HasForeignKey("CourseInstanceId");
 
                     b.HasOne("CS4540PS2.Models.UserLocator", "User")
-                        .WithMany("Notifications")
-                        .HasForeignKey("UserId")
+                        .WithOne("Notifications")
+                        .HasForeignKey("CS4540PS2.Models.Notifications", "UserId")
                         .HasConstraintName("FK__Notificat__UserI__412EB0B6")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

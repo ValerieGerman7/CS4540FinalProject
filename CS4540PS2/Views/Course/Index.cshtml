@@ -1,6 +1,6 @@
 ﻿@*
     Author: Valerie German, Cody Winters
-    Date: 28 Nov, 2019
+    Date: 4 Dec 2019
     Course: CS 4540, University of Utah
     Copyright: CS 4540, Valerie German and Cody Winters - This work may not be copied for use in Academic Coursework.
     We, Valerie German and Cody Winters, certify that we wrote this code from scratch and did not copy it in part or
@@ -48,9 +48,21 @@
                     @course.Department @course.Number -
                     <a asp-action="Course" asp-route-Dept="@course.Department" asp-route-Num="@course.Number"
                        asp-route-Sem="@course.Semester" asp-route-Year="@course.Year">
-                        <b>@course.Name</b>
+                        <b>@course.Name</b> <span class="badge badge-pill badge-secondary">@course.Status.Status</span>
                     </a>
                 </p>
+                @{ 
+                    var instructors = "";
+                    if (course.Instructors.Any()) {
+                        foreach (Instructors inst in course.Instructors) {
+                            instructors += inst.User.UserTitle + ", ";
+                        }
+                        instructors = instructors.Substring(0, instructors.Length - 2);
+                    } else {
+                        instructors = "No instructors assigned.";
+                    }
+                }
+                <p><b>Instructors: </b>@instructors</p>
                 <p>@course.Description</p>
             </div>
 

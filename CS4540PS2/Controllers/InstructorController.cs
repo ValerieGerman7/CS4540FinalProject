@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 /// <summary>
 /// Author: Valerie German
-/// Date: 18 Oct 2019
+/// Date: 4 Dec 2019
 /// Course: CS 4540, University of Utah
 /// Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
 /// I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
@@ -25,13 +25,17 @@ namespace CS4540PS2.Controllers {
     public partial class InstructorController : Controller {
         private readonly LOTDBContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserContext _userContext;
+        private UserManager<IdentityUser> _userManager;
         /// <summary>
         /// Construct a course controller with a database context.
         /// </summary>
         /// <param name="context"></param>
-        public InstructorController(LOTDBContext context, RoleManager<IdentityRole> role) {
+        public InstructorController(LOTDBContext context, RoleManager<IdentityRole> role, UserContext users, UserManager<IdentityUser> manager) {
             _context = context;
             _roleManager = role;
+            _userContext = users;
+            _userManager = manager;
         }
 
 
@@ -39,9 +43,35 @@ namespace CS4540PS2.Controllers {
         /// Return the index page listing all course instances belonging to the current professor.
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> Index() {
-            var instances = _context.CourseInstance.Where(i => 
-                i.Instructors.Where(ins => ins.User.UserLoginEmail == User.Identity.Name).Any());
+        public async Task<IActionResult> Index(string status) {
+            if(status == null) {
+                //All non-archived classes this user is an instructor of.
+                var instances = _context.CourseInstance
+                    .Include(c => c.Status)
+                    .Include(c => c.Instructors).ThenInclude(i => i.User)
+                    .Where(c => c.Instructors.Where(ins => ins.User.UserLoginEmail == User.Identity.Name).Any()
+                            && c.Status.Status != CourseStatusNames.Archived);
+                return View(new ValueTuple<string, IEnumerable<CourseInstance>>(null, await instances.ToListAsync()));
+            } else {
+                //All classes of the selected status this user is an instructor of.
+                var instances = _context.CourseInstance
+                    .Include(c => c.Status)
+                    .Include(c => c.Instructors).ThenInclude(i => i.User)
+                    .Where(c => c.Instructors.Where(ins => ins.User.UserLoginEmail == User.Identity.Name).Any()
+                            && c.Status.Status == status);
+                return View(new ValueTuple<string, IEnumerable<CourseInstance>>(status, await instances.ToListAsync()));
+            }
+        }
+
+        /// <summary>
+        /// View for all courses that have been archived.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> ArchivedCourses() {
+            var instances = _context.CourseInstance.Include(c => c.Status)
+                .Include(c => c.Instructors).ThenInclude(i => i.User)
+                .Where(c => c.Status.Status == CourseStatusNames.Archived)
+                .OrderByDescending(c => c.Department).ThenByDescending(c => c.Number).ThenByDescending(c => c.Year);
             return View(await instances.ToListAsync());
         }
 
@@ -73,8 +103,10 @@ namespace CS4540PS2.Controllers {
         /// <param name="NewNote"></param>
         /// <returns></returns>
         public JsonResult ChangeLONote(int LearningOutcomeId, string NewNote) {
+            //Finds the associated learning outcome. The user must be an instructor and the course cannot be archived.
             LearningOutcomes lo = _context.LearningOutcomes.Where(l => l.Loid == LearningOutcomeId).Include(l => l.LONotes)
-                .Where(l => l.CourseInstance.Instructors.Where(ins => ins.User.UserLoginEmail == User.Identity.Name).Any())
+                .Where(l => l.CourseInstance.Instructors.Where(ins => ins.User.UserLoginEmail == User.Identity.Name).Any()
+                        && l.CourseInstance.Status.Status != CourseStatusNames.Archived)
                 .FirstOrDefault();
             if (lo == null) return Json(new { success = false });
             if(lo.LONotes.Count == 0) {
@@ -96,22 +128,58 @@ namespace CS4540PS2.Controllers {
         /// <param name="Year"></param>
         /// <returns></returns>
         public async Task<IActionResult> Course(string Dept, int? Num, string Sem, int? Year) {
-            if (Dept.Equals(null) || Num == null || Sem.Equals(null) || Year == null)
+            if (Dept == null || Num == null || Sem.Equals(null) || Year == null)
                 return View("Error", new ErrorViewModel() {
                     ErrorMessage = "Insufficient information to locate course."
                 });
+            //Retrieves the associated course, the user must be an instructor of the course, or the course must be archived.
             CourseInstance course = _context.CourseInstance.Where(c => c.Department == Dept && c.Number == Num
                 && c.Semester == Sem && c.Year == Year)
                 .Include(c => c.CourseNotes)
-                .Include(c => c.LearningOutcomes)
-                .ThenInclude(lo => lo.EvaluationMetrics)
-                .ThenInclude(em => em.SampleFiles)
-                .Include(c => c.LearningOutcomes)
-                .ThenInclude(lo => lo.LONotes)
+                .Include(c => c.Instructors).ThenInclude(i => i.User)
+                .Include(c => c.LearningOutcomes).ThenInclude(lo => lo.EvaluationMetrics).ThenInclude(em => em.SampleFiles)
+                .Include(c => c.LearningOutcomes).ThenInclude(lo => lo.LONotes)
+                .Include(c => c.Status)
+                .Where(c => c.Instructors.Where(i => i.User.UserLoginEmail == User.Identity.Name).Any() || c.Status.Status == CourseStatusNames.Archived)
                 .FirstOrDefault();
             if (course == null)
                 return Forbid();
             return View("Course", course);
+        }
+
+        /// <summary>
+        /// Instructor changes the course's status to 'Awaiting Approval'
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> RequestApproval(int? courseId) {
+            if (courseId == null) return new JsonResult(new { success = false });
+            CourseInstance course = _context.CourseInstance.Include(c => c.Status)
+                .Where(c => c.CourseInstanceId == courseId).FirstOrDefault();
+            if(course == null) return new JsonResult(new { success = false });
+            if(course.Status.Status.Equals(CourseStatusNames.InProgress) || course.Status.Status.Equals(CourseStatusNames.InReview)) {
+                //Change status
+                CourseStatus app = _context.CourseStatus.Where(s => s.Status == CourseStatusNames.AwaitingApproval).FirstOrDefault();
+                if(app == null) return new JsonResult(new { success = false });
+                course.Status = app;
+                //Notify Chairs
+                foreach(IdentityUser user in _userManager.GetUsersInRoleAsync("Chair").Result) {
+                    UserLocator userLoc = _context.UserLocator.Where(u => u.UserLoginEmail == user.Email).FirstOrDefault();
+                    if(userLoc != null) {
+                        Notifications notify = new Notifications() {
+                            CourseInstance = course,
+                            Text = "Course approval requested.",
+                            DateNotified = DateTime.Now,
+                            User = userLoc
+                        };
+                        _context.Notifications.Add(notify);
+                    }
+                }
+                _context.SaveChanges();
+                return new JsonResult(new { success = true });
+            } else {
+                return new JsonResult(new { success = false });
+            }
         }
 
     }

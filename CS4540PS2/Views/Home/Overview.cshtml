@@ -1,0 +1,155 @@
+﻿@*
+    Author: Valerie German,
+    Date: 4 Dec 2019
+    Course: CS 4540, University of Utah
+    Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
+    I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
+    File Contents: Overview/tutorial page
+*@
+@{
+    ViewData["Title"] = "Overview";
+}
+<br />
+<h2>Project Overview</h2>
+<hr />
+<div class="card card-body">
+    <p>LOT 'o Learning expanded on the Learning Outcome Tracker project. ...</p>
+</div>
+<button class="btn btn-primary sectionButton text-left" type="button" data-toggle="collapse"
+        data-target="#SampleFileOverview" aria-expanded="false"
+        aria-controls="SampleFileOverview">
+    Sample Files
+</button>
+<div class="collapse" id="SampleFileOverview">
+    <div class="card card-body">
+        <p>Instructors are able to upload, download and remove Sample files for evaluation metrics.</p>
+        <div class="imageContainer">
+            <img class="sizeImage" src="~/overview/InstructorSampleFile.png" />
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<button class="btn btn-primary sectionButton text-left" type="button" data-toggle="collapse"
+        data-target="#AdminUser" aria-expanded="false"
+        aria-controls="AdminUser">
+    Users
+</button>
+<div class="collapse" id="AdminUser">
+    <div class="card card-body">
+        <p>Administrators can remove users.</p>
+        <div class="imageContainer">
+            <img class="sizeImage" src="~/overview/AdminUsers.png" />
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<button class="btn btn-primary sectionButton text-left" type="button" data-toggle="collapse"
+        data-target="#collapseContentNotif" aria-expanded="false"
+        aria-controls="collapseContentNotif">
+    Notifications
+</button>
+<div class="collapse" id="collapseContentNotif">
+    <div class="card card-body">
+        <p>
+            Instructors and Chairs receive notifications on the status of a course. Courses may be created with any initial status by an administrator, and
+            admins can modify the course status at any time. Department chairs may change a course to 'In-Review', 'Approved' or 'Archived'. Instructors may change
+            a course to 'Awaiting Approval'.
+        </p>
+        <p>
+            A notification is sent when a course status is changed. Notifications can be marked as read and deleted. Each notification contains a message and a link
+            to the related course.
+        </p>
+        <p>Possible Course Statuses are:</p>
+        <ul>
+            <li><b><i>In-Progress</i></b>: Instructor is working on the course.</li>
+            <li><b><i>Awaiting Approval</i></b>: Instructor has completed the course metrics and requested a department chair's approval.</li>
+            <li>
+                <b><i>In-Review</i></b>: Department chair didn't approve the instructor's work and requested changes. A department chair may send a message when changing
+                to this status.
+            </li>
+            <li><b><i>Approved/Complete</i></b>: The department chair accepted the course.</li>
+            <li><b><i>Archived</i></b>: The course is complete and can no longer be modified. Can now be viewed by all instructors.</li>
+        </ul>
+        <hr />
+        <p><b>Views and Details</b></p>
+        <figure class="figure border-bottom border-secondary">
+            <div class="imageContainer">
+                <img class="sizeImage" src="~/overview/ChairAwaitingCourse.png" />
+            </div>
+            <figcaption class="figure-caption text-center">
+                Department chair view of course awaiting approval. Chairs may change the course status to 'In-Review',
+                'Approved' or 'Archived' at any time.
+            </figcaption>
+        </figure>
+        <figure class="figure border-bottom border-secondary">
+            <div class="imageContainer">
+                <img class="sizeImage" src="~/overview/ChairNotification.png" />
+            </div>
+            <figcaption class="figure-caption text-center">
+                Department chair notifications
+            </figcaption>
+        </figure>
+        <figure class="figure border-bottom border-secondary">
+            <div class="imageContainer">
+                <img class="sizeImage" src="~/overview/InstructorViewCourses.png" />
+            </div>
+            <figcaption class="figure-caption text-center">
+                Instructor view of courses. By default all active (non-archived) courses are displayed, instructors may select a status to display those courses.
+            </figcaption>
+        </figure>
+        <figure class="figure border-bottom border-secondary">
+            <div class="imageContainer">
+                <img class="sizeImage" src="~/overview/InstructorInProgressCourse.png" />
+            </div>
+            <figcaption class="figure-caption text-center">
+                Instructor view of an in-progress course. Instructors may request a course be approved from this course page.
+            </figcaption>
+        </figure>
+        <figure class="figure border-bottom border-secondary">
+            <div class="imageContainer">
+                <img class="sizeImage" src="~/overview/InstructorNotification.png" />
+            </div>
+            <figcaption class="figure-caption text-center">
+                Instructor notifications. Notficiations may be marked as read (white), the number of unread notifications appears in the drop down menu. Note the chair
+                sent a message when changing a course to in-review.
+            </figcaption>
+        </figure>
+        <figure class="figure border-bottom border-secondary">
+            <div class="imageContainer">
+                <img class="sizeImage" src="~/overview/InstructorCourseHistory.png" />
+            </div>
+            <figcaption class="figure-caption text-center">
+                Instructor view of course history. Instructors may view any archived courses.
+            </figcaption>
+        </figure>
+        <figure class="figure border-bottom border-secondary">
+            <div class="imageContainer">
+                <img class="sizeImage" src="~/overview/InstructorArchivedCourse.png" />
+            </div>
+            <figcaption class="figure-caption text-center">
+                Instructor view of an archived aourse. Archived courses cannot be modified.
+            </figcaption>
+        </figure>
+
+    </div>
+</div>
+<br />
+<br />
+
+
+<!-- Collapse code:
+    <button class="btn btn-primary sectionButton text-left" type="button" data-toggle="collapse"
+        data-target="#UniqueIdHere" aria-expanded="false"
+        aria-controls="UniqueIdHere">
+    Title
+</button>
+<div class="collapse" id="UniqueIdHere">
+    <div class="card card-body">
+        <p>Sample Interior</p>
+    </div>
+</div>
+<br />
+<br />
+-->

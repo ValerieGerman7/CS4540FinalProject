@@ -1,6 +1,7 @@
-﻿@*
+﻿@model IEnumerable<CS4540PS2.Models.UserLocator>
+@*
     /// Author: Valerie German
-    /// Date: 18 Oct 2019
+    /// Date: 22 Nov 2019
     /// Course: CS 4540, University of Utah
     /// Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
     /// I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
@@ -19,59 +20,76 @@
     <thead>
         <tr>
             <th scope="col">User Name</th>
-            <th scope="col">Email</th>
-            <th scope="col">Email Confirmed</th>
+            <!--<th scope="col">Email</th>
+            <th scope="col">Email Confirmed</th>-->
+            <th scope="col">Title</th>
             <th scope="col">Administrator</th>
             <th scope="col">Chair</th>
             <th scope="col">Instructor</th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
         @foreach (IdentityUser user in UserManager.Users.OrderBy(u => u.UserName).ToList<IdentityUser>()) {
-        <tr>
-            <th scope="row">@user.UserName</th>
-            <td>@user.Email</td>
-            <td>@user.EmailConfirmed</td>
-            <td>
-                <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input">
-                    @{
-                        bool isAdmin = UserManager.IsInRoleAsync(user, "Admin").Result;
-                        <input type="checkbox" class="custom-control-input" id="@{<text>adminSwitch @user.UserName</text>}"
-                               checked="@isAdmin"
-                               onclick="ChangeUserRole(event, '@user.UserName', 'Admin');">
+            <tr id="@user.UserName Row">
+                <th scope="row">@user.UserName</th>
+                <!--<td>@user.Email</td>
+                <td>@user.EmailConfirmed</td>-->
+                @{
+                    var userlocator = Model.Where(u => u.UserLoginEmail == user.Email).FirstOrDefault();
+                    string title = "";
+                    if (userlocator == null) {
+                        title = "No Title";
+                    } else {
+                        title = userlocator.UserTitle;
                     }
-                    <label class="custom-control-label" for="@{<text>adminSwitch @user.UserName</text>}"></label>
+                }
+                <td>@title</td>
+                <td>
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input">
+                        @{
+                            bool isAdmin = UserManager.IsInRoleAsync(user, "Admin").Result;
+                            <input type="checkbox" class="custom-control-input" id="@{<text>adminSwitch @user.UserName</text>}"
+                                   checked="@isAdmin"
+                                   onclick="ChangeUserRole(event, '@user.UserName', 'Admin');">
+                        }
+                        <label class="custom-control-label" for="@{<text>adminSwitch @user.UserName</text>}"></label>
 
-                </div>
-            </td>
-            <td>
-                <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input">
-                    @{
-                        bool isChair = UserManager.IsInRoleAsync(user, "Chair").Result;
-                        <input type="checkbox" class="custom-control-input" id="@{<text>chairSwitch @user.UserName</text>}"
-                               checked="@isChair"
-                               onclick="ChangeUserRole(event, '@user.UserName', 'Chair');">
-                    }
-                    <label class="custom-control-label" for="@{<text>chairSwitch @user.UserName</text>}"></label>
+                    </div>
+                </td>
+                <td>
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input">
+                        @{
+                            bool isChair = UserManager.IsInRoleAsync(user, "Chair").Result;
+                            <input type="checkbox" class="custom-control-input" id="@{<text>chairSwitch @user.UserName</text>}"
+                                   checked="@isChair"
+                                   onclick="ChangeUserRole(event, '@user.UserName', 'Chair');">
+                        }
+                        <label class="custom-control-label" for="@{<text>chairSwitch @user.UserName</text>}"></label>
 
-                </div>
-            </td>
-            <td>
-                <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input">
-                    @{
-                        bool isInst = UserManager.IsInRoleAsync(user, "Instructor").Result;
-                        <input type="checkbox" class="custom-control-input" id="@{<text>instSwitch @user.UserName</text>}"
-                               checked="@isInst"
-                               onclick="ChangeUserRole(event, '@user.UserName', 'Instructor');">
-                    }
-                    <label class="custom-control-label" for="@{<text>instSwitch @user.UserName</text>}"></label>
+                    </div>
+                </td>
+                <td>
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input">
+                        @{
+                            bool isInst = UserManager.IsInRoleAsync(user, "Instructor").Result;
+                            <input type="checkbox" class="custom-control-input" id="@{<text>instSwitch @user.UserName</text>}"
+                                   checked="@isInst"
+                                   onclick="ChangeUserRole(event, '@user.UserName', 'Instructor');">
+                        }
+                        <label class="custom-control-label" for="@{<text>instSwitch @user.UserName</text>}"></label>
 
-                </div>
-            </td>
-        </tr>
+                    </div>
+                </td>
+                <td>
+                    <div class="custom-control custom-switch">
+                        <button class="btn-danger btn-sm" onclick="DeleteUser(event, '@user.UserName')">Remove User</button>
+                    </div>
+                </td>
+            </tr>
         }
 
     </tbody>

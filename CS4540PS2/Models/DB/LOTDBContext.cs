@@ -219,7 +219,7 @@ namespace CS4540PS2.Models
 
             modelBuilder.Entity<Notifications>(entity =>
             {
-                entity.HasKey(e => e.UserId)
+                entity.HasKey(e => e.NotificationId)
                     .HasName("PK__Notifica__1788CCAC810E6D4F");
 
                 entity.Property(e => e.UserId)
@@ -231,8 +231,8 @@ namespace CS4540PS2.Models
                 entity.Property(e => e.Text).IsRequired();
 
                 entity.HasOne(d => d.User)
-                    .WithOne(p => p.Notifications)
-                    .HasForeignKey<Notifications>(d => d.UserId)
+                    .WithMany(p => p.Notifications)
+                    .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK__Notificat__UserI__412EB0B6");
             });
 

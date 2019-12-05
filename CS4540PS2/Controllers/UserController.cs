@@ -35,7 +35,7 @@ namespace CS4540PS2.Controllers {
         /// </summary>
         /// <returns></returns>
         public IActionResult Index() {
-            return View();
+            return View(_context.UserLocator);
         }
 
         /// <summary>
@@ -47,7 +47,6 @@ namespace CS4540PS2.Controllers {
         /// <param name="role"></param>
         /// <returns></returns>
         public JsonResult ChangeRole(string username, string role) {
-            int x = 0;
             IdentityUser user = _userContext.Users.Where(u => u.UserName == username).FirstOrDefault();
             if(user == null) {
                 return Json(new { success = false, reason = "The user could not be found." });
@@ -62,6 +61,18 @@ namespace CS4540PS2.Controllers {
                 _userManager.AddToRoleAsync(user, role).Wait();
             }
             return Json(new { success = true, isRole = !isInRole });
+        }
+
+        /// <summary>
+        /// Removes the specified user. Prevents the current user from deleting themself.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public JsonResult RemoveUser(string username) {
+            IdentityUser user = _userContext.Users.Where(u => u.UserName == username).FirstOrDefault();
+            if (user == null || user.UserName == User.Identity.Name) return Json(new { success = false });
+            _userManager.DeleteAsync(user).Wait();
+            return Json(new { success = true });
         }
 
     }

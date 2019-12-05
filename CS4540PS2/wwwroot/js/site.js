@@ -1,5 +1,5 @@
 ﻿//Author: Valerie German
-//Date: 18 Oct 2019
+//Date: 2 Dec 2019
 //Course: CS 4540, University of Utah
 //Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
 //I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
@@ -167,7 +167,7 @@ function Redirect(Controller, Action) {
 //Requests to add a user to a role in the User controller
 //(obsolete)
 function AddUserToRole(e, username) {
-    window.alert("here");
+    //("here");
     e.preventDefault();
     $.ajax({
         url: "/User/AddRole",
@@ -177,8 +177,8 @@ function AddUserToRole(e, username) {
             role : "Admin"
         }
     }).done(function (data) {
-        window.alert("Always");
-        window.alert(data.success);
+        //window.alert("Always");
+        //window.alert(data.success);
     });
 }
 
@@ -292,6 +292,53 @@ function ChangeUserRole(e, username, role) {
     })
     
 }
+//Sends a request to delete the specified user.
+function DeleteUser(e, username) {
+    e.preventDefault();
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to delete " + username + "'s account.",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: "Delete User"
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: "/User/RemoveUser",
+                method: "POST",
+                data: {
+                    username: username
+                }
+            }).fail(function () {
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!'
+                })
+            }).done(function (data) {
+                if (data.success) {
+                    var row = document.getElementById(username + " Row");
+                    row.parentNode.removeChild(row);
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'success',
+                        title: 'The user was deleted.',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                } else {
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'error',
+                        title: 'User delete failed.',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                }
+            });
+        }
+    })
+}
 //Sends a request to delete a department
 function DeleteDept(e, deptCode) {
     //window.alert("here");
@@ -317,17 +364,8 @@ function DeleteDept(e, deptCode) {
                     text: 'Something went wrong!'
                 })
             }).done(function (data) {
-                var box = e.target;
                 if (data.success) {
                     window.location.href = '/DeptManager/Index';
-                    /*box.checked = !box.checked;
-                    Swal.fire({
-                        position: 'top-end',
-                        type: 'success',
-                        title: 'The department was deleted.',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })*/
                 } else {
                     Swal.fire({
                         position: 'top-end',
@@ -434,25 +472,24 @@ function DeleteSample(e, sid, ret) {
         }
     })
 }
-
-
-//Sends a request to delete a sample file
-function DeleteEM(e, sid, ret) {
+//Sends a request to change a course's due date
+function ChangeDueDate(e, cid) {
     //window.alert("here");
     e.preventDefault();
     Swal.fire({
         title: "Are you sure?",
-        text: "You are about to delete this sample.",
+        text: "You are about to change this course's due date.",
         type: 'warning',
         showCancelButton: true,
-        confirmButtonText: "Delete Sample"
+        confirmButtonText: "Change Due Date"
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: "/Instructor/DeleteEvaluationMetrics",
+                url: "/Department/UpdateCourseDueDate",
                 method: "POST",
                 data: {
-                    emId: sid
+                    courseId: cid,
+                    newDueDate: $("#dateInput").val()
                 }
             }).fail(function () {
                 Swal.fire({
@@ -461,22 +498,276 @@ function DeleteEM(e, sid, ret) {
                     text: 'Something went wrong!'
                 })
             }).done(function (data) {
-                var box = e.target;
                 if (data.success) {
-                    ret.click();
-                    /*box.checked = !box.checked;
                     Swal.fire({
                         position: 'top-end',
                         type: 'success',
-                        title: 'The department was deleted.',
+                        title: 'The due date was updated.',
                         showConfirmButton: false,
-                        timer: 1500
-                    })*/
+                        timer: 1000
+                    })
                 } else {
                     Swal.fire({
                         position: 'top-end',
                         type: 'error',
-                        title: 'The sample could not be deleted.',
+                        title: 'The date could not be updated.',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                }
+            });
+        }
+    })
+}
+//Sends request to approve a course
+function ApproveCourse(e, cid) {
+    //window.alert("here");
+    e.preventDefault();
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to change this course's status to approved.",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: "Approve"
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: "/Department/ApproveCourse",
+                method: "POST",
+                data: {
+                    courseId: cid
+                }
+            }).fail(function () {
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!'
+                })
+            }).done(function (data) {
+                if (data.success) {
+                    $("#statusI").text("Complete");
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'success',
+                        title: 'The course was approved.',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                } else {
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'error',
+                        title: 'The course could not be approved.',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                }
+            });
+        }
+    })
+}
+//Sends request to set a course to in-review
+function ReviewCourse(e, cid) {
+    //window.alert("here");
+    e.preventDefault();
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to change this course's status to in-review.",
+        input: 'text',
+        inputPlaceholder: "Message for Instructors",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: "In-Review"
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: "/Department/SetReviewCourse",
+                method: "POST",
+                data: {
+                    courseId: cid,
+                    message: result.value
+                }
+            }).fail(function () {
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!'
+                })
+            }).done(function (data) {
+                if (data.success) {
+                    $("#statusI").text("In-Review");
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'success',
+                        title: 'The course was set to in-review.',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                } else {
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'error',
+                        title: 'The course could not be set to in-review.',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                }
+            });
+        }
+    })
+}
+//Sends request to set a course to in-review
+function ArchiveCourse(e, cid) {
+    //window.alert("here");
+    e.preventDefault();
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to change this course's status to archived. This will prevent Instructors from modifying the course and allow all instructors to view this course.",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: "Archive"
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: "/Department/ArchiveCourse",
+                method: "POST",
+                data: {
+                    courseId: cid
+                }
+            }).fail(function () {
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!'
+                })
+            }).done(function (data) {
+                if (data.success) {
+                    $("#statusI").text("Archived");
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'success',
+                        title: 'The course was archived.',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                } else {
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'error',
+                        title: 'The course could not be archived.',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                }
+            });
+        }
+    })
+}
+//Sends request to get course approval
+function RequestApproveCourse(e, cid) {
+    //window.alert("here");
+    e.preventDefault();
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to request approval for this course.",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: "Request"
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: "/Instructor/RequestApproval",
+                method: "POST",
+                data: {
+                    courseId: cid
+                }
+            }).fail(function () {
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!'
+                })
+            }).done(function (data) {
+                if (data.success) {
+                    $("#statusI").text("Awaiting Approval");
+                    //window.alert($("#statusI").value);
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'success',
+                        title: 'The course was submitted for approval.',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                } else {
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'error',
+                        title: 'The course could not be submitted for approval.',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                }
+            });
+        }
+    })
+}
+//Marks a notification as read
+function ReadNotify(e, nid, row, col) {
+    e.preventDefault();
+    $.ajax({
+        url: "/Home/ReadNotification",
+        method: "POST",
+        data: {
+            notificationId: nid
+        }
+    }).fail(function () {
+        Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong!'
+        })
+    }).done(function (data) {
+        if (data.success) {
+            $('#' + col).empty();
+            $('#' + row).removeClass();
+            $('#' + row).addClass('bg-light text-dark');
+
+        } 
+    });
+}
+//Delete a notification
+function DeleteNotify(e, nid, row) {
+    e.preventDefault();
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to delete this notification.",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: "Delete"
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: "/Home/DeleteNotification",
+                method: "POST",
+                data: {
+                    notificationId: nid
+                }
+            }).fail(function () {
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!'
+                })
+            }).done(function (data) {
+                if (data.success) {
+                    if (data.success) {
+                        $('#' + row).remove();
+                    }
+                } else {
+                    Swal.fire({
+                        position: 'top-end',
+                        type: 'error',
+                        title: 'The notification could not be deleted.',
                         showConfirmButton: false,
                         timer: 1000
                     })

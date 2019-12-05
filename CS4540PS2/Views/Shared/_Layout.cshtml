@@ -1,6 +1,6 @@
 ﻿<!--
     Author: Valerie German
-    Date: 18 Oct 2019
+    Date: 3 Dec 2019
     Course: CS 4540, University of Utah
     Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
     I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="~/css/Learning_Outcomes.css" />
     <script src="https://kit.fontawesome.com/993c01b040.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css" />
-    <title>@ViewData["Title"] - CS4540PS4</title>
+    <title>@ViewData["Title"] - CS4540 Final Project</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -51,8 +51,7 @@
                     <li class="nav-item active">
                         <a class="nav-link navbar-brand" asp-controller="Home" asp-action="Index">Home <span class="sr-only">(current)</span></a>
                     </li>
-                    @if (User.IsInRole("Admin"))
-                    {
+                    @if (User.IsInRole("Admin")) {
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="LearningOutcomes" asp-action="Index">Learning Outcomes</a>
                         </li>
@@ -73,8 +72,7 @@
                             <a class="nav-link" asp-controller="User" asp-action="Index">Users</a>
                         </li>
                     }
-                    @if (User.IsInRole("Chair"))
-                    {
+                    @if (User.IsInRole("Chair")) {
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Departments
@@ -86,10 +84,12 @@
                             </div>
                         </li>
                     }
-                    @if (User.IsInRole("Instructor"))
-                    {
+                    @if (User.IsInRole("Instructor")) {
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Instructor" asp-action="Index">Courses</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Instructor" asp-action="ArchivedCourses">Course History</a>
                         </li>
                         <!-- Dropdown -->
                         <!--<li class="nav-item dropdown">
@@ -106,7 +106,9 @@
         </div>
                         </li>-->
                     }
-
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="Overview">Overview</a>
+                    </li>
                 </ul>
                 <!-- User Info -->
                 <partial name="_LoginPartial" />
@@ -133,7 +135,7 @@
         var userLocator = context.UserLocator.Where(o => o.UserLoginEmail == email);
         var userID = userLocator.FirstOrDefault().Id;
         <!--Save the userLocator ID in this p so .js file can access-->
-        <p id="userID" display="hidden">@userID</p>
+        <p id="userID" display="hidden" hidden="hidden">@userID</p>
 
         <!--Message box-->
         @foreach (IdentityUser user in UserManager.Users)

@@ -10,12 +10,21 @@
 @{
     ViewData["Title"] = "Edit Course";
     @using Microsoft.EntityFrameworkCore;
+    var instructors = "";
+    if (Model.Course.Instructors.Any()) {
+        foreach(Instructors inst in Model.Course.Instructors) {
+            instructors += inst.User.UserTitle + ", ";
+        }
+        instructors = instructors.Substring(0, instructors.Length - 2);
+    } else {
+        instructors = "No assigned instructors";
+    }
 }
 
 <h2>Edit</h2>
 <h4>@Model.Course.Department  @Model.Course.Number  - @Model.Course.Name</h4>
 @if (Model.Course.Instructors.Any()) {
-    <p>Instructor: @Model.Course.Instructors.First().User.UserTitle</p>
+    <p>Instructors: @instructors</p>
 }
 <hr />
 <div class="row">
@@ -81,16 +90,17 @@
             </div>
             <div class="form-group">
                 <label class="control-label">Instructor <i>(optional)</i></label>
-                <select name="newInstructor">
+                <select name="newInstructors" class="form-control" multiple data-max-options="3">
                     @foreach (UserLocator user in Model.Professors) {
                         @if (Model.Course.Instructors.Any()
-                          && Model.Course.Instructors.First().User.UserLoginEmail == user.UserLoginEmail) {
-                            <option value="@user.UserLoginEmail" selected>@user.UserTitle</option>
-                        } else {
-                            <option value="@user.UserLoginEmail">@user.UserTitle</option>
-                        }
+                       && Model.Course.Instructors.Where(i => i.User.UserLoginEmail == user.UserLoginEmail).Any()) {
+                    <option value="@user.UserLoginEmail" selected>@user.UserTitle</option>
+                } else {
+                    <option value="@user.UserLoginEmail">@user.UserTitle</option>
+                }
                     }
                 </select>
+
             </div>
             <div class="form-group">
                 <input type="submit" value="Edit" class="btn btn-primary" />
