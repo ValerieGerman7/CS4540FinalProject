@@ -35,7 +35,8 @@
 
     <hr />
     <h2>Learning Outcomes</h2>
-
+    @if (!archive)
+    {
     <!--Modals are used for adding evaluation metrics or sample files in a simple popup.-->
     <!--Add modal for evaluation metrics (modals reference https://getbootstrap.com/docs/4.1/components/modal/)-->
     <div class="modal fade" id="emModal" tabindex="-1" role="dialog" aria-labelledby="evaluationMetricModal" aria-hidden="true">
@@ -107,6 +108,7 @@
             </div>
         </div>
     </div>
+    }
     <!-- Form containing sample work - will be changed for multiple examples to be dynamic later (and moved close to button). For now these are forms
     to be link to files.-->
     <!-- Referenced https://stackoverflow.com/questions/11620698/how-to-trigger-a-file-download-when-clicking-an-html-button-or-javascript for opening files.
