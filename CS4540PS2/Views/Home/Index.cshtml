@@ -11,25 +11,40 @@
 }
 
 <div class="text-center">
-    <h3 class="display-4">Home - PS4</h3>
+    <h3 class="display-4">Home - LOT 'o Learning</h3>
     <hr />
-    <p>
-        <b>Admin:</b>
-        <a asp-controller="LearningOutcomes" asp-action="Index">Learning Outcomes</a>,
-        <a asp-controller="Course" asp-action="Index">All Courses</a>,
-        <a asp-controller="User" asp-action="Index"><b>User roles</b> page</a>
-    </p>
-    <p>
-        <b>Instructor:</b>
-        <a asp-controller="Instructor" asp-action="Index">Courses Overview</a>,
-        <a asp-controller="Instructor" asp-action="Course" asp-route-Dept="CS" asp-route-Num="4540"
-           asp-route-Sem="Fall" asp-route-Year="2019">CS 4540 (Professor Jim) <b>Learning Outcomes and Course Notes</b></a>,
-        <a asp-controller="Instructor" asp-action="Course" asp-route-Dept="CS" asp-route-Num="2100"
-           asp-route-Sem="Fall" asp-route-Year="2019">CS 2100 (Professor Mary) <b>Learning Outcomes and Course Notes</b></a>
-    </p>
-    <p>
-        <b>Chair:</b>
-        <a asp-controller="Department" asp-action="Department">Computer Science Department Overview</a>, 
-        <a asp-controller="Department" asp-action="Course" asp-route-CourseId="1">Course Overview <b>Learning Outcomes Note</b></a>
-    </p>
+    <p><a asp-controller="Home" asp-action="Overview">Features Overview</a></p>
 </div>
+<p>
+    <b>Admin:</b>
+    <ul>
+        <li><a asp-controller="LearningOutcomes" asp-action="Index">Learning Outcomes</a></li>
+        <li><a asp-controller="Course" asp-action="Index">All Courses</a></li>
+        <li><a asp-controller="DeptManager" asp-action="Index">Departments</a></li>
+        <li><a asp-controller="User" asp-action="Index"><b>User roles</b> page</a></li>
+    </ul>
+</p>
+<p>
+    <b>Instructor:</b>
+    <ul>
+        <li><a asp-controller="Instructor" asp-action="Index">Courses Overview</a></li>
+        <li>
+            <a asp-controller="Instructor" asp-action="Course" asp-route-Dept="CS" asp-route-Num="4540"
+               asp-route-Sem="Fall" asp-route-Year="2019">CS 4540 (Professor Jim) <b>Learning Outcomes and Course Notes</b></a>
+        </li>
+        <li>
+            <a asp-controller="Instructor" asp-action="Course" asp-route-Dept="CS" asp-route-Num="2100"
+               asp-route-Sem="Fall" asp-route-Year="2019">CS 2100 (Professor Mary) <b>Learning Outcomes and Course Notes</b></a>
+        </li>
+        <li><a asp-controller="Home" asp-action="Notifications"><b>Notifications</b></a></li>
+        <li><a asp-controller="Instructor" asp-action="ArchivedCourses"><b>Course History</b></a></li>
+    </ul>
+</p>
+<p>
+    <b>Chair:</b>
+    <ul>
+        <li><a asp-controller="Department" asp-action="Department">Computer Science Department Overview</a></li>
+        <li><a asp-controller="Department" asp-action="Course" asp-route-CourseId="1"><b>Course Overview</b></a></li>
+        <li><a asp-controller="Home" asp-action="Notifications"><b>Notifications</b></a></li>
+    </ul>
+</p>
