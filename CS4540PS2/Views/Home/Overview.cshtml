@@ -13,16 +13,46 @@
 <h2>Project Overview</h2>
 <hr />
 <div class="card card-body">
-    <p>LOT 'o Learning expanded on the Learning Outcome Tracker project. ...</p>
+    <p>LOT 'o Learning expanded on the Learning Outcome Tracker project.</p>
+    <p>This project started from as PS5 solution, below are the changes made. Click on any topic for details.</p>
 </div>
+<button class="btn btn-primary sectionButton text-left" type="button" data-toggle="collapse"
+        data-target="#DatabaseOverview" aria-expanded="false"
+        aria-controls="DatabaseOverview">
+    Database Changes
+</button>
+<div class="collapse" id="DatabaseOverview">
+    <div class="card card-body">
+        <p>
+            The database went through several changes. These included expansions for storing files, tables for notfications, messages, course
+            statuses and better user management.
+        </p>
+        <p>
+            The database initializer was also updated, including seeding files, including courses of different statuses, notifications and messages.
+        </p>
+    </div>
+</div>
+<br />
+<br />
 <button class="btn btn-primary sectionButton text-left" type="button" data-toggle="collapse"
         data-target="#SampleFileOverview" aria-expanded="false"
         aria-controls="SampleFileOverview">
-    Sample Files
+    Departments, Courses, Sample Files
 </button>
 <div class="collapse" id="SampleFileOverview">
     <div class="card card-body">
-        <p>Instructors are able to upload, download and remove Sample files for evaluation metrics.</p>
+        <p>
+            <b>Departments</b>: Administrators can create, view, edit and delete Departments. Departments are a separate table in the database to allow better department
+            management.
+        </p>
+        <p>
+            <b>Courses</b>: Administrators are able to create, edit, view and delete courses. They are able to assign multiple instructors to each course. Administrators
+            can also set the course status (see Notifications/Course History).
+        </p>
+        <p>
+            <b>Sample Files</b>: Instructors are able to upload, download and remove Sample files for evaluation metrics. Department chairs are also able to download
+            sample files.
+        </p>
         <div class="imageContainer">
             <img class="sizeImage" src="~/overview/InstructorSampleFile.png" />
         </div>
@@ -48,7 +78,7 @@
 <button class="btn btn-primary sectionButton text-left" type="button" data-toggle="collapse"
         data-target="#collapseContentNotif" aria-expanded="false"
         aria-controls="collapseContentNotif">
-    Notifications
+    Notifications/Course History
 </button>
 <div class="collapse" id="collapseContentNotif">
     <div class="card card-body">
@@ -56,6 +86,10 @@
             Instructors and Chairs receive notifications on the status of a course. Courses may be created with any initial status by an administrator, and
             admins can modify the course status at any time. Department chairs may change a course to 'In-Review', 'Approved' or 'Archived'. Instructors may change
             a course to 'Awaiting Approval'.
+        </p>
+        <p>
+            Courses with the archived status can be viewed by all department chairs and instructors and cannot be modified by any instructor. Instructors may view
+            archived courses under 'Course History'.
         </p>
         <p>
             A notification is sent when a course status is changed. Notifications can be marked as read and deleted. Each notification contains a message and a link
@@ -73,13 +107,14 @@
             <li><b><i>Archived</i></b>: The course is complete and can no longer be modified. Can now be viewed by all instructors.</li>
         </ul>
         <hr />
-        <p><b>Views and Details</b></p>
+        <h4><b>Views and Details</b></h4>
+        <p><b>Department Chairs</b></p>
         <figure class="figure border-bottom border-secondary">
             <div class="imageContainer">
                 <img class="sizeImage" src="~/overview/ChairAwaitingCourse.png" />
             </div>
             <figcaption class="figure-caption text-center">
-                Department chair view of course awaiting approval. Chairs may change the course status to 'In-Review',
+                <b>Department chair view</b> of course awaiting approval. Chairs may change the course status to 'In-Review',
                 'Approved' or 'Archived' at any time.
             </figcaption>
         </figure>
@@ -88,15 +123,16 @@
                 <img class="sizeImage" src="~/overview/ChairNotification.png" />
             </div>
             <figcaption class="figure-caption text-center">
-                Department chair notifications
+                Department chair <b>notifications</b>
             </figcaption>
         </figure>
+        <p><b>Instructors</b></p>
         <figure class="figure border-bottom border-secondary">
             <div class="imageContainer">
                 <img class="sizeImage" src="~/overview/InstructorViewCourses.png" />
             </div>
             <figcaption class="figure-caption text-center">
-                Instructor view of courses. By default all active (non-archived) courses are displayed, instructors may select a status to display those courses.
+                <b>Instructor view of courses</b>. By default all active (non-archived) courses are displayed, instructors may select a status to display those courses.
             </figcaption>
         </figure>
         <figure class="figure border-bottom border-secondary">
@@ -104,7 +140,7 @@
                 <img class="sizeImage" src="~/overview/InstructorInProgressCourse.png" />
             </div>
             <figcaption class="figure-caption text-center">
-                Instructor view of an in-progress course. Instructors may request a course be approved from this course page.
+                Instructor view of an <b>in-progress course</b>. Instructors may request a course be approved from this course page.
             </figcaption>
         </figure>
         <figure class="figure border-bottom border-secondary">
@@ -112,7 +148,7 @@
                 <img class="sizeImage" src="~/overview/InstructorNotification.png" />
             </div>
             <figcaption class="figure-caption text-center">
-                Instructor notifications. Notficiations may be marked as read (white), the number of unread notifications appears in the drop down menu. Note the chair
+                Instructor <b>notifications</b>. Notficiations may be marked as <b>read</b> (white), the <b>number of unread</b> notifications appears in the drop down menu. Note the chair
                 sent a message when changing a course to in-review.
             </figcaption>
         </figure>
@@ -121,7 +157,7 @@
                 <img class="sizeImage" src="~/overview/InstructorCourseHistory.png" />
             </div>
             <figcaption class="figure-caption text-center">
-                Instructor view of course history. Instructors may view any archived courses.
+                Instructor view of <b>course history</b>. Instructors may view any archived courses.
             </figcaption>
         </figure>
         <figure class="figure border-bottom border-secondary">
@@ -129,7 +165,7 @@
                 <img class="sizeImage" src="~/overview/InstructorArchivedCourse.png" />
             </div>
             <figcaption class="figure-caption text-center">
-                Instructor view of an archived aourse. Archived courses cannot be modified.
+                Instructor view of an <b>archived course</b>. Archived courses cannot be modified.
             </figcaption>
         </figure>
 
