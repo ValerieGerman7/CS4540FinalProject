@@ -9,10 +9,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.Text;
 
 /// <summary>
 /// Author: Valerie German
-/// Date: 16 Nov 2019
+/// Date: 5 Dec 2019
 /// Course: CS 4540, University of Utah
 /// Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
 /// I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
@@ -159,7 +160,7 @@ namespace CS4540PS2.Data {
                 "server-side programming (Servlets and JavaServer Pages), component reuse (JavaBeans), database connectivity (JDBC), and " +
                 "web servers.",
                 DepartmentNavigation=csDept, Number = 4540, Semester = "Fall", Year = 2019,
-                Status= inProg, DueDate=new DateTime(2019, 12, 10),
+                Status= inRev, DueDate=new DateTime(2019, 12, 10),
                 CourseNotes = new List<CourseNotes>() { cnote }
             };
             cnote.CourseInstance = ci0;
@@ -189,7 +190,7 @@ namespace CS4540PS2.Data {
                 Description = "Introduction to propositional logic, predicate logic, formal logical arguments, finite sets, functions, relations," +
                 " inductive proofs, recurrence relations, graphs, probability, and their applications to Computer Science.",
                 DepartmentNavigation = csDept, Number = 2100, Semester = "Fall", Year = 2019,
-                Status = inProg, DueDate = new DateTime(2019, 12, 10),
+                Status = waitingApp, DueDate = new DateTime(2019, 12, 10),
                 CourseNotes = new List<CourseNotes>() {
                     cnote1      
                 }
@@ -221,7 +222,27 @@ namespace CS4540PS2.Data {
                 DepartmentNavigation = mathdept, Number = 3220, Semester = "Fall", Year = 2018,
                 Status = arch, DueDate = new DateTime(2018, 12, 10)
             };
-            var courses = new CourseInstance[] { ci0, ci1, ci2, ci3, ci4, ci5, ci6 };
+            var ci7 = new CourseInstance {
+                Name = "Software Practice",
+                Description = "Practical exposure to the process of creating large software systems, including requirements specifications, " +
+                "design, implementation, testing, and maintenance. Emphasis on software process, software tools (debuggers, profilers, source " +
+                "code repositories, test harnesses), software engineering techniques (time management, code, and documentation standards, " +
+                "source code management, object-oriented analysis and design), and team development practice. Much of the work will be in " +
+                "groups and will involve modifying preexisting software systems.",
+                DepartmentNavigation = csDept, Number = 3500, Semester = "Fall", Year = 2018,
+                Status = completeStatus, DueDate = new DateTime(2018, 12, 10)
+            };
+            var ci8 = new CourseInstance {
+                Name = "Introduction To Algorithms and Data Structures",
+                Description = "This course provides an introduction to the problem of engineering computational efficiency into programs. " +
+                "Students will learn about classical algorithms (including sorting, searching, and graph traversal), data structures " +
+                "(including stacks, queues, linked lists, trees, hash tables, and graphs), and analysis of program space and time " +
+                "requirements. Students will complete extensive programming exercises that require the application of elementary techniques " +
+                "from software engineering.",
+                DepartmentNavigation = csDept, Number = 2420, Semester = "Fall", Year = 2018,
+                Status = arch, DueDate = new DateTime(2018, 12, 10)
+            };
+            var courses = new CourseInstance[] { ci0, ci1, ci2, ci3, ci4, ci5, ci6, ci7, ci8 };
             foreach(CourseInstance co in courses) {
                 context.CourseInstance.Add(co);
             }
@@ -422,7 +443,29 @@ namespace CS4540PS2.Data {
                 CourseInstance = ci5, Name = "Peer Code Reviews",
                 Description = "Appreciate the collaborative nature of software development by discussing the benefits of peer code reviews."
             };
-
+            //CS3500 Complete
+            var lo38 = new LearningOutcomes {
+                CourseInstance = ci7, Name = "Large, Complex Software Systems with Process Models, Libraries and Software Development Tools",
+                Description = "Design and implement large and complex software systems (including concurrent software) through the use " +
+                "of process models (such as waterfall and agile), libraries (both standard and custom), and modern software development " +
+                "tools (such as debuggers, profilers, and revision control systems)."
+            };
+            var lo39 = new LearningOutcomes {
+                CourseInstance = ci7, Name = "Validation, Error Handling and Testing",
+                Description = "Perform input validation and error handling, as well as employ advanced testing principles and tools to " +
+                "systematically evaluate software."
+            };
+            //CS2420 Archive
+            var lo40 = new LearningOutcomes {
+                CourseInstance = ci8, Name = "Implement and Analyze Data Structures",
+                Description = "Implement, and analyze for efficiency, fundamental data structures (including lists, graphs, and trees) and " +
+                "algorithms (including searching, sorting, and hashing)."
+            };
+            var lo41 = new LearningOutcomes {
+                CourseInstance = ci8, Name = "Complexity",
+                Description = "Employ Big-O notation to describe and compare the asymptotic complexity of algorithms, as well as perform empirical " +
+                "studies to validate hypotheses about running time."
+            };
             #endregion Learning outcomes
             var learningo = new LearningOutcomes[] {
                 lo0, lo1, lo2, lo3, lo4, lo5, lo6,
@@ -430,7 +473,8 @@ namespace CS4540PS2.Data {
                 lo13, lo14, lo15, lo16, lo17, lo18,
                 lo19, lo20, lo21, lo22, lo23, lo24, lo25,
                 lo26, lo27, lo28, lo29, lo30, lo31,
-                lo32, lo33, lo34, lo35, lo36, lo37
+                lo32, lo33, lo34, lo35, lo36, lo37,
+                lo38, lo39, lo40, lo41
             };
             foreach(LearningOutcomes lo in learningo) {
                 context.LearningOutcomes.Add(lo);
@@ -439,70 +483,125 @@ namespace CS4540PS2.Data {
             context.LONotes.Add(lonote1);
             context.SaveChanges();
             //CS4540
-            var em0 = new EvaluationMetrics { Lo=lo0, Name = "PS1", Description = "Students will write static HTML web pages." };
-            var em1 = new EvaluationMetrics { Lo = lo0, Name = "Exam 1", Description = "The exam covers HTML concepts such as __ and __." };
-            var em2 = new EvaluationMetrics { Lo = lo1, Name = "PS2", Description = "Students will write HTML pages with accessible ____." };
+            var em0 = new EvaluationMetrics { Lo=lo0, Name = "PS1", Description = "Students will write static HTML web pages.",
+                ContentType=sampleFileType, FileContent= sampleAssignmentContent, FileName="Sample_Assignment.txt" 
+            };
+            var em1 = new EvaluationMetrics { Lo = lo0, Name = "Exam 1", Description = "The exam covers HTML concepts such as __ and __.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
+            var em2 = new EvaluationMetrics { Lo = lo1, Name = "PS2", Description = "Students will write HTML pages with accessible ____.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             var em3 = new EvaluationMetrics { Lo = lo2, Name = "PS2", Description = "Students will write a web application with a model-view-controller " +
-                "architecture, utilizing C# .NET Core." };
+                "architecture, utilizing C# .NET Core.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             var em4 = new EvaluationMetrics { Lo = lo3, Name = "PS3", Description = "Write a secure web server that protects against database" +
-                " injection attacks, spoofing, and utilizes authorization." };
+                " injection attacks, spoofing, and utilizes authorization.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             var em5 = new EvaluationMetrics { Lo = lo4, Name = "PS3", Description = "Web server that uses JavaScript to make interactive" +
-                " web pages." };
+                " web pages.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             var em6 = new EvaluationMetrics { Lo = lo5, Name = "PS3", Description = "Web page that adjusts size based on user's browser and" +
-                " screen." };
+                " screen.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             var em7 = new EvaluationMetrics { Lo = lo6, Name = "PS4", Description = "Students will implement a web-crawler that will take " +
-                "data from _____ and display that data." };
+                "data from _____ and display that data.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             //CS2420
             var em8 = new EvaluationMetrics { Lo = lo7, Name = "Homework 1", Description = "Students will write a linked list and an array " +
-                "list, and implement searching algorithms." };
+                "list, and implement searching algorithms.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             var em9 = new EvaluationMetrics { Lo = lo8, Name = "Homework 2", Description = "Students will identify the complexity of " +
-                "various algorithms." };
+                "various algorithms.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             //CS3500
-            var em10 = new EvaluationMetrics { Lo = lo13, Name = "PS1", Description = "Students will write a C# program." };
+            var em10 = new EvaluationMetrics { Lo = lo13, Name = "PS1", Description = "Students will write a C# program.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             //CS2100
             var em11 = new EvaluationMetrics { Lo = lo19, Name = "PS1", Description = "Students will use symbolic logic to model real-world " +
                 "situations by converting informal language statements to propositional and predicate logic expressions, as well as apply " +
-                "formal methods to propositions and predicates (such as computing normal forms and calculating validity)..." };
+                "formal methods to propositions and predicates (such as computing normal forms and calculating validity)...",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             //CS4400
             //CS3500
-            var em12 = new EvaluationMetrics { Lo = lo32, Name = "PS1", Description = "Students will write a C# program." };
+            var em12 = new EvaluationMetrics { Lo = lo32, Name = "PS1", Description = "Students will write a C# program.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             var em13 = new EvaluationMetrics { Lo = lo33, Name = "PS1", Description = "Students will write a C# program and implement tests" +
-                " where the code coverage is 100%." };
+                " where the code coverage is 100%.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             var em14 = new EvaluationMetrics { Lo = lo34, Name = "PS2", Description = "Students will write a C# program using the model" +
-                " view controller structure." };
-
+                " view controller structure.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
+            //CS3500 Complete
+            var em15 = new EvaluationMetrics { Lo = lo38, Name = "PS1", Description = "Students will write a C# program.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
+            var em16 = new EvaluationMetrics {
+                Lo = lo39, Name = "PS1", Description = "Students will write a C# program and implement tests" +
+                " where the code coverage is 100%.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
+            //CS2420 Archive
+            var em17 = new EvaluationMetrics {
+                Lo = lo40, Name = "Homework 1", Description = "Students will write a linked list and an array " +
+                "list, and implement searching algorithms.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
+            var em18 = new EvaluationMetrics {
+                Lo = lo41, Name = "Homework 2", Description = "Students will identify the complexity of " +
+                "various algorithms.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             var evals = new EvaluationMetrics[] { em0, em1, em2, em3, em4, em5, em6, em7,
                 em8, em9,
                 em10,
                 em11,
-                em12, em13, em14
+                em12, em13, em14,
+                em15, em16,
+                em17, em18
             };
             foreach(EvaluationMetrics em in evals) {
                 context.EvaluationMetrics.Add(em);
             }
             context.SaveChanges();
             var samples = new SampleFiles[] {
-                new SampleFiles { Em=em0, FileName="Example_Student_Work.pdf", Score=60 },
-                new SampleFiles { Em=em0, FileName="Example_Student_Work.pdf", Score=70 },
-                new SampleFiles { Em=em0, FileName="Example_Student_Work.pdf", Score=80 },
-                new SampleFiles { Em=em0, FileName="Example_Student_Work.pdf", Score=90 },
-                new SampleFiles { Em=em1, FileName="Example_Student_Work.pdf", Score=45 },
-                new SampleFiles { Em=em1, FileName="Example_Student_Work.pdf", Score=70 },
-                new SampleFiles { Em=em1, FileName="Example_Student_Work.pdf", Score=95 },
-                new SampleFiles { Em=em3, FileName="Example_Student_Work.pdf", Score=0 },
-                new SampleFiles { Em=em3, FileName="Example_Student_Work.pdf", Score=50 },
-                new SampleFiles { Em=em3, FileName="Example_Student_Work.pdf", Score=100 },
-                new SampleFiles { Em=em5, FileName="Example_Student_Work.pdf", Score=100 },
+                new SampleFiles { Em=em0, FileName="Example_Student_Work.txt", Score=60, FileContent=sampleFileContent, ContentType=sampleFileType },
+                new SampleFiles { Em=em0, FileName="Example_Student_Work.txt", Score=70, FileContent=sampleFileContent, ContentType=sampleFileType },
+                new SampleFiles { Em=em0, FileName="Example_Student_Work.txt", Score=80, FileContent=sampleFileContent, ContentType=sampleFileType },
+                new SampleFiles { Em=em0, FileName="Example_Student_Work.txt", Score=90, FileContent=sampleFileContent, ContentType=sampleFileType },
+                new SampleFiles { Em=em1, FileName="Example_Student_Work.txt", Score=45, FileContent=sampleFileContent, ContentType=sampleFileType },
+                new SampleFiles { Em=em1, FileName="Example_Student_Work.txt", Score=70, FileContent=sampleFileContent, ContentType=sampleFileType },
+                new SampleFiles { Em=em1, FileName="Example_Student_Work.txt", Score=95, FileContent=sampleFileContent, ContentType=sampleFileType },
+                new SampleFiles { Em=em3, FileName="Example_Student_Work.txt", Score=0, FileContent=sampleFileContent, ContentType=sampleFileType },
+                new SampleFiles { Em=em3, FileName="Example_Student_Work.txt", Score=50, FileContent=sampleFileContent, ContentType=sampleFileType },
+                new SampleFiles { Em=em3, FileName="Example_Student_Work.txt", Score=100, FileContent=sampleFileContent, ContentType=sampleFileType },
+                new SampleFiles { Em=em5, FileName="Example_Student_Work.txt", Score=100, FileContent=sampleFileContent, ContentType=sampleFileType },
 
-                new SampleFiles { Em=em8, FileName="Example_Student_Work.pdf", Score=80 },
-                new SampleFiles { Em=em9, FileName="Example_Student_Work.pdf", Score=90 },
+                new SampleFiles { Em=em8, FileName="Example_Student_Work.txt", Score=80, FileContent=sampleFileContent, ContentType=sampleFileType },
+                new SampleFiles { Em=em9, FileName="Example_Student_Work.txt", Score=90, FileContent=sampleFileContent, ContentType=sampleFileType },
 
-                new SampleFiles { Em=em10, FileName="Example_Student_Work.pdf", Score=90 },
+                new SampleFiles { Em=em10, FileName="Example_Student_Work.txt", Score=90, FileContent=sampleFileContent, ContentType=sampleFileType },
 
-                new SampleFiles { Em=em11, FileName="Example_Student_Work.pdf", Score=90 },
-                new SampleFiles { Em=em12, FileName="Example_Student_Work.pdf", Score=90 },
-                new SampleFiles { Em=em12, FileName="Example_Student_Work.pdf", Score=55 },
-                new SampleFiles { Em=em12, FileName="Example_Student_Work.pdf", Score=75 }
+                new SampleFiles { Em=em11, FileName="Example_Student_Work.txt", Score=90, FileContent=sampleFileContent, ContentType=sampleFileType },
+                new SampleFiles { Em=em12, FileName="Example_Student_Work.txt", Score=90, FileContent=sampleFileContent, ContentType=sampleFileType },
+                new SampleFiles { Em=em12, FileName="Example_Student_Work.txt", Score=55, FileContent=sampleFileContent, ContentType=sampleFileType },
+                new SampleFiles { Em=em12, FileName="Example_Student_Work.txt", Score=75, FileContent=sampleFileContent, ContentType=sampleFileType },
+                new SampleFiles { Em=em15, FileName="Example_Student_Work.txt", Score=90, FileContent=sampleFileContent, ContentType=sampleFileType },
+                new SampleFiles { Em=em16, FileName="Example_Student_Work.txt", Score=85, FileContent=sampleFileContent, ContentType=sampleFileType },
+                new SampleFiles { Em=em17, FileName="Example_Student_Work.txt", Score=90, FileContent=sampleFileContent, ContentType=sampleFileType },
+                new SampleFiles { Em=em18, FileName="Example_Student_Work.txt", Score=88, FileContent=sampleFileContent, ContentType=sampleFileType }
             };
             foreach(SampleFiles s in samples) {
                 context.SampleFiles.Add(s);
@@ -531,6 +630,21 @@ namespace CS4540PS2.Data {
                 context.Messages.Add(m);
             }
             context.SaveChanges();
+            var notifications = new Notifications[] {
+                new Notifications { Text="This course has been changed to in-review. Message from chair: 'Add samples for some learning outcomes.'", DateNotified=new DateTime(2019, 12, 5), 
+                    Read=false, CourseInstance=ci0, User=user0 },
+                new Notifications { Text="This course is awaiting approval.", DateNotified=new DateTime(2019, 12, 4), Read=true, CourseInstance=ci0, User=user2 },
+                new Notifications { Text="This course is awaiting approval.", DateNotified=new DateTime(2019, 12, 5), Read=false, CourseInstance=ci3, User=user2 },
+                new Notifications { Text="This course has been archived.", DateNotified=new DateTime(2019, 12, 5), Read=false, CourseInstance=ci8, User=user4 }
+            };
+            foreach(Notifications notif in notifications) {
+                context.Notifications.Add(notif);
+            }
+            context.SaveChanges();
         }
+
+        private static byte[] sampleAssignmentContent = Encoding.ASCII.GetBytes("Sample Assignment File.");
+        private static byte[] sampleFileContent = Encoding.ASCII.GetBytes("Sample Student Work.");
+        private static string sampleFileType = "text/plain";
     }
 }

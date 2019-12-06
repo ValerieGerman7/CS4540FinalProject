@@ -23,7 +23,7 @@
     @if (!Model.CourseInstance.Any()) {
         <p><i>This department has no courses.</i></p>
     }
-    @{ foreach (CourseInstance course in Model.CourseInstance) {
+    @{ foreach (CourseInstance course in Model.CourseInstance.OrderByDescending(c => c.Number).ThenByDescending(c => c.Year)) {
             var LOProgress = 100 * (course.LearningOutcomes.Where(lo => lo.EvaluationMetrics.Any()).Count());
             var loCount = course.LearningOutcomes.Count();
             if (loCount > 0) {

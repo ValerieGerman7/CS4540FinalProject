@@ -82,6 +82,10 @@ namespace CS4540PS2.Controllers {
             SampleFiles sf = _context.SampleFiles.Include(s => s.Em).ThenInclude(e => e.Lo).ThenInclude(l => l.CourseInstance).ThenInclude(c => c.Status)
                 .Where(s => s.Sid == sfId).FirstOrDefault();
             if (sf == null) return NotFound();
+            //Verify is instructor or archived
+            bool allowed = sf.Em.Lo.CourseInstance.Instructors.Where(i => i.User.UserLoginEmail == User.Identity.Name).Any()
+                || sf.Em.Lo.CourseInstance.Status.Status == CourseStatusNames.Archived;
+            if (!allowed) { return Forbid(); }
             return View(sf);
         }
 
@@ -95,13 +99,15 @@ namespace CS4540PS2.Controllers {
         public ActionResult GetSampleFile(int? sfId) {
             SampleFiles sfObj = _context.SampleFiles.Include(s => s.Em).ThenInclude(e => e.Lo).ThenInclude(l => l.CourseInstance)
                                             .ThenInclude(c => c.Instructors).ThenInclude(i => i.User)
+                                            .Include(s => s.Em).ThenInclude(e => e.Lo).ThenInclude(l => l.CourseInstance).ThenInclude(c => c.Status)
                                             .Where(s => s.Sid == sfId).FirstOrDefault();
-            if (sfObj == null || !sfObj.Em.Lo.CourseInstance.Instructors.Where(i => i.User.UserLoginEmail == User.Identity.Name).Any()) {
+            if (sfObj == null) {
                 return NotFound();
             }
-            if(sfObj.FileContent == null || sfObj.ContentType == null || sfObj.FileName == null) {
-                return NotFound();
-            }
+            //Verify is instructor or archived
+            bool allowed = sfObj.Em.Lo.CourseInstance.Instructors.Where(i => i.User.UserLoginEmail == User.Identity.Name).Any()
+                || sfObj.Em.Lo.CourseInstance.Status.Status == CourseStatusNames.Archived;
+            if (!allowed) { return Forbid(); }
             return File(sfObj.FileContent, sfObj.ContentType, sfObj.FileName);
         }
 
