@@ -68,25 +68,6 @@ namespace CS4540PS2.Controllers {
         /// <summary>
         /// View for all courses that have been archived.
         /// </summary>
-        /// <returns></returns>
-        //public async Task<IActionResult> ArchivedCourses() {
-        //    var instances = _context.CourseInstance.Include(c => c.Status)
-        //        .Include(c => c.Instructors).ThenInclude(i => i.User)
-        //        .Where(c => c.Status.Status == CourseStatusNames.Archived)
-        //        .OrderByDescending(c => c.Department).ThenByDescending(c => c.Number).ThenByDescending(c => c.Year);
-        //    return View(await instances.ToListAsync());
-        //}
-
-        /*************************************************************
-         * 
-         * 
-         * 
-         *  
-         ************************************************************/
-
-        /// <summary>
-        /// View for all courses that have been archived.
-        /// </summary>
         public async Task<IActionResult> ArchivedCourses(string sortOrder, string currentFilter, string searchString, int? pageNumber, int resultsPerPage = 5) {
             ViewData["PageNumber"] = pageNumber;
             ViewData["ResultsPerPage"] = resultsPerPage;
@@ -193,12 +174,6 @@ namespace CS4540PS2.Controllers {
             return courseInstances;
         }
 
-        /*************************************************************
-         * 
-         * 
-         * 
-         *  
-         ************************************************************/
         /// <summary>
         /// Updates the course's note and the date modified.
         /// </summary>
