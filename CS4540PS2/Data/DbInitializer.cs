@@ -483,51 +483,86 @@ namespace CS4540PS2.Data {
             context.LONotes.Add(lonote1);
             context.SaveChanges();
             //CS4540
-            var em0 = new EvaluationMetrics { Lo=lo0, Name = "PS1", Description = "Students will write static HTML web pages." };
-            var em1 = new EvaluationMetrics { Lo = lo0, Name = "Exam 1", Description = "The exam covers HTML concepts such as __ and __." };
-            var em2 = new EvaluationMetrics { Lo = lo1, Name = "PS2", Description = "Students will write HTML pages with accessible ____." };
+            var em0 = new EvaluationMetrics { Lo=lo0, Name = "PS1", Description = "Students will write static HTML web pages.",
+                ContentType=sampleFileType, FileContent= sampleAssignmentContent, FileName="Sample_Assignment.txt" 
+            };
+            var em1 = new EvaluationMetrics { Lo = lo0, Name = "Exam 1", Description = "The exam covers HTML concepts such as __ and __.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
+            var em2 = new EvaluationMetrics { Lo = lo1, Name = "PS2", Description = "Students will write HTML pages with accessible ____.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             var em3 = new EvaluationMetrics { Lo = lo2, Name = "PS2", Description = "Students will write a web application with a model-view-controller " +
-                "architecture, utilizing C# .NET Core." };
+                "architecture, utilizing C# .NET Core.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             var em4 = new EvaluationMetrics { Lo = lo3, Name = "PS3", Description = "Write a secure web server that protects against database" +
-                " injection attacks, spoofing, and utilizes authorization." };
+                " injection attacks, spoofing, and utilizes authorization.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             var em5 = new EvaluationMetrics { Lo = lo4, Name = "PS3", Description = "Web server that uses JavaScript to make interactive" +
-                " web pages." };
+                " web pages.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             var em6 = new EvaluationMetrics { Lo = lo5, Name = "PS3", Description = "Web page that adjusts size based on user's browser and" +
-                " screen." };
+                " screen.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             var em7 = new EvaluationMetrics { Lo = lo6, Name = "PS4", Description = "Students will implement a web-crawler that will take " +
-                "data from _____ and display that data." };
+                "data from _____ and display that data.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             //CS2420
             var em8 = new EvaluationMetrics { Lo = lo7, Name = "Homework 1", Description = "Students will write a linked list and an array " +
-                "list, and implement searching algorithms." };
+                "list, and implement searching algorithms.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             var em9 = new EvaluationMetrics { Lo = lo8, Name = "Homework 2", Description = "Students will identify the complexity of " +
-                "various algorithms." };
+                "various algorithms.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             //CS3500
-            var em10 = new EvaluationMetrics { Lo = lo13, Name = "PS1", Description = "Students will write a C# program." };
+            var em10 = new EvaluationMetrics { Lo = lo13, Name = "PS1", Description = "Students will write a C# program.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             //CS2100
             var em11 = new EvaluationMetrics { Lo = lo19, Name = "PS1", Description = "Students will use symbolic logic to model real-world " +
                 "situations by converting informal language statements to propositional and predicate logic expressions, as well as apply " +
-                "formal methods to propositions and predicates (such as computing normal forms and calculating validity)..." };
+                "formal methods to propositions and predicates (such as computing normal forms and calculating validity)...",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             //CS4400
             //CS3500
-            var em12 = new EvaluationMetrics { Lo = lo32, Name = "PS1", Description = "Students will write a C# program." };
+            var em12 = new EvaluationMetrics { Lo = lo32, Name = "PS1", Description = "Students will write a C# program.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             var em13 = new EvaluationMetrics { Lo = lo33, Name = "PS1", Description = "Students will write a C# program and implement tests" +
-                " where the code coverage is 100%." };
+                " where the code coverage is 100%.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             var em14 = new EvaluationMetrics { Lo = lo34, Name = "PS2", Description = "Students will write a C# program using the model" +
-                " view controller structure." };
+                " view controller structure.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             //CS3500 Complete
-            var em15 = new EvaluationMetrics { Lo = lo38, Name = "PS1", Description = "Students will write a C# program." };
+            var em15 = new EvaluationMetrics { Lo = lo38, Name = "PS1", Description = "Students will write a C# program.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
+            };
             var em16 = new EvaluationMetrics {
                 Lo = lo39, Name = "PS1", Description = "Students will write a C# program and implement tests" +
-                " where the code coverage is 100%."
+                " where the code coverage is 100%.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
             };
             //CS2420 Archive
             var em17 = new EvaluationMetrics {
                 Lo = lo40, Name = "Homework 1", Description = "Students will write a linked list and an array " +
-                "list, and implement searching algorithms."
+                "list, and implement searching algorithms.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
             };
             var em18 = new EvaluationMetrics {
                 Lo = lo41, Name = "Homework 2", Description = "Students will identify the complexity of " +
-                "various algorithms."
+                "various algorithms.",
+                ContentType = sampleFileType, FileContent = sampleAssignmentContent, FileName = "Sample_Assignment.txt"
             };
             var evals = new EvaluationMetrics[] { em0, em1, em2, em3, em4, em5, em6, em7,
                 em8, em9,
@@ -608,6 +643,7 @@ namespace CS4540PS2.Data {
             context.SaveChanges();
         }
 
+        private static byte[] sampleAssignmentContent = Encoding.ASCII.GetBytes("Sample Assignment File.");
         private static byte[] sampleFileContent = Encoding.ASCII.GetBytes("Sample Student Work.");
         private static string sampleFileType = "text/plain";
     }
