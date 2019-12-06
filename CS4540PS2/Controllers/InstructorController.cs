@@ -68,13 +68,110 @@ namespace CS4540PS2.Controllers {
         /// <summary>
         /// View for all courses that have been archived.
         /// </summary>
-        /// <returns></returns>
-        public async Task<IActionResult> ArchivedCourses() {
+        public async Task<IActionResult> ArchivedCourses(string sortOrder, string currentFilter, string searchString, int? pageNumber, int resultsPerPage = 5) {
+            ViewData["PageNumber"] = pageNumber;
+            ViewData["ResultsPerPage"] = resultsPerPage;
+            // Set up the possible ordering schemes of the table.
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["CourseNumSortParam"] = String.IsNullOrEmpty(sortOrder) ? "course_num_desc" : "";
+            ViewData["CourseTitleSortParam"] = sortOrder == "title_asc" ? "title_desc" : "title_asc";
+            ViewData["DepartmentSortParam"] = sortOrder == "dept_asc" ? "dept_desc" : "dept_asc";
+            ViewData["SemesterSortParam"] = sortOrder == "semester_asc" ? "semester_desc" : "semester_asc";
+            ViewData["YearSortParam"] = sortOrder == "year_asc" ? "year_desc" : "year_asc";
+
+            // If there is a search string, filter by that, otherwise use the default
+            if (searchString != null) {
+                pageNumber = 1;
+            }
+            else {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+
+            // get course instances
             var instances = _context.CourseInstance.Include(c => c.Status)
                 .Include(c => c.Instructors).ThenInclude(i => i.User)
-                .Where(c => c.Status.Status == CourseStatusNames.Archived)
-                .OrderByDescending(c => c.Department).ThenByDescending(c => c.Number).ThenByDescending(c => c.Year);
-            return View(await instances.ToListAsync());
+                .Where(c => c.Status.Status == CourseStatusNames.Archived);
+
+            /* TODO: test if this is necessary*/
+            if (instances.Count() == 0)
+                return View();
+
+            // allow the user to search the course catalogue
+            instances = FilterBySearch(searchString, instances);
+
+            // reorder the results based on the selected filter
+            instances = OrderBySelection(sortOrder, instances);
+
+            return View(await PaginatedList<CourseInstance>.CreateAsync(instances.AsNoTracking(), pageNumber ?? 1, resultsPerPage));
+        }
+
+        /// <summary>
+        /// Filters the courses returned by the database by a user supplied search string.
+        /// </summary>
+        private IQueryable<CourseInstance> FilterBySearch(string searchString, IQueryable<CourseInstance> courseInstances) {
+            // allow the user to search the course catalogue
+            if (!string.IsNullOrEmpty(searchString)) {
+                string[] searchWords = searchString.Split(' ');
+                foreach (string s in searchWords) {
+                    if (!string.IsNullOrEmpty(s)) {
+                        courseInstances = courseInstances.Where(c => c.Name.Contains(s)
+                            || c.Department.Contains(s)
+                            || c.Number.ToString().Contains(s)
+                            || c.Semester.Contains(s)
+                            || c.Year.ToString().Contains(s));
+                    }
+                }
+            }
+            return courseInstances;
+        }
+
+        /// <summary>
+        /// Reorders the courses in the view based on user selection
+        /// </summary>
+        private IQueryable<CourseInstance> OrderBySelection(string sortOrder, IQueryable<CourseInstance> courseInstances) {
+            // reorder the results based on the selected filter           
+            switch (sortOrder) {
+                case "course_num_desc":
+                    courseInstances = courseInstances.OrderByDescending(c => c.Number)
+                        .ThenBy(c => c.Year);
+                    break;
+                case "title_asc":
+                    courseInstances = courseInstances.OrderBy(c => c.Name)
+                        .ThenBy(c => c.Year);
+                    break;
+                case "title_desc":
+                    courseInstances = courseInstances.OrderByDescending(c => c.Name)
+                        .ThenBy(c => c.Year);
+                    break;
+                case "dept_asc":
+                    courseInstances = courseInstances.OrderBy(c => c.Department)
+                        .ThenBy(c => c.Year);
+                    break;
+                case "dept_desc":
+                    courseInstances = courseInstances.OrderByDescending(c => c.Department)
+                        .ThenBy(c => c.Year);
+                    break;
+                case "semester_asc":
+                    courseInstances = courseInstances.OrderBy(c => c.Semester)
+                        .ThenBy(c => c.Year);
+                    break;
+                case "semester_desc":
+                    courseInstances = courseInstances.OrderByDescending(c => c.Semester)
+                    .ThenBy(c => c.Year);
+                    break;
+                case "year_asc":
+                    courseInstances = courseInstances.OrderBy(c => c.Year);
+                    break;
+                case "year_desc":
+                    courseInstances = courseInstances.OrderByDescending(c => c.Year);
+                    break;
+                default:
+                    courseInstances = courseInstances.OrderBy(c => c.Number)
+                        .ThenBy(c => c.Year);
+                    break;
+            }
+            return courseInstances;
         }
 
         /// <summary>

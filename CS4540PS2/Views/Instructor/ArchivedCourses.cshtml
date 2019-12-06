@@ -1,37 +1,232 @@
-﻿@model IEnumerable<CS4540PS2.Models.CourseInstance>
-@*
-    Author: Valerie German
-    Date: 4 Dec 2019
+﻿@*
+    Author: Valerie German, Cody Winters
+    Date: 5 Dec 2019
     Course: CS 4540, University of Utah
-    Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
-    I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
+    Copyright: CS 4540, Valerie German and Cody Winters - This work may not be copied for use in Academic Coursework.
+    We, Valerie German and Cody Winters, certify that we wrote this code from scratch and did not copy it in part or
+    whole from another source. Any references used in the completion of this assignment are cited in my README file.
     File Contents: Professor view of archived courses.
 *@
 @{
     ViewData["Title"] = "Course History";
 }
 
-<h2>Course Archives</h2>
+<div align="left" class="halfWidth">
+    <h1>Course Archive</h1>
+</div>
+
+<form asp-action="ArchivedCourses" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Search: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+        </p>
+    </div>
+</form>
+<div name="orderByBar" id="orderByMenu" class="dropdown">
+    <button name="orderByDropDownMenuButton" id="orderByDropDownMenuButton" class="btn btn-default dropdown-toggle"
+            type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Order By
+    </button>
+    <div name="orderByDropDownMenuItems" id="orderByDropDownMenuItems" class="dropdown-menu" aria-labelledby="orderByDropDownMenuButton">
+        <a class="dropdown-item" asp-action="ArchivedCourses" asp-route-sortOrder="@ViewData["DepartmentSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Department</a>
+        <a class="dropdown-item" asp-action="ArchivedCourses" asp-route-sortOrder="@ViewData["CourseNumSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Course Number</a>
+        <a class="dropdown-item" asp-action="ArchivedCourses" asp-route-sortOrder="@ViewData["CourseTitleSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Course Title</a>
+        <a class="dropdown-item" asp-action="ArchivedCourses" asp-route-sortOrder="@ViewData["SemesterSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Semester</a>
+        <a class="dropdown-item" asp-action="ArchivedCourses" asp-route-sortOrder="@ViewData["YearSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Year</a>
+    </div>
+</div>
 <hr />
 
-@foreach (CourseInstance course in Model) {
-    <div class="card shadowBox">
-        <div class="card-body" onclick="RedirectToInstCourse('@course.Department', @course.Number, '@course.Semester', @course.Year);">
-            <p>@course.Department @course.Number - <b>@course.Name</b> </p>
-            @{ 
-                var instructors = "";
-                if (course.Instructors.Any()) {
-                    foreach (Instructors inst in course.Instructors) {
-                        instructors += inst.User.UserTitle + ", ";
+@*@foreach (CourseInstance course in Model) {
+        <div class="card shadowBox">
+            <div class="card-body" onclick="RedirectToInstCourse('@course.Department', @course.Number, '@course.Semester', @course.Year);">
+                <p>@course.Department @course.Number - <b>@course.Name</b> </p>
+                @{
+                    var instructors = "";
+                    if (course.Instructors.Any()) {
+                        foreach (Instructors inst in course.Instructors) {
+                            instructors += inst.User.UserTitle + ", ";
+                        }
+                        instructors = instructors.Substring(0, instructors.Length - 2);
+                    } else {
+                        instructors = "No assigned instructors";
                     }
-                    instructors = instructors.Substring(0, instructors.Length - 2);
-                } else {
-                    instructors = "No assigned instructors";
                 }
-            }
-            <p><b>Instructors: </b>@instructors</p>
-            <p>@course.Description</p>
+                <p><b>Instructors: </b>@instructors</p>
+                <p>@course.Description</p>
+            </div>
         </div>
+        <br />
+    }*@
+
+@if (Model != null)
+{
+    @foreach (CourseInstance course in Model)
+    {
+        <div class="card shadowBox">
+            <div class="card-body">
+                <p>
+                    @course.Department @course.Number -
+                    <a asp-action="Course" asp-route-Dept="@course.Department" asp-route-Num="@course.Number"
+                       asp-route-Sem="@course.Semester" asp-route-Year="@course.Year">
+                        <b>@course.Name</b> <span class="badge badge-pill badge-secondary">@course.Status.Status</span>
+                    </a>
+                </p>
+                @{
+                    var instructors = "";
+                    if (course.Instructors.Any())
+                    {
+                        foreach (Instructors inst in course.Instructors)
+                        {
+                            instructors += inst.User.UserTitle + ", ";
+                        }
+                        instructors = instructors.Substring(0, instructors.Length - 2);
+                    }
+                    else
+                    {
+                        instructors = "No instructors assigned.";
+                    }
+                }
+                <p><b>Instructors: </b>@instructors</p>
+                <p>@course.Description</p>
+            </div>
+
+            <div align="right">
+                <a class="btn btn-danger" asp-controller="Course" asp-action="Delete" asp-route-id="@course.CourseInstanceId">Delete</a>
+                <a class="btn btn-primary" asp-controller="Course" asp-action="Edit" asp-route-id="@course.CourseInstanceId">Modify</a>
+            </div>
+        </div>
+        <br />
+    }
+
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+
+    <!-- Page navigation within the archive. -->
+    <div>
+        <!-- The folowing links allow the user to navigate between pages of course items in the archive view-->
+        <nav id="ArchivedCoursesPageNavigation" aria-label="Page navigation">
+            <ul id="ArchivedCoursesPageNavigationList" class="pagination" style="float:left">
+                <li id="ArchivedCoursesFirstPageButtonListItem" class="page-item @prevDisabled">
+                    <a id="ArchivedCoursesFirstPageButton" class="page-link" aria-label="First"
+                       asp-action="ArchivedCourses"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-pageNumber="1"
+                       asp-route-resultsPerPage="@ViewData["ResultsPerPage"]"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                        <span aria-hidden="true">&lt;&lt;</span>
+                        <span class="sr-only">First Page</span>
+                    </a>
+                </li>
+                <li id="ArchivedCoursesPreviousPageButtonListItem" class="page-item @prevDisabled">
+                    <a id="ArchivedCoursesPreviousPageButton" class="page-link"
+                       asp-action="ArchivedCourses"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-pageNumber="@(Model.PageIndex - 1)"
+                       asp-route-resultsPerPage="@ViewData["ResultsPerPage"]"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                        <span aria-hidden="true">&lt;</span>
+                        <span class="sr-only">Previous Page</span>
+                    </a>
+                </li>
+                <li id="ArchivedCoursesCurrentPageListItem" class="page-item disabled">
+                    <a id="ArchivedCoursesCurrentPage" class="page-link"
+                       asp-action="ArchivedCourses"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-pageNumber=pageNumTextBox.text
+                       asp-route-resultsPerPage="@ViewData["ResultsPerPage"]"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                        <span aria-hidden="true"><b>@Model.PageIndex </b></span>
+                        <span class="sr-only">Current Page: @Model.PageIndex</span>
+                    </a>
+                </li>
+                <li id="ArchivedCoursesNextPageButtonListItem" class="page-item @nextDisabled">
+                    <a id="ArchivedCoursesNextPageButton" class="page-link"
+                       asp-action="ArchivedCourses"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-pageNumber="@(Model.PageIndex + 1)"
+                       asp-route-resultsPerPage="@ViewData["ResultsPerPage"]"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                        <span aria-hidden="true">></span>
+                        <span class="sr-only">Next Page</span>
+                    </a>
+                </li>
+                <li id="ArchivedCoursesLastPageButtonListItem" class="page-item @nextDisabled">
+                    <a id="ArchivedCoursesLastPageButton" class="page-link"
+                       asp-action="ArchivedCourses"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-pageNumber="@(Model.TotalPages)"
+                       asp-route-resultsPerPage="@ViewData["ResultsPerPage"]"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                        <span aria-hidden="true">>></span>
+                        <span class="sr-only">Last Page</span>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- The folowing links allow the user to set the number of courses to view per page-->
+            <ul id="ArchivedCoursesPageResultsList" class="pagination" style="float:right">
+                <li id="ArchivedCoursesLastPageButtonListItem" class="page-item disabled">
+                    <a id="ArchivedCoursesLastPageButton" class="page-link">
+                        <span aria-hidden="true">Elements per page:</span>
+                        <span class="sr-only">Last Page</span>
+                    </a>
+                </li>
+                <li id="ArchivedCoursesTwoPageResultsListItem" class="page-item">
+                    <a id="ArchivedCoursesTwoPageResultsListButton" class="page-link" aria-label="First"
+                       asp-action="ArchivedCourses"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       asp-route-resultsPerPage=2>
+                        <span aria-hidden="true">2</span>
+                        <span class="sr-only">First Page</span>
+                    </a>
+                </li>
+                <li id="ArchivedCoursesFivePageResultsListItem" class="page-item">
+                    <a id="ArchivedCoursesFivePageResultsListButton" class="page-link"
+                       asp-action="ArchivedCourses"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       asp-route-resultsPerPage=5>
+                        <span aria-hidden="true">5</span>
+                        <span class="sr-only">Previous Page</span>
+                    </a>
+                </li>
+                <li id="ArchivedCoursesTenPageResultsListItem" class="page-item">
+                    <a id="ArchivedCoursesTenPageResultsListButton" class="page-link"
+                       asp-action="ArchivedCourses"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       asp-route-resultsPerPage=10>
+                        <span aria-hidden="true">10</span>
+                        <span class="sr-only">Current Page: @Model.PageIndex</span>
+                    </a>
+                </li>
+                <li id="ArchivedCoursesTwentyFivePageResultsListItem" class="page-item">
+                    <a id="ArchivedCoursesTwentyFivePageResultsListButton" class="page-link"
+                       asp-action="ArchivedCourses"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       asp-route-resultsPerPage=25>
+                        <span aria-hidden="true">25</span>
+                        <span class="sr-only">Next Page</span>
+                    </a>
+                </li>
+                <li id="ArchivedCoursesAllPageResultsListItem" class="page-item">
+                    <a id="ArchivedCoursesAllPageResultsListButton" class="page-link"
+                       asp-action="ArchivedCourses"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       asp-route-resultsPerPage=2000000000>
+                        <span aria-hidden="true">All</span>
+                        <span class="sr-only">Last Page</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
-    <br />
+}
+else
+{
+    <h2> Your search returned no results.</h2>
 }

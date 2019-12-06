@@ -43,7 +43,7 @@
     @foreach (CourseInstance course in Model)
     {
         <div class="card shadowBox">
-            <div class="card-body" onclick="RedirectToCourse('@course.Department', @course.Number, '@course.Semester', @course.Year);">
+            <div class="card-body">
                 <p>
                     @course.Department @course.Number -
                     <a asp-action="Course" asp-route-Dept="@course.Department" asp-route-Num="@course.Number"
