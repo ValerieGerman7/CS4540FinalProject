@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using CS4540PS2.Controllers;
 using CS4540PS2.Data;
 using CS4540PS2.Models;
 using Microsoft.AspNetCore;
@@ -30,15 +31,15 @@ namespace CS4540PS2 {
                     DbInitializer.Initialize(context);
                     var userContext = services.GetRequiredService<UserContext>();
                     DbInitializer.InitializeUser(userContext, services).Wait();
+                    try {
+                        //Notification notify = new Notification(services);
+                    } catch (Exception e) {
+                        var logger = services.GetRequiredService<ILogger<Program>>();
+                        logger.LogError(e, "Error occurred while starting the notifications.");
+                    }
                 } catch (Exception e) {
                     var logger = services.GetRequiredService<ILogger<Program>>();
                     logger.LogError(e, "Error occurred while seeding the database.");
-                }
-                try {
-                    Notification notify = Notification.Self;
-                } catch (Exception e) {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(e, "Error occurred while starting the notifications.");
                 }
             }
             host.Run();
