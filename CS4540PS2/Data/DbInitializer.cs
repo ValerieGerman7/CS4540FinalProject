@@ -21,6 +21,12 @@ using System.Text;
 /// </summary>
 namespace CS4540PS2.Data {
     public class DbInitializer {
+        /// <summary>
+        /// Initializes the user tables of the database. Seeds users.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="provider"></param>
+        /// <returns></returns>
         public static async Task InitializeUser(UserContext context, IServiceProvider provider) {
             //context.Database.EnsureCreated();
             context.Database.Migrate();
@@ -112,6 +118,11 @@ namespace CS4540PS2.Data {
                 //await context.SaveChangesAsync();
             }
         }
+
+        /// <summary>
+        /// Initializes the Learning Outcome Tracker tables of the database. Seeds departments, courses, instructors, etc.
+        /// </summary>
+        /// <param name="context"></param>
         public static void Initialize(LOTDBContext context) {
             if (context.Database.EnsureCreated()) {
                 //context.Database.Migrate();

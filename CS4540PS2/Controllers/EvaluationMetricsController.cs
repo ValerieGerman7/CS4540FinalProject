@@ -11,12 +11,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 /// <summary>
-/// Author: Valerie German
-/// Date: 19 Nov 2019
+/// Author: Valerie German, Pierce Bringhurst
+/// Date: 6 Dec 2019
 /// Course: CS 4540, University of Utah
 /// Copyright: CS 4540 and Valerie German - This work may not be copied for use in Academic Coursework.
 /// I, Valerie German, certify that I wrote this code from scratch and did not copy it in part or whole from another source. Any references used in the completion of this assignment are cited in my README file.
-/// File Contents: This file contains controller the instructor's actions on sample files. This continues the InstructorController class.
+/// File Contents: This file contains controller the instructor's actions on evaluation metrics. This continues the InstructorController class.
 /// </summary>
 namespace CS4540PS2.Controllers
 {
