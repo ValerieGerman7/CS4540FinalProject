@@ -34,10 +34,10 @@
             <!--Collapses separated in divs-->
             <!--Collapse with information about a learning outcome-->
             <!--This and following collapses created with help from https://getbootstrap.com/docs/4.0/components/collapse/-->
-            <button class="btn btn-primary sectionButton text-left" type="button" data-toggle="collapse"
+            <button class="btn sectionButton text-left lot-expando-btn" type="button" data-toggle="collapse"
                     data-target="#collapseContent@{<text>@lo.Loid</text>}" aria-expanded="false"
                     aria-controls="collapseContent@{<text>@lo.Loid</text>}">
-                @lo.Name
+                <b>@lo.Name</b>
             </button>
             <div class="collapse show" id="collapseContent@{<text>@lo.Loid</text>}">
                 <!--Cards reference https://getbootstrap.com/docs/4.1/components/card/ (this is true of all following cards).-->
