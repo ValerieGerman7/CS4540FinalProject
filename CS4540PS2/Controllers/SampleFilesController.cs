@@ -80,6 +80,7 @@ namespace CS4540PS2.Controllers {
         public IActionResult SampleFile(int? sfId) {
             if (sfId == null) return NotFound();
             SampleFiles sf = _context.SampleFiles.Include(s => s.Em).ThenInclude(e => e.Lo).ThenInclude(l => l.CourseInstance).ThenInclude(c => c.Status)
+                .Include(s => s.Em).ThenInclude(e => e.Lo).ThenInclude(l => l.CourseInstance).ThenInclude(c => c.Instructors).ThenInclude(i => i.User)
                 .Where(s => s.Sid == sfId).FirstOrDefault();
             if (sf == null) return NotFound();
             //Verify is instructor or archived

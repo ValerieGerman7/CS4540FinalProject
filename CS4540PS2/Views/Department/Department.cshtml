@@ -57,8 +57,11 @@
             }
             <!-- This div contains the progress for a single class. Bootstrap cards are used to separate data. See https://getbootstrap.com/docs/4.1/components/card/. This
             reference is used for all following cards. -->
-            <div class="card mb-3 shadowBox @progressColor" onclick="RedirectToCourseDept(@course.CourseInstanceId);">
-                <div class="card-header courseHeader">@course.Department @course.Number - @course.Name  <small>@course.Semester, @course.Year</small></div>
+            <div class="card mb-3 shadowBox @progressColor">
+                <div class="card-header courseHeader">
+                    <a asp-action="Course" asp-route-CourseId="@course.CourseInstanceId"><b>@course.Department @course.Number - @course.Name</b></a>
+                    <small>@course.Semester, @course.Year</small>
+                </div>
                 <div class="card-body">
                     <p class="card-text classInfo" align="left"><b>Instructors:</b> @instructors</p>
                     <div class="card-text" align="right">

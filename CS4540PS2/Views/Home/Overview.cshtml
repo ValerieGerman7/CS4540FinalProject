@@ -16,7 +16,7 @@
     <p>LOT 'o Learning expanded on the Learning Outcome Tracker project.</p>
     <p>This project started from as PS5 solution, below are the changes made. Click on any topic for details.</p>
 </div>
-<button class="btn btn-primary sectionButton text-left" type="button" data-toggle="collapse"
+<button class="btn sectionButton text-left lot-expando-btn" type="button" data-toggle="collapse"
         data-target="#DatabaseOverview" aria-expanded="false"
         aria-controls="DatabaseOverview">
     Database Changes
@@ -34,7 +34,8 @@
 </div>
 <br />
 <br />
-<button class="btn btn-primary sectionButton text-left" type="button" data-toggle="collapse"
+
+<button class="btn sectionButton text-left lot-expando-btn" type="button" data-toggle="collapse"
         data-target="#SampleFileOverview" aria-expanded="false"
         aria-controls="SampleFileOverview">
     Departments, Courses, Sample Files
@@ -60,22 +61,47 @@
 </div>
 <br />
 <br />
-<button class="btn btn-primary sectionButton text-left" type="button" data-toggle="collapse"
-        data-target="#AdminUser" aria-expanded="false"
-        aria-controls="AdminUser">
-    Users
+
+<button class="btn  sectionButton text-left lot-expando-btn" type="button" data-toggle="collapse"
+        data-target="#EMCrud" aria-expanded="false"
+        aria-controls="EMCrud">
+    Evaluation Metrics CRUD
 </button>
-<div class="collapse" id="AdminUser">
+<div class="collapse" id="EMCrud">
     <div class="card card-body">
-        <p>Administrators can remove users.</p>
+        <p>Instructors can create new Evaluation metrics with their associated assignment files. This involved creating an EM table in the DB.</p>
         <div class="imageContainer">
-            <img class="sizeImage" src="~/overview/AdminUsers.png" />
+            <img class="sizeImage" src="~/overview/createEvaluationMetric.png" />
+        </div>
+        <p>A view has been created where Instructors can delete the EM or download its file.</p>
+        <div class="imageContainer">
+            <img class="sizeImage" src="~/overview/EvaluationMetricView.png" />
         </div>
     </div>
 </div>
 <br />
 <br />
-<button class="btn btn-primary sectionButton text-left" type="button" data-toggle="collapse"
+
+<button class="btn  sectionButton text-left lot-expando-btn" type="button" data-toggle="collapse"
+        data-target="#Messaging" aria-expanded="false"
+        aria-controls="Messaging">
+    Messaging
+</button>
+<div class="collapse" id="Messaging">
+    <div class="card card-body">
+        <p>Users can message each other with real-time responses. This involved implementing SignalR and adding a Messages table to the DB.</p>
+        <div class="imageContainer">
+            <img class="sizeImage" src="~/overview/messaging1.png" />
+        </div>
+        <div class="imageContainer">
+            <img class="sizeImage" src="~/overview/messaging2.png" />
+        </div>
+    </div>
+</div>
+<br />
+<br />
+
+<button class="btn  sectionButton text-left lot-expando-btn" type="button" data-toggle="collapse"
         data-target="#collapseContentNotif" aria-expanded="false"
         aria-controls="collapseContentNotif">
     Notifications/Course History
@@ -173,50 +199,112 @@
 </div>
 <br />
 <br />
-<button class="btn btn-primary sectionButton text-left" type="button" data-toggle="collapse"
-        data-target="#Messaging" aria-expanded="false"
-        aria-controls="Messaging">
-    Messaging
+
+<button class="btn sectionButton text-left lot-expando-btn" type="button" data-toggle="collapse"
+        data-target="#PagId" aria-expanded="false"
+        aria-controls="PagId">
+    Pagination
 </button>
-<div class="collapse" id="Messaging">
+<div class="collapse" id="PagId">
     <div class="card card-body">
-        <p>Users can message each other with real-time responses. This involved implementing SignalR and adding a Messages table to the DB.</p>
+        <p>
+            All users have the ability to navigate index views as paginated lists instead of being forced
+            to view all data all the time. The user can step through pages, or go quickly to the first or
+            last page, as well as select how many results to view per page.
+        </p>
+        <hr/>
+        <h4><b>Pagination Navigation</b></h4>
+        <figure class="figure border-bottom border-secondary">
+            <div class="imageContainer">
+                <img class="sizeImage" src="~/files/images/pagination.png"/>
+            </div>
+            <figcaption class="figure-caption text-center">
+                Page navigation bar.
+            </figcaption>
+        </figure>
+    </div>
+</div>
+<br />
+<br />
+
+<button class="btn sectionButton text-left lot-expando-btn" type="button" data-toggle="collapse"
+        data-target="#SearchId" aria-expanded="false"
+        aria-controls="SearchId">
+    Search
+</button>
+<div class="collapse" id="SearchId">
+    <div class="card card-body">
+        <p>
+           Users have the ability to search index views. This allows a user to find the desired
+            database item quickly. The view are also able to be sorted by properties of the objects
+            being returned.
+        </p>
+        <hr />
+        <h4><b>Search Bar</b></h4>
+        <figure class="figure border-bottom border-secondary">
+            <div class="imageContainer">
+                <img class="sizeImage" src="~/files/images/search.png" />
+            </div>
+            <figcaption class="figure-caption text-center">
+                Page search bar.
+            </figcaption>
+        </figure>
+    </div>
+</div>
+<br />
+<br />
+
+<button class="btn sectionButton text-left lot-expando-btn" type="button" data-toggle="collapse"
+        data-target="#StyleId" aria-expanded="false"
+        aria-controls="StyleId">
+    Style
+</button>
+<div class="collapse" id="StyleId">
+    <div class="card card-body">
+        <p>
+            Style changes were made throughout the document. Navigation links were listed in 
+            alphabetical order where necessary, and changed to buttons where possible. Alignment
+            issues were fixed throughout. The top nav bar was given a look and feel similar to 
+            that of the SOC website. 
+        </p>
+        <hr />
+        <h4><b>Home Page</b></h4>
+        <figure class="figure border-bottom border-secondary">
+            <div class="imageContainer">
+                <img class="sizeImage" src="~/files/images/style.png" />
+            </div>
+            <figcaption class="figure-caption text-center">
+                Previously, the home page was simply a list of links to various areas in the page.
+            </figcaption>
+        </figure>
+    </div>
+</div>
+<br />
+<br />
+
+<button class="btn  sectionButton text-left lot-expando-btn" type="button" data-toggle="collapse"
+        data-target="#AdminUser" aria-expanded="false"
+        aria-controls="AdminUser">
+    Users
+</button>
+<div class="collapse" id="AdminUser">
+    <div class="card card-body">
+        <p>Administrators can remove users.</p>
         <div class="imageContainer">
-            <img class="sizeImage" src="~/overview/messaging1.png" />
-        </div>
-        <div class="imageContainer">
-            <img class="sizeImage" src="~/overview/messaging2.png" />
+            <img class="sizeImage" src="~/overview/AdminUsers.png" />
         </div>
     </div>
 </div>
 <br />
 <br />
-<button class="btn btn-primary sectionButton text-left" type="button" data-toggle="collapse"
-        data-target="#EMCrud" aria-expanded="false"
-        aria-controls="EMCrud">
-    Evaluation Metrics CRUD
-</button>
-<div class="collapse" id="EMCrud">
-    <div class="card card-body">
-        <p>Instructors can create new Evaluation metrics with their associated assignment files. This involved creating an EM table in the DB.</p>
-        <div class="imageContainer">
-            <img class="sizeImage" src="~/overview/createEvaluationMetric.png" />
-        </div>
-        <p>A view has been created where Instructors can delete the EM or download its file.</p>
-        <div class="imageContainer">
-            <img class="sizeImage" src="~/overview/EvaluationMetricView.png" />
-        </div>
-    </div>
-</div>
-<br />
-<br />
+
 
 
 
 
 
 <!-- Collapse code:
-    <button class="btn btn-primary sectionButton text-left" type="button" data-toggle="collapse"
+    <button class="btn sectionButton text-left lot-expando-btn" type="button" data-toggle="collapse"
         data-target="#UniqueIdHere" aria-expanded="false"
         aria-controls="UniqueIdHere">
     Title
