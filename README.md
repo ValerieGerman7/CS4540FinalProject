@@ -24,3 +24,5 @@ https://stackoverflow.com/questions/10626885/passing-data-to-a-bootstrap-modal
 (Forms) https://stackoverflow.com/questions/4497140/jquery-create-a-form-and-add-elements-to-it-programmatically
 (Alert Input) https://stackoverflow.com/questions/29920784/input-text-in-sweetalert
 (Notifications) https://stackoverflow.com/questions/3243348/how-to-call-a-method-daily-at-specific-time-in-c
+(Messaging styling) https://www.youtube.com/watch?v=xQtqlylbZ7s
+(SignalR) https://docs.microsoft.com/en-us/aspnet/core/tutorials/signalr?view=aspnetcore-3.1&tabs=visual-studio
