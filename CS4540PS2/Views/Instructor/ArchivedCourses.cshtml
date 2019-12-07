@@ -15,7 +15,7 @@
     <h1>Course Archive</h1>
 </div>
 
-<form asp-action="ArchivedCourses" method="get">
+<form asp-action="ArchivedCourses" method="get" style="float: left">
     <div class="form-actions no-color">
         <p>
             Search: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
@@ -224,6 +224,7 @@
                 </li>
             </ul>
         </nav>
+        <div style="clear:left"></div>
     </div>
 }
 else

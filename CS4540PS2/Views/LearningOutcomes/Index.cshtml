@@ -16,13 +16,16 @@
     <h1>Learning Outcomes</h1>
 </div>
 
-<form asp-action="Index" method="get">
+
+
+<form asp-action="Index" method="get" style="float: left">
     <div class="form-actions no-color">
         <p>
             Search: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
         </p>
     </div>
 </form>
+
 <div name="orderByBar" id="orderByMenu" class="dropdown">
     <button name="orderByDropDownMenuButton" id="orderByDropDownMenuButton" class="btn btn-default dropdown-toggle"
             type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -33,6 +36,10 @@
         <a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["CourseNumSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Course Number</a>
     </div>
 </div>
+
+
+
+
 <hr />
 
 @if (Model != null)
@@ -185,6 +192,7 @@
                 </li>
             </ul>
         </nav>
+        <div style="clear:left"></div>
     </div>
 }
 else

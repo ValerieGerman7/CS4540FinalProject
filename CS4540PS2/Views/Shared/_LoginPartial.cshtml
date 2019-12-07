@@ -19,24 +19,23 @@
             </a>
             <!-- Referenced https://stackoverflow.com/questions/42388989/bootstrap-4-center-vertical-and-horizontal-alignment for alignment classes. -->
             <div class="dropdown-menu justify-content-center" aria-labelledby="navbarDropdown">
-                <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                <a id="manage" class="nav-link text-dark dropdown-hover" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
                     Profile @if (User.IsInRole("Admin")) {<text>(Admin)</text>} else if (User.IsInRole("Chair")) {<text>(Chair)</text>} else if (User.IsInRole("Instructor")) {<text>(Instructor)</text>}
                 </a>
                 @{
                     var numNotif = context.Notifications.Where(n => n.User.UserLoginEmail == User.Identity.Name && !n.Read).Count();
                     var stringNotif = numNotif > 0 ? "(" + numNotif + ")" : "";
                 }
-                <a class="nav-link text-dark" asp-controller="Home" asp-action="Notifications">Notifications <b>@stringNotif</b></a>
-                <!--<div class="dropdown-divider"></div>
-                <button class="btn btn-outline-success my-2 my-sm-0 align-self-center p-2" type="submit">Logout</button>-->
+                <a class="nav-link text-dark dropdown-hover" asp-controller="Home" asp-action="Notifications">Notifications <b>@stringNotif</b></a>
+                <hr />
+                <div>
+                    <form id="logoutForm" class="lot-logout-form" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button id="logout" type="submit" class=red-button>Logout</button>
+                    </form>
+                    <div style="clear: both;"></div>
+                </div>
             </div>
         </div>
-        <li class="nav-item">
-            <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button id="logout" type="submit" class="btn btn-outline-success my-2 my-sm-0">Logout</button>
-            </form>
-        </li>
-
 
     } else {
         <li class="nav-item">

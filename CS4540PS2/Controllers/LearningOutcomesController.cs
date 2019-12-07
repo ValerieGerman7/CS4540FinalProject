@@ -28,7 +28,7 @@ namespace CS4540PS2.Controllers {
         /// Returns index page listing all learning outcomes.
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber, int resultsPerPage = 10) {
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber, int resultsPerPage = 5) {
             ViewData["PageNumber"] = pageNumber;
             ViewData["ResultsPerPage"] = resultsPerPage;
             // Set up the possible ordering schemes of the table.

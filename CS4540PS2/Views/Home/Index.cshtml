@@ -11,40 +11,81 @@
 }
 
 <div class="text-center">
-    <h3 class="display-4">Home - LOT 'o Learning</h3>
+    <h3 class="display-4">Learning Objective Tracker</h3>
     <hr />
-    <p><a asp-controller="Home" asp-action="Overview">Features Overview</a></p>
 </div>
-<p>
-    <b>Admin:</b>
-    <ul>
-        <li><a asp-controller="LearningOutcomes" asp-action="Index">Learning Outcomes</a></li>
-        <li><a asp-controller="Course" asp-action="Index">All Courses</a></li>
-        <li><a asp-controller="DeptManager" asp-action="Index">Departments</a></li>
-        <li><a asp-controller="User" asp-action="Index"><b>User roles</b> page</a></li>
-    </ul>
-</p>
-<p>
-    <b>Instructor:</b>
-    <ul>
-        <li><a asp-controller="Instructor" asp-action="Index">Courses Overview</a></li>
-        <li>
-            <a asp-controller="Instructor" asp-action="Course" asp-route-Dept="CS" asp-route-Num="4540"
-               asp-route-Sem="Fall" asp-route-Year="2019">CS 4540 (Professor Jim) <b>Learning Outcomes and Course Notes</b></a>
-        </li>
-        <li>
-            <a asp-controller="Instructor" asp-action="Course" asp-route-Dept="CS" asp-route-Num="2100"
-               asp-route-Sem="Fall" asp-route-Year="2019">CS 2100 (Professor Mary) <b>Learning Outcomes and Course Notes</b></a>
-        </li>
-        <li><a asp-controller="Home" asp-action="Notifications"><b>Notifications</b></a></li>
-        <li><a asp-controller="Instructor" asp-action="ArchivedCourses"><b>Course History</b></a></li>
-    </ul>
-</p>
-<p>
-    <b>Chair:</b>
-    <ul>
-        <li><a asp-controller="Department" asp-action="Department">Computer Science Department Overview</a></li>
-        <li><a asp-controller="Department" asp-action="Course" asp-route-CourseId="1"><b>Course Overview</b></a></li>
-        <li><a asp-controller="Home" asp-action="Notifications"><b>Notifications</b></a></li>
-    </ul>
-</p>
+<table class="button-container" width="100%">
+    <col width="25%">
+    <col width="25%">
+    <col width="25%">
+    <col width="25%">
+    <tr>
+        <th class="lot-th">Admin</th>
+    </tr>
+    <tr>
+        <td>
+            <a asp-controller="Course" asp-action="Index" class="btn lot-icon">
+                <img src="~/files/images/books_logo.png" /><br />
+                <b>All Courses</b>
+            </a>
+        </td>
+        <td>
+            <a asp-controller="DeptManager" asp-action="Index" class="btn lot-icon">
+                <img src="~/files/images/depts.png" /><br />
+                <b>Departments</b>
+            </a>            
+        </td>
+        <td>
+            <a asp-controller="LearningOutcomes" asp-action="Index" class="btn lot-icon">
+                <img src="~/files/images/brain logo.png" /><br />
+                <b>Learning Outcomes</b>
+            </a>            
+        <td>
+            <a asp-controller="User" asp-action="Index" class="btn lot-icon">
+                <img src="~/files/images/users.png" /><br />
+                <b>User Roles</b>
+            </a>           
+        </td>
+    </tr>
+    <tr>
+        <th class="lot-th">Chair</th>
+    </tr>
+    <tr>       
+        <td>
+            <a asp-controller="Department" asp-action="Department" class="btn lot-icon">
+                <img src="~/files/images/dept_overview.png" /><br />
+                <b>Department Overview</b>
+            </a>
+        </td>
+        <td>
+            <a asp-controller="Home" asp-action="Notifications" class="btn lot-icon">
+                <img src="~/files/images/notification.png" /><br />
+                <b>Notifications</b>
+            </a>            
+        </td>
+    </tr>  
+    <tr>
+        <th class="lot-th">Instructor</th>
+    </tr>
+    <tr>
+        <td>
+            <a asp-controller="Instructor" asp-action="ArchivedCourses" class="btn lot-icon">
+                <img src="~/files/images/archive.png" /><br />
+                <b>Archived Courses</b>
+            </a>
+        </td>
+        <td>
+            <a asp-controller="Instructor" asp-action="Index" class="btn lot-icon">
+                <img src="~/files/images/courses overview.png" /><br />
+                <b>Courses Overview</b>
+            </a>
+        </td>
+        <td>
+            <a asp-controller="Home" asp-action="Notifications" class="btn lot-icon">
+                <img src="~/files/images/notification.png" /><br />
+                <b>Notifications</b>
+            </a>
+        </td>
+    </tr>
+
+</table>

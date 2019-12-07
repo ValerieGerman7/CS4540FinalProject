@@ -38,25 +38,26 @@
               integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" />
     </environment>
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/light.css" />
 </head>
 <body>
-    <header>
-        <!-- References bootstrap https://getbootstrap.com/docs/4.0/components/navbar/ -->
+    <header class="bg-dark">
+        <!-- References bootstrap https://getbootstrap.com/docs/4.0/components/navbar/
+        U of U School of Computing Website https://www.cs.utah.edu -->
+        <a class="nav-link navbar-brand" asp-controller="Home" asp-action="Index">
+            <img src="~/files/images/soc_logo.png" />
+            <span class="sr-only">(current)</span>
+        </a>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link navbar-brand" asp-controller="Home" asp-action="Index">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                    @if (User.IsInRole("Admin")) {
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="LearningOutcomes" asp-action="Index">Learning Outcomes</a>
-                        </li>
+                    @if (User.IsInRole("Admin"))
+                    {
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle text-light" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Courses
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -66,15 +67,19 @@
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="DeptManager" asp-action="Index">Departments</a>
+                            <a class="nav-link text-light" asp-controller="DeptManager" asp-action="Index">Departments</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="User" asp-action="Index">Users</a>
+                            <a class="nav-link text-light" asp-controller="LearningOutcomes" asp-action="Index">Learning Outcomes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-controller="User" asp-action="Index">Users</a>
                         </li>
                     }
-                    @if (User.IsInRole("Chair")) {
+                    @if (User.IsInRole("Chair"))
+                    {
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle text-light" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Departments
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -84,12 +89,13 @@
                             </div>
                         </li>
                     }
-                    @if (User.IsInRole("Instructor")) {
+                    @if (User.IsInRole("Instructor"))
+                    {
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Instructor" asp-action="Index">Courses</a>
+                            <a class="nav-link text-light" asp-controller="Instructor" asp-action="Index">Courses</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Instructor" asp-action="ArchivedCourses">Course History</a>
+                            <a class="nav-link text-light" asp-controller="Instructor" asp-action="ArchivedCourses">Course History</a>
                         </li>
                         <!-- Dropdown -->
                         <!--<li class="nav-item dropdown">
@@ -107,7 +113,7 @@
                         </li>-->
                     }
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Home" asp-action="Overview">Overview</a>
+                        <a class="nav-link text-light" asp-controller="Home" asp-action="Overview">Overview</a>
                     </li>
                 </ul>
                 <!-- User Info -->
@@ -127,7 +133,7 @@
     <!--Make sure user is signed in before displaying messaging boxes-->
     @if (SignInManager.IsSignedIn(User))
     {
-        
+
 
         <!--Find email of logged in user-->
         var email = UserManager.GetUserName(User);
@@ -140,8 +146,8 @@
         <!--Message box-->
         @foreach (IdentityUser user in UserManager.Users)
         {
-            //Don't let user send messages to themself. 
-            if(user.Email == email)
+            //Don't let user send messages to themself.
+            if (user.Email == email)
             {
                 continue;
             }
@@ -169,21 +175,21 @@
                         {
                             if (context.UserLocator.Find(m.Sender).UserLoginEmail == email)
                             {
-                        <div class="single_message2">
-                            <p>
-                                @m.Text
-                            </p>
-                            <!--<i class="fas fa-circle"></i>-->
-                        </div>
+                                <div class="single_message2">
+                                    <p>
+                                        @m.Text
+                                    </p>
+                                    <!--<i class="fas fa-circle"></i>-->
+                                </div>
                             }
                             else
                             {
-                    <div class="single_message">
-                        <!--<i class="fas fa-circle"></i>-->
-                        <p>
-                            @m.Text
-                        </p>
-                    </div>
+                                <div class="single_message">
+                                    <!--<i class="fas fa-circle"></i>-->
+                                    <p>
+                                        @m.Text
+                                    </p>
+                                </div>
                             }
                         }
                     </div>
@@ -213,7 +219,7 @@
                 @foreach (IdentityUser id in UserManager.Users)
                 {
                     //Don't let users send emails to themself
-                    if(id.Email == email)
+                    if (id.Email == email)
                     {
                         continue;
                     }
